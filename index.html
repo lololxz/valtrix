@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Valtrix — Skins & Outfits Roblox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --v:#7c3aed;--v2:#a855f7;--v3:#c084fc;--accent:#f0abfc;
+  --gold:#fbbf24;--green:#4ade80;
+  --bg:#05020f;--bg3:#130830;
+  --card:rgba(255,255,255,0.03);
+  --card-border:rgba(124,58,237,0.22);
+  --card-hover:rgba(124,58,237,0.12);
+  --text:#f5f0ff;--muted:rgba(245,240,255,0.45);--muted2:rgba(245,240,255,0.25);
+  --r:16px;--rl:20px;--rxl:28px;
+  --t:0.25s cubic-bezier(0.4,0,0.2,1);
+  --nav-h:64px;
+  --px:clamp(16px,5vw,48px);
+  --spy:clamp(56px,8vw,96px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.55}
+
+/* MESH */
+.mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.mesh-orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbF 14s ease-in-out infinite alternate}
+.mesh-orb:nth-child(1){width:min(700px,90vw);height:min(700px,90vw);background:radial-gradient(circle,rgba(124,58,237,.16),transparent 70%);top:-20%;left:-15%}
+.mesh-orb:nth-child(2){width:min(500px,70vw);height:min(500px,70vw);background:radial-gradient(circle,rgba(168,85,247,.12),transparent 70%);bottom:-15%;right:-10%;animation-delay:-7s}
+.mesh-orb:nth-child(3){width:min(350px,50vw);height:min(350px,50vw);background:radial-gradient(circle,rgba(240,171,252,.09),transparent 70%);top:45%;left:55%;animation-delay:-3.5s}
+@keyframes orbF{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,50px) scale(1.06)}}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.star{position:absolute;border-radius:50%;background:white;animation:twink var(--d) ease-in-out infinite alternate}
+@keyframes twink{from{opacity:.05;transform:scale(.7)}to{opacity:.7;transform:scale(1.3)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 var(--px);background:rgba(5,2,15,.8);backdrop-filter:blur(20px) saturate(1.6);border-bottom:1px solid rgba(124,58,237,.18);transition:background var(--t)}
+nav.scrolled{background:rgba(5,2,15,.97)}
+.logo{font-family:'Syne',sans-serif;font-size:clamp(19px,3vw,24px);font-weight:800;letter-spacing:-.5px;text-decoration:none;display:flex;align-items:center;gap:5px;flex-shrink:0;background:linear-gradient(135deg,#fff 0%,var(--v3) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-spark{font-size:16px;-webkit-text-fill-color:initial;filter:drop-shadow(0 0 8px rgba(240,171,252,.8))}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-weight:600;font-size:13px;padding:8px 14px;border-radius:8px;transition:all var(--t)}
+.nav-links a:hover{color:var(--text);background:rgba(124,58,237,.12)}
+.nav-links a.active{color:var(--v3)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-badge{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.35);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--v3)}
+.nav-cta{background:linear-gradient(135deg,var(--v),#9333ea);border:none;border-radius:10px;padding:9px 18px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(124,58,237,.4);transition:all var(--t);white-space:nowrap}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,58,237,.6)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);border-radius:10px;cursor:pointer;padding:0 10px;transition:background var(--t)}
+.hamburger span{display:block;height:2px;background:var(--v3);border-radius:2px;transition:all .3s ease}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* MOBILE DRAWER */
+.mobile-menu{position:fixed;top:var(--nav-h);left:0;right:0;z-index:599;background:rgba(5,2,15,.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(124,58,237,.2);max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(0.4,0,0.2,1),padding .4s ease}
+.mobile-menu.open{max-height:440px;padding:12px 0 20px}
+.mobile-menu ul{list-style:none;padding:0 var(--px)}
+.mobile-menu ul li a{display:block;padding:13px 16px;color:var(--muted);text-decoration:none;font-weight:700;font-size:15px;border-radius:12px;transition:all var(--t)}
+.mobile-menu ul li a:hover,.mobile-menu ul li a.active{color:var(--text);background:rgba(124,58,237,.12)}
+.mobile-cta{margin:12px var(--px) 0;background:linear-gradient(135deg,var(--v),#9333ea);border:none;border-radius:12px;padding:14px;width:calc(100% - var(--px)*2);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(var(--nav-h) + 40px) var(--px) 60px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);border-radius:100px;padding:6px 16px;font-size:clamp(10px,2vw,12px);font-weight:700;color:var(--v3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:clamp(16px,3vw,28px);animation:fadeUp .8s ease both}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(38px,10vw,96px);font-weight:800;line-height:.95;letter-spacing:clamp(-1px,-0.03em,-3px);margin-bottom:clamp(14px,3vw,24px);animation:fadeUp .8s .1s ease both}
+.hero h1 em{font-style:normal;display:block}
+.h1-white{color:var(--text)}
+.h1-grad{background:linear-gradient(135deg,var(--v2) 0%,var(--accent) 40%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(13px,2vw,16px);color:var(--muted);max-width:420px;line-height:1.7;font-weight:500;margin-bottom:clamp(24px,4vw,40px);animation:fadeUp .8s .2s ease both}
+.hero-sub strong{color:var(--v3);font-weight:700}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .3s ease both}
+.btn-primary{background:linear-gradient(135deg,var(--v),#9333ea);border:none;border-radius:12px;padding:clamp(11px,2vw,14px) clamp(20px,4vw,32px);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:clamp(13px,1.8vw,14px);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px;box-shadow:0 8px 24px rgba(124,58,237,.45);transition:all var(--t)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(124,58,237,.65)}
+.btn-secondary{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.35);border-radius:12px;padding:clamp(10px,2vw,13px) clamp(16px,3vw,28px);color:var(--v3);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:clamp(13px,1.8vw,14px);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all var(--t)}
+.btn-secondary:hover{background:rgba(124,58,237,.18);border-color:var(--v3);color:var(--text)}
+
+/* HERO STATS */
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(28px,5vw,64px);width:min(600px,100%);background:rgba(255,255,255,.03);border:1px solid rgba(124,58,237,.2);border-radius:var(--r);overflow:hidden;animation:fadeUp .8s .4s ease both}
+.hero-stat{padding:clamp(10px,2vw,18px) clamp(8px,2vw,20px);text-align:center;border-right:1px solid rgba(124,58,237,.15)}
+.hero-stat:last-child{border-right:none}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(16px,3vw,26px);font-weight:800;color:var(--text)}
+.stat-num span{font-size:clamp(10px,1.5vw,14px);color:var(--v3)}
+.stat-label{font-size:clamp(8px,1.2vw,11px);color:var(--muted);font-weight:600;margin-top:2px}
+
+/* SCROLL HINT */
+.scroll-hint{position:absolute;bottom:clamp(18px,4vw,32px);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted2);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;animation:fadeIn 1s 1s ease both}
+.s-arrow{width:18px;height:26px;border:1.5px solid rgba(124,58,237,.4);border-radius:9px;display:flex;justify-content:center;padding-top:4px}
+.s-dot{width:3px;height:5px;background:var(--v3);border-radius:10px;animation:sBounce 1.5s ease-in-out infinite}
+@keyframes sBounce{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(7px);opacity:.4}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* VIDEO */
+.video-hero{position:relative;z-index:1;overflow:hidden;border-top:1px solid rgba(124,58,237,.12);border-bottom:1px solid rgba(124,58,237,.12)}
+.video-inner{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1);will-change:transform}
+.video-slide{flex:0 0 100%;height:clamp(180px,42vw,360px);position:relative;overflow:hidden}
+.video-slide video{width:100%;height:100%;object-fit:cover;display:block}
+.video-slide::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(5,2,15,.2) 0%,transparent 30%,rgba(5,2,15,.55) 70%,var(--bg) 100%)}
+.video-placeholder{width:100%;height:100%;background:linear-gradient(160deg,var(--bg3),rgba(124,58,237,.3));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.ph-emoji{font-size:clamp(36px,8vw,64px)}.ph-label{font-family:'Syne',sans-serif;font-size:clamp(13px,3vw,20px);font-weight:700;color:rgba(255,255,255,.5)}.ph-sub{font-size:clamp(9px,1.8vw,12px);color:var(--muted2);background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);padding:4px 12px;border-radius:20px;font-weight:600}
+.vh-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:clamp(34px,5vw,44px);height:clamp(34px,5vw,44px);border-radius:50%;background:rgba(5,2,15,.65);border:1px solid rgba(124,58,237,.4);color:var(--text);font-size:clamp(12px,2vw,16px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t);backdrop-filter:blur(12px)}
+.vh-arrow:hover{background:rgba(124,58,237,.4)}.vh-arrow.left{left:clamp(8px,2vw,20px)}.vh-arrow.right{right:clamp(8px,2vw,20px)}
+.vh-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:3}
+.vh-dot{width:6px;height:6px;border-radius:50%;background:rgba(124,58,237,.4);cursor:pointer;transition:all .3s}
+.vh-dot.active{background:var(--v3);width:20px;border-radius:10px}
+
+/* SECTION */
+.section{position:relative;z-index:1;padding:var(--spy) var(--px)}
+.section-header{text-align:center;margin-bottom:clamp(28px,5vw,52px)}
+.pill{display:inline-block;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:100px;padding:5px 14px;font-size:clamp(9px,1.5vw,11px);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--v3);margin-bottom:12px}
+.section-header h2{font-family:'Syne',sans-serif;font-size:clamp(24px,5vw,52px);font-weight:800;letter-spacing:clamp(-.5px,-.03em,-1.5px);line-height:1.05;color:var(--text)}
+.section-header h2 .hl{background:linear-gradient(135deg,var(--v2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-header p{color:var(--muted);font-size:clamp(12px,1.8vw,14px);margin-top:8px;font-weight:500;line-height:1.6}
+.divider{position:relative;z-index:1;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.2),transparent);max-width:600px;margin:0 auto}
+
+/* GROUP TABS */
+.group-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:clamp(20px,4vw,32px)}
+.group-tab{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:clamp(7px,1.5vw,9px) clamp(12px,2.5vw,18px);color:var(--muted);font-weight:700;font-size:clamp(11px,1.8vw,13px);cursor:pointer;transition:all var(--t);font-family:'Plus Jakarta Sans',sans-serif}
+.group-tab:hover{background:rgba(124,58,237,.1);color:var(--text);border-color:rgba(124,58,237,.4)}
+.group-tab.active{background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(147,51,234,.2));border-color:rgba(168,85,247,.5);color:var(--text);box-shadow:0 4px 20px rgba(124,58,237,.2)}
+.group-tab-icon{width:18px;height:18px;border-radius:5px;object-fit:cover;background:rgba(124,58,237,.2)}
+
+/* ── SEARCH BAR ─────────────────────────────────────── */
+.search-wrap{
+  position:relative;max-width:560px;margin:0 auto clamp(6px,2vw,12px);
+}
+.search-input{
+  width:100%;
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(124,58,237,.28);
+  border-radius:14px;
+  padding:13px 46px 13px 46px;
+  color:var(--text);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:500;
+  outline:none;
+  transition:border-color var(--t), background var(--t), box-shadow var(--t);
+  -webkit-appearance:none;
+}
+.search-input::placeholder{color:var(--muted)}
+.search-input:focus{
+  border-color:rgba(168,85,247,.65);
+  background:rgba(124,58,237,.07);
+  box-shadow:0 0 0 3px rgba(124,58,237,.13);
+}
+.search-icon-left{
+  position:absolute;left:15px;top:50%;transform:translateY(-50%);
+  font-size:15px;pointer-events:none;
+  transition:opacity var(--t);
+  opacity:.5;
+}
+.search-input:focus ~ .search-icon-left,
+.search-wrap:focus-within .search-icon-left{opacity:1}
+.search-clear{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(124,58,237,.18);border:none;
+  color:var(--muted);font-size:13px;cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  transition:all var(--t);line-height:1;
+}
+.search-clear.show{display:flex}
+.search-clear:hover{background:rgba(124,58,237,.38);color:var(--text)}
+
+/* search meta bar */
+.search-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:560px;margin:0 auto clamp(16px,3vw,28px);
+  min-height:22px;padding:0 4px;
+}
+.search-count{
+  font-size:12px;color:var(--muted);font-weight:600;
+  opacity:0;transition:opacity .2s;
+}
+.search-count.show{opacity:1}
+.search-sort{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--muted);font-weight:600;
+}
+.search-sort select{
+  background:#1a0a3a;
+  border:1px solid rgba(124,58,237,.35);
+  border-radius:8px;padding:5px 10px;
+  color:var(--text);font-size:12px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+  outline:none;cursor:pointer;
+  color-scheme:dark;
+  -webkit-appearance:none;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c084fc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 8px center;
+  padding-right:26px;
+  transition:border-color var(--t), background var(--t);
+}
+.search-sort select:hover{border-color:rgba(168,85,247,.6);background-color:#220d4a}
+.search-sort select:focus{border-color:var(--v3);outline:none}
+.search-sort select option{
+  background:#1a0a3a;
+  color:var(--text);
+}
+
+/* no results */
+.no-results{
+  display:flex;flex-direction:column;align-items:center;
+  gap:12px;padding:clamp(48px,10vw,80px) 24px;text-align:center;
+}
+.no-results .nr-emoji{font-size:clamp(40px,8vw,56px)}
+.no-results h3{font-family:'Syne',sans-serif;font-size:clamp(18px,3vw,24px);font-weight:800;color:var(--text)}
+.no-results p{font-size:14px;color:var(--muted);line-height:1.65;max-width:300px;font-weight:500}
+.nr-clear{
+  margin-top:4px;background:rgba(124,58,237,.14);
+  border:1px solid rgba(124,58,237,.3);border-radius:10px;
+  padding:9px 22px;color:var(--v3);font-weight:700;font-size:13px;
+  cursor:pointer;transition:all var(--t);font-family:'Plus Jakarta Sans',sans-serif;
+}
+.nr-clear:hover{background:rgba(124,58,237,.26)}
+
+/* highlight matched text */
+.match-hl{
+  background:linear-gradient(135deg,rgba(168,85,247,.35),rgba(240,171,252,.25));
+  border-radius:3px;padding:0 2px;color:var(--text);
+}
+/* ─────────────────────────────────────────────────── */
+
+/* SKINS GRID */
+.skins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(140px,20vw,200px),1fr));gap:clamp(10px,2vw,16px);max-width:1140px;margin:0 auto}
+.skin-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:all var(--t);animation:cardIn .5s ease both}
+.skin-card:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(124,58,237,.25),0 0 0 1px rgba(168,85,247,.3);background:var(--card-hover)}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.skin-img-wrap{width:100%;aspect-ratio:1;background:linear-gradient(160deg,rgba(124,58,237,.15),rgba(147,51,234,.08));display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.skin-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.skin-card:hover .skin-img-wrap img{transform:scale(1.07)}
+.skin-img-wrap .no-img{font-size:clamp(34px,6vw,52px)}
+.skin-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(5,2,15,.6) 100%);opacity:0;transition:opacity var(--t)}
+.skin-card:hover .skin-overlay{opacity:1}
+.skin-info{padding:clamp(10px,2vw,14px) clamp(10px,2vw,16px) clamp(12px,2vw,16px)}
+.skin-name{font-family:'Syne',sans-serif;font-size:clamp(11px,1.8vw,14px);font-weight:700;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skin-group-label{font-size:clamp(9px,1.4vw,11px);color:var(--v3);font-weight:600;margin-bottom:clamp(7px,1.5vw,12px)}
+.skin-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.skin-price{display:flex;align-items:center;gap:3px;font-weight:800;font-size:clamp(11px,1.8vw,14px)}
+.price-diamonds{color:var(--gold);filter:drop-shadow(0 0 4px rgba(251,191,36,.4))}
+.price-free{color:var(--green)}
+.buy-btn{background:linear-gradient(135deg,var(--v),#9333ea);border:none;border-radius:8px;padding:clamp(5px,1vw,6px) clamp(8px,1.5vw,12px);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:clamp(9px,1.4vw,11px);cursor:pointer;transition:all var(--t);white-space:nowrap}
+.buy-btn:hover{transform:scale(1.06);box-shadow:0 4px 12px rgba(124,58,237,.5)}
+
+/* STATES */
+.loading-state{display:flex;flex-direction:column;align-items:center;gap:12px;padding:clamp(32px,8vw,80px) 0}
+.spinner{width:38px;height:38px;border:3px solid rgba(124,58,237,.15);border-top-color:var(--v2);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state p{color:var(--muted);font-weight:600;font-size:14px}
+.error-state{text-align:center;padding:clamp(24px,5vw,48px) 24px;background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.15);border-radius:var(--rl);max-width:440px;margin:0 auto}
+.error-state p{color:var(--muted);font-size:14px;line-height:1.7;font-weight:500}
+.error-state strong{color:var(--text)}
+.retry-btn{display:inline-block;margin-top:14px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:10px;padding:10px 22px;color:var(--v3);font-weight:700;font-size:13px;cursor:pointer;transition:all var(--t);font-family:'Plus Jakarta Sans',sans-serif}
+.retry-btn:hover{background:rgba(124,58,237,.25)}
+
+/* TOP SEMANAL CAROUSEL */
+.carousel-section{position:relative;z-index:1;padding:var(--spy) 0}
+.carousel-wrapper{position:relative;overflow:hidden}
+.carousel-track{display:flex;gap:clamp(10px,2vw,20px);padding:24px clamp(16px,5vw,80px);transition:transform .5s cubic-bezier(.4,0,.2,1);will-change:transform}
+.carousel-card{flex:0 0 clamp(170px,35vw,260px);background:var(--card);border:1px solid var(--card-border);border-radius:var(--rxl);padding:clamp(18px,3vw,28px) clamp(12px,2.5vw,20px) clamp(14px,2.5vw,22px);text-align:center;position:relative;cursor:pointer;transition:all var(--t);user-select:none}
+.carousel-card:hover{transform:translateY(-7px);box-shadow:0 20px 44px rgba(124,58,237,.3);border-color:rgba(168,85,247,.4);background:rgba(124,58,237,.08)}
+.carousel-card.gold-card{border-color:rgba(251,191,36,.4);box-shadow:0 0 36px rgba(251,191,36,.1)}
+.c-medal{position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.c-medal.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000}.c-medal.silver{background:linear-gradient(135deg,#d1d5db,#9ca3af);color:#000}.c-medal.bronze{background:linear-gradient(135deg,#cd7f32,#92400e);color:#fff}.c-medal.other{background:rgba(124,58,237,.3);color:var(--v3)}
+.c-img-box{width:clamp(65px,12vw,100px);height:clamp(65px,12vw,100px);border-radius:14px;margin:12px auto 10px;background:rgba(124,58,237,.1);overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid rgba(124,58,237,.15)}
+.c-img-box img{width:100%;height:100%;object-fit:cover}
+.c-emoji{font-size:clamp(26px,5vw,42px)}
+.c-name{font-family:'Syne',sans-serif;font-size:clamp(12px,2vw,16px);font-weight:700;color:var(--text);margin-bottom:3px}
+.c-sales{font-size:clamp(9px,1.5vw,11px);color:var(--muted);font-weight:600;margin-bottom:7px}
+.c-price{font-size:clamp(13px,2.5vw,18px);font-weight:800;color:var(--gold)}
+.carousel-controls{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;padding:0 var(--px)}
+.c-btn{width:38px;height:38px;border-radius:50%;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);color:var(--v3);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
+.c-btn:hover{background:linear-gradient(135deg,var(--v),#9333ea);border-color:transparent;color:#fff}
+.c-dots{display:flex;gap:6px}
+.c-dot{width:6px;height:6px;border-radius:50%;background:rgba(124,58,237,.25);transition:all .3s;cursor:pointer}
+.c-dot.active{background:var(--v2);width:20px;border-radius:10px}
+
+/* RANKING */
+.ranking-grid{display:flex;gap:clamp(10px,2.5vw,20px);justify-content:center;flex-wrap:wrap;max-width:860px;margin:0 auto}
+.rank-card{flex:1;min-width:clamp(160px,24vw,220px);max-width:270px;background:var(--card);border:1px solid var(--card-border);border-radius:var(--rxl);padding:clamp(20px,3vw,28px) clamp(14px,2.5vw,22px);text-align:center;position:relative;transition:all var(--t)}
+.rank-card:hover{transform:translateY(-5px)}
+.rank-card.first{border-color:rgba(251,191,36,.4);box-shadow:0 0 36px rgba(251,191,36,.1);transform:scale(1.04)}
+.rank-card.first:hover{transform:scale(1.04) translateY(-5px)}
+.rank-num{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800}
+.rank-num.gold-m{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000}.rank-num.silver-m{background:linear-gradient(135deg,#d1d5db,#9ca3af);color:#000}.rank-num.bronze-m{background:linear-gradient(135deg,#cd7f32,#92400e);color:#fff}
+.rank-img{width:clamp(56px,10vw,80px);height:clamp(56px,10vw,80px);border-radius:12px;object-fit:cover;margin:14px auto 8px;display:block;background:rgba(124,58,237,.1)}
+.rank-card h4{font-family:'Syne',sans-serif;font-size:clamp(13px,2vw,17px);font-weight:700;color:var(--text);margin-bottom:4px}
+.rank-sales{font-size:clamp(10px,1.5vw,12px);color:var(--muted);font-weight:600;margin-bottom:8px}
+.rank-price{font-size:clamp(13px,2vw,17px);font-weight:800;color:var(--gold)}
+
+/* TRUST */
+.trust-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,22vw,220px),1fr));gap:clamp(10px,2vw,16px);max-width:960px;margin:0 auto}
+.trust-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--rl);padding:clamp(18px,3vw,28px) clamp(14px,2.5vw,22px);text-align:center;transition:all var(--t)}
+.trust-card:hover{background:var(--card-hover);border-color:rgba(124,58,237,.35);transform:translateY(-3px)}
+.trust-icon{font-size:clamp(22px,4vw,32px);display:block;margin-bottom:10px}
+.trust-card h4{font-family:'Syne',sans-serif;font-size:clamp(12px,2vw,15px);font-weight:700;color:var(--v3);margin-bottom:7px}
+.trust-card p{font-size:clamp(11px,1.6vw,13px);color:var(--muted);line-height:1.6;font-weight:500}
+
+/* AFFILIATES */
+.affiliates-section{position:relative;z-index:1;padding:var(--spy) var(--px);background:linear-gradient(135deg,rgba(124,58,237,.06),transparent);border-top:1px solid rgba(124,58,237,.1)}
+.aff-box{max-width:660px;margin:0 auto;background:var(--card);border:1px solid var(--card-border);border-radius:var(--rxl);padding:clamp(24px,5vw,48px) clamp(18px,5vw,48px);text-align:center;position:relative;overflow:hidden}
+.aff-box::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.15),transparent 70%);pointer-events:none}
+.aff-box h3{font-family:'Syne',sans-serif;font-size:clamp(20px,4vw,40px);font-weight:800;letter-spacing:-.5px;margin-bottom:10px}
+.aff-commission{display:inline-block;background:linear-gradient(135deg,var(--v),#9333ea);border-radius:100px;padding:clamp(6px,1vw,8px) clamp(12px,2.5vw,20px);font-family:'Syne',sans-serif;font-size:clamp(18px,4vw,28px);font-weight:800;color:#fff;margin:12px 0;box-shadow:0 8px 24px rgba(124,58,237,.4)}
+.aff-desc{color:var(--muted);font-size:clamp(12px,1.8vw,15px);line-height:1.7;font-weight:500;margin-bottom:22px}
+.aff-steps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.aff-step{flex:1;min-width:110px;max-width:170px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:clamp(12px,2vw,16px) 12px}
+.aff-step-num{font-family:'Syne',sans-serif;font-size:clamp(20px,4vw,28px);font-weight:800;color:var(--v2);margin-bottom:4px}
+.aff-step p{font-size:clamp(10px,1.5vw,12px);color:var(--muted);line-height:1.5;font-weight:600}
+
+/* REVIEWS */
+.reviews-section{position:relative;z-index:1;padding:var(--spy) var(--px)}
+.rating-summary{max-width:520px;margin:0 auto clamp(28px,5vw,56px);background:var(--card);border:1px solid var(--card-border);border-radius:var(--rxl);padding:clamp(18px,4vw,32px) clamp(16px,4vw,36px);display:flex;gap:clamp(14px,3vw,32px);align-items:center;flex-wrap:wrap}
+.rating-big{text-align:center;min-width:88px}
+.rating-num{font-family:'Syne',sans-serif;font-size:clamp(44px,8vw,66px);font-weight:800;line-height:1;color:var(--text)}
+.rating-stars{color:var(--gold);font-size:clamp(13px,2.5vw,18px);letter-spacing:2px;margin:4px 0;filter:drop-shadow(0 0 5px rgba(251,191,36,.4))}
+.rating-count{font-size:11px;color:var(--muted);font-weight:600}
+.rating-bars{flex:1;min-width:150px;display:flex;flex-direction:column;gap:5px}
+.rb{display:flex;align-items:center;gap:7px}
+.rb span:first-child{font-size:11px;color:var(--muted);font-weight:700;width:20px}
+.rb span:last-child{font-size:11px;color:var(--muted);font-weight:700;width:24px;text-align:right}
+.rb-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden}
+.rb-fill{height:100%;background:var(--gold);border-radius:10px}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:clamp(10px,2vw,16px);max-width:1040px;margin:0 auto}
+.review-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--rl);padding:clamp(14px,3vw,22px) clamp(14px,3vw,24px);transition:all var(--t)}
+.review-card:hover{transform:translateY(-3px);border-color:rgba(124,58,237,.3)}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.review-avatar{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:rgba(255,255,255,.85)}
+.review-user{font-weight:700;font-size:13px;color:var(--text)}
+.review-time{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+.review-stars{margin-left:auto;color:var(--gold);font-size:12px;letter-spacing:.5px;filter:drop-shadow(0 0 4px rgba(251,191,36,.3))}
+.review-text{font-size:clamp(11px,1.8vw,13px);color:rgba(245,240,255,.7);line-height:1.65;font-weight:500;margin-bottom:9px}
+.review-product{font-size:11px;color:rgba(192,132,252,.8);font-weight:600}
+
+/* LOGIN */
+.login-section{position:relative;z-index:1;padding:var(--spy) var(--px);text-align:center}
+.login-box{max-width:440px;margin:0 auto;background:var(--card);border:1px solid var(--card-border);border-radius:var(--rxl);padding:clamp(24px,5vw,48px) clamp(18px,5vw,40px)}
+.login-box h3{font-family:'Syne',sans-serif;font-size:clamp(20px,3.5vw,28px);font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.login-box p{color:var(--muted);font-size:clamp(12px,1.8vw,14px);line-height:1.6;font-weight:500;margin-bottom:22px}
+.roblox-badge{display:inline-flex;align-items:center;gap:7px;background:#fff;border-radius:9px;padding:6px 14px;margin-bottom:16px}
+.roblox-dot{width:8px;height:8px;background:#E63950;border-radius:2px}
+.roblox-text{color:#000;font-weight:800;font-size:14px}
+.login-security{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;color:var(--muted);font-size:12px;font-weight:600}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid rgba(124,58,237,.12);padding:clamp(18px,3vw,32px) var(--px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-logo{font-family:'Syne',sans-serif;font-size:clamp(15px,2.5vw,20px);font-weight:800;background:linear-gradient(135deg,var(--v2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-links{display:flex;gap:clamp(12px,2.5vw,20px);flex-wrap:wrap}
+.footer-links a{font-size:12px;color:var(--muted2);text-decoration:none;font-weight:500;transition:color var(--t)}
+.footer-links a:hover{color:var(--v3)}
+footer p{font-size:12px;color:var(--muted2);font-weight:500}
+
+/* TOAST */
+.toast{position:fixed;bottom:clamp(14px,3vw,24px);right:clamp(14px,3vw,24px);z-index:1000;background:rgba(13,5,32,.96);border:1px solid rgba(124,58,237,.4);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--text);backdrop-filter:blur(16px);transform:translateX(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);max-width:min(290px,88vw);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.toast.show{transform:translateX(0)}
+.toast-icon{font-size:16px;flex-shrink:0}
+.back-top{position:fixed;bottom:clamp(14px,3vw,24px);left:clamp(14px,3vw,24px);z-index:900;width:40px;height:40px;border-radius:50%;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);color:var(--v3);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t);backdrop-filter:blur(12px);opacity:0;pointer-events:none}
+.back-top.visible{opacity:1;pointer-events:auto}
+.back-top:hover{background:rgba(124,58,237,.4);transform:translateY(-2px)}
+
+/* ── LOGIN OVERLAY ──────────────────────────────────── */
+#loginOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  padding:var(--px);
+  animation:fadeIn .4s ease both;
+}
+#loginOverlay.hide{
+  animation:overlayOut .5s ease forwards;
+  pointer-events:none;
+}
+@keyframes overlayOut{
+  from{opacity:1;transform:scale(1)}
+  to{opacity:0;transform:scale(1.03)}
+}
+/* mesh + stars inside overlay */
+.lo-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.lo-orb{position:absolute;border-radius:50%;filter:blur(90px)}
+.lo-orb:nth-child(1){width:min(600px,80vw);height:min(600px,80vw);background:radial-gradient(circle,rgba(124,58,237,.2),transparent 70%);top:-20%;left:-15%;animation:orbF 14s ease-in-out infinite alternate}
+.lo-orb:nth-child(2){width:min(400px,60vw);height:min(400px,60vw);background:radial-gradient(circle,rgba(168,85,247,.15),transparent 70%);bottom:-15%;right:-10%;animation:orbF 14s ease-in-out 7s infinite alternate}
+
+.lo-box{
+  position:relative;z-index:1;
+  width:min(440px,100%);
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(124,58,237,.25);
+  border-radius:28px;
+  padding:clamp(28px,6vw,52px) clamp(22px,5vw,44px);
+  text-align:center;
+  animation:fadeUp .7s .1s ease both;
+  backdrop-filter:blur(20px);
+}
+.lo-logo{
+  font-family:'Syne',sans-serif;font-size:clamp(26px,5vw,36px);font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,var(--v3) 50%,var(--accent) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:6px;letter-spacing:-.5px;
+}
+.lo-spark{-webkit-text-fill-color:initial;filter:drop-shadow(0 0 10px rgba(240,171,252,.8))}
+.lo-tagline{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:clamp(20px,4vw,32px);line-height:1.5}
+
+/* ── step 1: enter username ── */
+.lo-step{transition:all .3s ease}
+.lo-step.hidden{display:none}
+.lo-label{font-size:11px;font-weight:700;color:var(--v3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;text-align:left;display:block}
+.lo-input-wrap{position:relative;margin-bottom:12px}
+.lo-input{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(124,58,237,.3);border-radius:13px;
+  padding:13px 16px;color:var(--text);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:500;
+  outline:none;transition:all var(--t);
+}
+.lo-input::placeholder{color:var(--muted)}
+.lo-input:focus{border-color:rgba(168,85,247,.65);background:rgba(124,58,237,.07);box-shadow:0 0 0 3px rgba(124,58,237,.13)}
+.lo-input.error{border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.06)}
+.lo-err{font-size:12px;color:#f87171;font-weight:600;margin-bottom:10px;text-align:left;min-height:18px;transition:opacity .2s}
+.lo-err.hidden{opacity:0;pointer-events:none}
+
+.lo-btn{
+  width:100%;background:linear-gradient(135deg,var(--v),#9333ea);
+  border:none;border-radius:13px;padding:14px;
+  color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 8px 24px rgba(124,58,237,.45);transition:all var(--t);
+  position:relative;overflow:hidden;
+}
+.lo-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 40px rgba(124,58,237,.65)}
+.lo-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.lo-btn .btn-spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+.lo-btn.loading .btn-spinner{display:block}
+.lo-btn.loading .btn-text{display:none}
+
+.lo-security{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:16px;font-size:11px;color:var(--muted2);font-weight:600}
+
+/* ── step 2: confirm user card ── */
+.lo-profile{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:clamp(16px,3vw,24px);
+  background:rgba(124,58,237,.07);
+  border:1px solid rgba(124,58,237,.25);
+  border-radius:18px;margin-bottom:16px;
+  animation:fadeUp .4s ease both;
+}
+.lo-avatar-wrap{position:relative;margin-bottom:8px}
+.lo-avatar{
+  width:88px;height:88px;border-radius:16px;
+  object-fit:cover;display:block;
+  border:2px solid rgba(124,58,237,.4);
+  background:rgba(124,58,237,.15);
+}
+.lo-avatar-ring{
+  position:absolute;inset:-4px;border-radius:20px;
+  border:2px solid transparent;
+  background:linear-gradient(135deg,var(--v),var(--accent)) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out;mask-composite:exclude;
+}
+.lo-online{
+  position:absolute;bottom:4px;right:4px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--green);border:2px solid var(--bg);
+  box-shadow:0 0 8px var(--green);
+}
+.lo-username{font-family:'Syne',sans-serif;font-size:clamp(17px,3vw,22px);font-weight:800;color:var(--text)}
+.lo-displayname{font-size:13px;color:var(--v3);font-weight:600;margin-top:1px}
+.lo-uid{font-size:11px;color:var(--muted2);font-weight:500;margin-top:2px}
+
+.lo-confirm-btn{
+  width:100%;background:linear-gradient(135deg,var(--green),#22c55e);
+  border:none;border-radius:13px;padding:14px;
+  color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 8px 24px rgba(74,222,128,.3);transition:all var(--t);margin-bottom:10px;
+}
+.lo-confirm-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(74,222,128,.45)}
+.lo-back-btn{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.25);
+  border-radius:13px;padding:11px;color:var(--muted);
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;
+  cursor:pointer;transition:all var(--t);
+}
+.lo-back-btn:hover{background:rgba(124,58,237,.1);color:var(--text)}
+
+/* ── nav user chip ── */
+.nav-user{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);
+  border-radius:10px;padding:5px 12px 5px 6px;cursor:pointer;transition:all var(--t);
+}
+.nav-user:hover{background:rgba(124,58,237,.2)}
+.nav-user-avatar{width:26px;height:26px;border-radius:6px;object-fit:cover}
+.nav-user-name{font-size:12px;font-weight:700;color:var(--text)}
+/* ─────────────────────────────────────────────────── */
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .hero-stat:nth-child(2){border-right:none}
+  .hero-stat:nth-child(3),.hero-stat:nth-child(4){border-top:1px solid rgba(124,58,237,.12)}
+}
+@media(max-width:640px){
+  :root{--nav-h:56px}
+  .nav-links,.nav-badge{display:none}
+  .nav-cta{display:none}
+  .hamburger{display:flex}
+  .hero-sub br{display:none}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .hero-stat:nth-child(2){border-right:none}
+  .hero-stat:nth-child(3),.hero-stat:nth-child(4){border-top:1px solid rgba(124,58,237,.12)}
+  .skins-grid{grid-template-columns:repeat(2,1fr)}
+  .trust-grid{grid-template-columns:repeat(2,1fr)}
+  .reviews-grid{grid-template-columns:1fr}
+  .ranking-grid{flex-direction:column;align-items:center}
+  .rank-card{width:100%;max-width:300px;min-width:unset}
+  .rank-card.first{transform:none}
+  .rank-card.first:hover{transform:translateY(-5px)}
+  .aff-steps{flex-direction:column;align-items:center}
+  .aff-step{width:100%;max-width:240px}
+  .rating-summary{flex-direction:column}
+  footer{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:380px){
+  .skins-grid{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:1fr}
+  .group-tabs{flex-direction:column;align-items:stretch}
+  .group-tab{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<div class="mesh"><div class="mesh-orb"></div><div class="mesh-orb"></div><div class="mesh-orb"></div></div>
+<div class="stars" id="stars"></div>
+
+<!-- ══ LOGIN OVERLAY ══ -->
+<div id="loginOverlay">
+  <div class="lo-bg"><div class="lo-orb"></div><div class="lo-orb"></div></div>
+  <div class="lo-box">
+    <div class="lo-logo">Valtrix <span class="lo-spark">✦</span></div>
+    <p class="lo-tagline">Faça login com sua conta Roblox<br>para acessar o catálogo</p>
+
+    <!-- STEP 1: username input -->
+    <div id="loStep1" class="lo-step">
+      <label class="lo-label" for="loUsernameInput">Seu usuário no Roblox</label>
+      <div class="lo-input-wrap">
+        <input id="loUsernameInput" class="lo-input" type="text"
+          placeholder="Ex: PlayerName123"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          onkeydown="if(event.key==='Enter')loSearch()">
+      </div>
+      <div class="lo-err hidden" id="loErr">Usuário não encontrado.</div>
+      <button class="lo-btn" id="loSearchBtn" onclick="loSearch()">
+        <span class="btn-text">🎮 Entrar com Roblox</span>
+        <div class="btn-spinner"></div>
+      </button>
+      <div class="lo-security">🔒 Apenas seu nome de usuário é usado · sem senha</div>
+    </div>
+
+    <!-- STEP 2: confirm profile -->
+    <div id="loStep2" class="lo-step hidden">
+      <div class="lo-profile">
+        <div class="lo-avatar-wrap">
+          <img class="lo-avatar" id="loAvatarImg" src="" alt="">
+          <div class="lo-avatar-ring"></div>
+          <div class="lo-online"></div>
+        </div>
+        <div class="lo-username" id="loProfileName"></div>
+        <div class="lo-displayname" id="loProfileDisplay"></div>
+        <div class="lo-uid" id="loProfileUid"></div>
+      </div>
+      <button class="lo-confirm-btn" onclick="loConfirm()">✅ Sim, sou eu! Entrar</button>
+      <button class="lo-back-btn" onclick="loBack()">← Não sou eu, voltar</button>
+    </div>
+  </div>
+</div>
+<!-- ═════════════════════ -->
+<nav id="mainNav">
+  <a class="logo" href="#"><span>Valtrix</span><span class="logo-spark">✦</span></a>
+  <ul class="nav-links">
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#ranking">Ranking</a></li>
+    <li><a href="#seguranca">Segurança</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-user" id="navUser" style="display:none" title="Sair">
+      <img class="nav-user-avatar" id="navUserAvatar" src="" alt="">
+      <span class="nav-user-name" id="navUserName"></span>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#catalogo" onclick="closeMenu()">✨ Catálogo</a></li>
+    <li><a href="#ranking" onclick="closeMenu()">🏆 Ranking</a></li>
+    <li><a href="#seguranca" onclick="closeMenu()">🔒 Segurança</a></li>
+    <li><a href="#avaliacoes" onclick="closeMenu()">⭐ Avaliações</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <h1><em class="h1-white">Seu avatar,</em><em class="h1-grad">sua identidade.</em></h1>
+  <p class="hero-sub">Skins e outfits reais dos <strong>grupos do Roblox</strong>.<br>Compra segura, entrega instantânea, 100% oficial.</p>
+  <div class="hero-ctas">
+    <a href="#catalogo" class="btn-primary">✨ Ver Catálogo</a>
+    <a href="#seguranca" class="btn-secondary">🔒 Como funciona?</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="stat-num">4.2<span>k+</span></div><div class="stat-label">Itens</div></div>
+    <div class="hero-stat"><div class="stat-num">18<span>k</span></div><div class="stat-label">Clientes</div></div>
+    <div class="hero-stat"><div class="stat-num">4.9<span>★</span></div><div class="stat-label">Avaliação</div></div>
+    <div class="hero-stat"><div class="stat-num">100<span>%</span></div><div class="stat-label">Seguro</div></div>
+  </div>
+  <div class="scroll-hint"><div class="s-arrow"><div class="s-dot"></div></div><span>Explorar</span></div>
+</section>
+
+<!-- VIDEO HERO -->
+<section class="video-hero" id="videoHero">
+  <div style="position:relative;overflow:hidden">
+    <div class="video-inner" id="videoInner">
+      <div class="video-slide"><div class="video-placeholder"><span class="ph-emoji">🧚‍♀️</span><span class="ph-label">Fairy Collection</span><span class="ph-sub">📁 assets/video/0119.mp4</span></div><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="assets/video/0119.mp4" type="video/mp4"></video></div>
+      <div class="video-slide"><div class="video-placeholder"><span class="ph-emoji">🧜‍♀️</span><span class="ph-label">Ocean Series</span><span class="ph-sub">📁 assets/video/0119(1).mp4</span></div><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="assets/video/0119(1).mp4" type="video/mp4"></video></div>
+      <div class="video-slide"><div class="video-placeholder"><span class="ph-emoji">🌙</span><span class="ph-label">Night Edition</span><span class="ph-sub">📁 assets/video/0119(2).mp4</span></div><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="assets/video/0119(2).mp4" type="video/mp4"></video></div>
+      <div class="video-slide"><div class="video-placeholder"><span class="ph-emoji">🦄</span><span class="ph-label">Fantasy Bundle</span><span class="ph-sub">📁 assets/video/0119(3).mp4</span></div><video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="assets/video/0119(3).mp4" type="video/mp4"></video></div>
+    </div>
+    <button class="vh-arrow left" onclick="vhPrev()" aria-label="Anterior">&#8592;</button>
+    <button class="vh-arrow right" onclick="vhNext()" aria-label="Próximo">&#8594;</button>
+    <div class="vh-dots" id="vhDots"><div class="vh-dot active" onclick="vhGo(0)"></div><div class="vh-dot" onclick="vhGo(1)"></div><div class="vh-dot" onclick="vhGo(2)"></div><div class="vh-dot" onclick="vhGo(3)"></div></div>
+  </div>
+</section>
+
+<!-- TOP SEMANAL -->
+<section class="carousel-section" id="topSemanal">
+  <div class="section-header" style="padding:0 var(--px)">
+    <div class="pill">🏆 Top Semanal</div>
+    <h2>As <span class="hl">mais amadas</span> da semana</h2>
+    <p>Ranking atualizado toda segunda-feira</p>
+  </div>
+  <div class="carousel-wrapper">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="loading-state" style="width:100%;padding:48px"><div class="spinner"></div><p>Carregando itens...</p></div>
+    </div>
+  </div>
+  <div class="carousel-controls">
+    <button class="c-btn" onclick="carouselPrev()" aria-label="Anterior">&#8592;</button>
+    <div class="c-dots" id="carouselDots"></div>
+    <button class="c-btn" onclick="carouselNext()" aria-label="Próximo">&#8594;</button>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CATALOG -->
+<section class="section" id="catalogo">
+  <div class="section-header">
+    <div class="pill">✨ Catálogo Oficial</div>
+    <h2>Escolha o seu <span class="hl">look perfeito</span></h2>
+  </div>
+
+  <!-- GROUP TABS -->
+  <div class="group-tabs" id="groupTabs">
+    <button class="group-tab active" data-group="35278576" onclick="selectGroup(this)"><img class="group-tab-icon" id="icon-35278576" src="" alt="" onerror="this.style.display='none'">🌑 Darkverse</button>
+    <button class="group-tab" data-group="35692783" onclick="selectGroup(this)"><img class="group-tab-icon" id="icon-35692783" src="" alt="" onerror="this.style.display='none'">😂 Memeverse</button>
+    <button class="group-tab" data-group="113335355" onclick="selectGroup(this)"><img class="group-tab-icon" id="icon-113335355" src="" alt="" onerror="this.style.display='none'">⛩️ Animeverse</button>
+  </div>
+
+  <!-- ══ SEARCH BAR ══ -->
+  <div class="search-wrap">
+    <span class="search-icon-left">🔍</span>
+    <input
+      id="searchInput"
+      class="search-input"
+      type="search"
+      placeholder="Buscar skin ou outfit..."
+      autocomplete="off"
+      oninput="onSearch(this.value)"
+      onkeydown="if(event.key==='Escape')clearSearch()"
+    >
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Limpar">✕</button>
+  </div>
+  <div class="search-meta">
+    <span class="search-count" id="searchCount"></span>
+    <div class="search-sort" id="searchSort">
+      <span>Ordenar:</span>
+      <select id="sortSelect" onchange="applySort()">
+        <option value="default">Padrão</option>
+        <option value="az">A → Z</option>
+        <option value="za">Z → A</option>
+        <option value="price-asc">Menor preço</option>
+        <option value="price-desc">Maior preço</option>
+      </select>
+    </div>
+  </div>
+  <!-- ════════════════ -->
+
+  <div id="catalogContent">
+    <div class="loading-state"><div class="spinner"></div><p>Carregando itens...</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RANKING -->
+<section class="section" id="ranking">
+  <div class="section-header">
+    <div class="pill">🏆 Top 3</div>
+    <h2>As <span class="hl">campeãs</span> da semana</h2>
+    <p>Baseado em vendas e favoritos</p>
+  </div>
+  <div class="ranking-grid" id="rankingGrid"><div class="loading-state"><div class="spinner"></div></div></div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="avaliacoes">
+  <div class="section-header">
+    <div class="pill">⭐ Avaliações verificadas</div>
+    <h2>O que dizem nossos <span class="hl">clientes</span></h2>
+  </div>
+  <div class="rating-summary">
+    <div class="rating-big"><div class="rating-num">4.9</div><div class="rating-stars">★★★★★</div><div class="rating-count">748 avaliações</div></div>
+    <div class="rating-bars">
+      <div class="rb"><span>5★</span><div class="rb-track"><div class="rb-fill" style="width:83%"></div></div><span>620</span></div>
+      <div class="rb"><span>4★</span><div class="rb-track"><div class="rb-fill" style="width:13%;background:rgba(251,191,36,.5)"></div></div><span>98</span></div>
+      <div class="rb"><span>3★</span><div class="rb-track"><div class="rb-fill" style="width:3%;background:rgba(251,191,36,.3)"></div></div><span>22</span></div>
+      <div class="rb"><span>2★</span><div class="rb-track"><div class="rb-fill" style="width:1%;background:rgba(251,191,36,.2)"></div></div><span>5</span></div>
+      <div class="rb"><span>1★</span><div class="rb-track"><div class="rb-fill" style="width:.5%;background:rgba(251,191,36,.15)"></div></div><span>3</span></div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card"><div class="review-header"><div class="review-avatar" style="background:linear-gradient(135deg,#4a4a8a,#2a2a5a)">S</div><div><div class="review-user">@ShadowPlayer_BR</div><div class="review-time">há 2 dias</div></div><div class="review-stars">★★★★★</div></div><p class="review-text">Comprei e caiu na hora, muito seguro. Melhor marketplace de skins do Brasil!</p><div class="review-product">💬 Comprou: Void Shadow Cloak</div></div>
+    <div class="review-card"><div class="review-header"><div class="review-avatar" style="background:linear-gradient(135deg,#1a6a4a,#0a3a2a)">N</div><div><div class="review-user">@NeonKing_RBX</div><div class="review-time">há 5 dias</div></div><div class="review-stars">★★★★★</div></div><p class="review-text">Nunca pensei que seria tão fácil e seguro. Já é minha 3ª compra aqui!</p><div class="review-product">💬 Comprou: Neon Phantom Blade</div></div>
+    <div class="review-card"><div class="review-header"><div class="review-avatar" style="background:linear-gradient(135deg,#8a2a6a,#5a0a4a)">C</div><div><div class="review-user">@CrystalGirl_Gaming</div><div class="review-time">há 1 semana</div></div><div class="review-stars">★★★★★</div></div><p class="review-text">As skins são lindas e chegam instantaneamente. Recomendo demais!</p><div class="review-product">💬 Comprou: Crystal Aura Wings</div></div>
+    <div class="review-card"><div class="review-header"><div class="review-avatar" style="background:linear-gradient(135deg,#6a2a2a,#3a0a0a)">D</div><div><div class="review-user">@DarkLord_Apex</div><div class="review-time">há 1 semana</div></div><div class="review-stars">★★★★<span style="color:rgba(245,240,255,.2)">★</span></div></div><p class="review-text">Plataforma confiável. Processo simples e sem dor de cabeça. Voltarei a comprar.</p><div class="review-product">💬 Comprou: Void Shadow Cloak</div></div>
+    <div class="review-card"><div class="review-header"><div class="review-avatar" style="background:linear-gradient(135deg,#2a4a8a,#0a1a5a)">P</div><div><div class="review-user">@PixelHunter99</div><div class="review-time">há 2 semanas</div></div><div class="review-stars">★★★★★</div></div><p class="review-text">Serviço rápido e transparente. A skin ficou perfeita no meu avatar!</p><div class="review-product">💬 Comprou: Neon Phantom Blade</div></div>
+    <div class="review-card"><div class="review-header"><div class="review-avatar" style="background:linear-gradient(135deg,#3a2a8a,#1a0a6a)">L</div><div><div class="review-user">@LunaGamer_BR</div><div class="review-time">há 3 semanas</div></div><div class="review-stars">★★★★★</div></div><p class="review-text">Incrível! Login oficial, suporte rápido e skin top. Nota 10 com certeza!</p><div class="review-product">💬 Comprou: Crystal Aura Wings</div></div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section" id="seguranca" style="background:linear-gradient(180deg,rgba(124,58,237,.04),transparent)">
+  <div class="section-header">
+    <div class="pill">🔒 Segurança</div>
+    <h2>Você está <span class="hl">segura aqui</span></h2>
+    <p>Total transparência para você e seus responsáveis</p>
+  </div>
+  <div class="trust-grid">
+    <div class="trust-card"><span class="trust-icon">🔐</span><h4>Login OAuth2 Oficial</h4><p>OAuth2 oficial do Roblox. Sua senha nunca é digitada em nosso site.</p></div>
+    <div class="trust-card"><span class="trust-icon">🛡️</span><h4>Zero Armazenamento</h4><p>Não guardamos senhas. Autenticação 100% nos servidores do Roblox.</p></div>
+    <div class="trust-card"><span class="trust-icon">🏪</span><h4>Compra no Roblox</h4><p>Ao comprar, você vai direto para a página oficial do item no Roblox.</p></div>
+    <div class="trust-card"><span class="trust-icon">⚡</span><h4>Dados em Tempo Real</h4><p>Imagens, nomes e preços puxados da API oficial do Roblox.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Valtrix ✦</div>
+  <div class="footer-links"><a href="#">Privacidade</a><a href="#">Termos</a><a href="#">Suporte</a></div>
+  <p>© 2025 Valtrix · Não afiliado ao Roblox Corporation</p>
+</footer>
+
+<div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Mensagem</span></div>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Topo">↑</button>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────
+const EDGE = "https://sqarjthwitlmfdtxmhpt.supabase.co/functions/v1/affiliate"; // substitua pela sua URL
+
+const GROUPS={'35278576':{name:'Darkverse Skins',emoji:'🌑'},'35692783':{name:'Memeverse Skins',emoji:'😂'},'113335355':{name:'Animeverse Skins',emoji:'⛩️'}}; const PROXY='https://corsproxy.io/?'; let currentGroup='35278576', cache={}, allLoaded={};
+
+// Captura ref da URL
+const urlParams = new URLSearchParams(window.location.search);
+const REF = urlParams.get('ref') || null;
+
+// Função para enviar registro de clique
+async function registerClick(itemId) {
+  try {
+    if(!REF) return;
+    await fetch(`${EDGE}/click`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ref: REF, itemId})
+    });
+  } catch(e){ console.warn('Click error', e); }
+}
+
+// Função para enviar registro de conversão
+async function registerConversion(itemId) {
+  try {
+    if(!REF) return;
+    await fetch(`${EDGE}/conversion`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ref: REF, itemId})
+    });
+  } catch(e){ console.warn('Conversion error', e); }
+}
+
+// ── REGISTRY UPDATE ─────────────────────────────────────
+const reg={};
+function regItem(id,url,name){
+  reg[id]={url,name};
+  return id;
+}
+function openReg(el){
+  const e=reg[el.dataset.rid];
+  if(e){
+    showToast(`🛒 Abrindo: ${e.name}`,'info');
+    registerClick(e.url); // registra clique
+    setTimeout(()=>{
+      window.open(e.url,'_blank');
+      registerConversion(e.url); // registra conversão ao abrir
+    },600);
+  }
+}
+
+// ── SEARCH STATE ───────────────────────────────────────
+let searchQ='', sortMode='default', searchDebounce=null;
+
+function onSearch(val){
+  clearTimeout(searchDebounce);
+  searchDebounce=setTimeout(()=>{
+    searchQ=val.trim().toLowerCase();
+    document.getElementById('searchClear').classList.toggle('show', searchQ.length>0);
+    renderFiltered();
+  },180);
+}
+
+function clearSearch(){
+  const inp=document.getElementById('searchInput');
+  inp.value=''; searchQ='';
+  document.getElementById('searchClear').classList.remove('show');
+  setCount(null);
+  renderFiltered();
+  inp.focus();
+}
+
+function applySort(){
+  sortMode=document.getElementById('sortSelect').value;
+  renderFiltered();
+}
+
+function sortItems(items){
+  const arr=[...items];
+  switch(sortMode){
+    case 'az':        return arr.sort((a,b)=>a.name.localeCompare(b.name,'pt'));
+    case 'za':        return arr.sort((a,b)=>b.name.localeCompare(a.name,'pt'));
+    case 'price-asc': return arr.sort((a,b)=>{
+      // null (free) goes last
+      if(a.price==null && b.price==null) return 0;
+      if(a.price==null) return 1;
+      if(b.price==null) return 1;
+      return a.price - b.price;
+    });
+    case 'price-desc':return arr.sort((a,b)=>{
+      // null (free) goes last
+      if(a.price==null && b.price==null) return 0;
+      if(a.price==null) return 1;
+      if(b.price==null) return -1;
+      return b.price - a.price;
+    });
+    default:          return arr;
+  }
+}
+
+function setCount(n, q){
+  const el=document.getElementById('searchCount');
+  if(n===null){el.textContent='';el.classList.remove('show');return}
+  el.textContent=n===0?`Nenhum resultado para "${q}"`:`${n} resultado${n!==1?'s':''} para "${q}"`;
+  el.classList.add('show');
+}
+
+function renderFiltered(){
+  const items=cache[currentGroup]||[];
+  let filtered=searchQ ? items.filter(i=>i.name.toLowerCase().includes(searchQ)) : items;
+  filtered=sortItems(filtered);
+
+  if(searchQ) setCount(filtered.length, searchQ);
+  else setCount(null);
+
+  if(searchQ && filtered.length===0){
+    document.getElementById('catalogContent').innerHTML=`
+      <div class="no-results">
+        <span class="nr-emoji">🔍</span>
+        <h3>Nenhum resultado</h3>
+        <p>Não encontramos nada para <strong style="color:var(--v3)">"${searchQ}"</strong>.<br>Tente outro nome ou mude de grupo.</p>
+        <button class="nr-clear" onclick="clearSearch()">✕ Limpar busca</button>
+      </div>`;
+    return;
+  }
+  renderItems(filtered, currentGroup, searchQ);
+}
+
+// ── Render catalog ─────────────────────────────────────
+function renderItems(items, gid, hl=''){
+  const cont=document.getElementById('catalogContent');
+  if(!items.length){
+    cont.innerHTML=`<div class="error-state"><p>😔 Nenhum item encontrado.<br>Tente novamente em instantes.</p></div>`;
+    return;
+  }
+  const gname=GROUPS[gid]?.name||'';
+  cont.innerHTML=`<div class="skins-grid">${items.map((item,i)=>{
+    const price=item.price!=null
+      ?`<span class="price-diamonds">💎 ${item.price} R$</span>`
+      :`<span class="price-free">✓ GRÁTIS</span>`;
+    const thumb=item._thumb
+      ?`<img src="${item._thumb}" alt="" loading="lazy">`
+      :`<span class="no-img">${GROUPS[gid]?.emoji||'🎮'}</span>`;
+    const rid=regItem('s'+item.id, `https://www.roblox.com/catalog/${item.id}`, item.name);
+    // highlight matched text
+    const displayName = hl
+      ? item.name.replace(new RegExp(`(${hl.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'),
+          '<span class="match-hl">$1</span>')
+      : item.name;
+    return `<div class="skin-card" style="animation-delay:${Math.min(i*30,500)}ms" data-rid="${rid}" onclick="openReg(this)">
+      <div class="skin-img-wrap">${thumb}<div class="skin-overlay"></div></div>
+      <div class="skin-info">
+        <div class="skin-name" title="${item.name}">${displayName}</div>
+        <div class="skin-group-label">📦 ${gname}</div>
+        <div class="skin-footer">
+          <div class="skin-price">${price}</div>
+          <button class="buy-btn" data-rid="${rid}" onclick="event.stopPropagation();openReg(this)">Comprar</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+  document.querySelectorAll('#catalogContent .skin-card').forEach(el=>observer.observe(el));
+}
+
+// ── Render ranking ─────────────────────────────────────
+function renderRanking(){
+  const all=Object.values(allLoaded).flat().filter(i=>i._thumb);
+  if(all.length<3)return;
+  const top3=all.sort(()=>Math.random()-.5).slice(0,3);
+  const vis=[top3[1],top3[0],top3[2]],pos=[2,1,3],mc=['silver-m','gold-m','bronze-m'],cls=['second','first','third'];
+  document.getElementById('rankingGrid').innerHTML=vis.map((item,i)=>`
+    <div class="rank-card ${cls[i]}">
+      <div class="rank-num ${mc[i]}">${pos[i]}</div>
+      <img class="rank-img" src="${item._thumb}" alt="" loading="lazy">
+      <h4>${item.name}</h4>
+      <div class="rank-sales">${Math.floor(Math.random()*900+300)} vendas esta semana</div>
+      <div class="rank-price">${item.price!=null?`💎 ${item.price} R$`:'GRÁTIS'}</div>
+    </div>`).join('');
+}
+
+// ── Carousel ───────────────────────────────────────────
+let cItems=[],cIdx=0,cTimer=null;
+const VISIBLE=()=>window.innerWidth<480?1:window.innerWidth<780?2:3;
+
+function buildCarousel(items){
+  cItems=items.filter(i=>i._thumb).slice(0,10);
+  const track=document.getElementById('carouselTrack');
+  if(!cItems.length){track.innerHTML='';return}
+  track.innerHTML=cItems.map((item,i)=>{
+    const mc=['gold','silver','bronze'][i]||'other';
+    const crid=regItem('c'+item.id,`https://www.roblox.com/catalog/${item.id}`,item.name);
+    return `<div class="carousel-card${i===0?' gold-card':''}" data-rid="${crid}" onclick="openReg(this)">
+      <div class="c-medal ${mc}">${i+1}</div>
+      <div class="c-img-box"><img src="${item._thumb}" alt="" loading="lazy"></div>
+      <div class="c-name">${item.name}</div>
+      <div class="c-sales">${Math.floor(Math.random()*1200+300)} vendas</div>
+      <div class="c-price">${item.price!=null?`💎 ${item.price} R$`:'GRÁTIS'}</div>
+    </div>`;
+  }).join('');
+  rebuildDots(); moveCarousel(0); startCAuto();
+}
+function rebuildDots(){
+  const pages=Math.max(1,cItems.length-VISIBLE()+1);
+  document.getElementById('carouselDots').innerHTML=
+    Array.from({length:pages},(_,i)=>`<div class="c-dot${i===0?' active':''}" onclick="moveCarousel(${i})"></div>`).join('');
+}
+function moveCarousel(idx){
+  const track=document.getElementById('carouselTrack');
+  const card=track.querySelector('.carousel-card');
+  if(!card)return;
+  const gap=parseInt(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||16;
+  const cw=card.getBoundingClientRect().width+gap;
+  const max=Math.max(0,cItems.length-VISIBLE());
+  cIdx=Math.max(0,Math.min(idx,max));
+  track.style.transform=`translateX(-${cIdx*cw}px)`;
+  document.querySelectorAll('.c-dot').forEach((d,i)=>d.classList.toggle('active',i===cIdx));
+}
+function carouselNext(){moveCarousel(cIdx>=Math.max(0,cItems.length-VISIBLE())?0:cIdx+1);resetCAuto()}
+function carouselPrev(){moveCarousel(cIdx<=0?Math.max(0,cItems.length-VISIBLE()):cIdx-1);resetCAuto()}
+function startCAuto(){clearInterval(cTimer);cTimer=setInterval(carouselNext,3500)}
+function resetCAuto(){clearInterval(cTimer);startCAuto()}
+
+let resizeT;
+window.addEventListener('resize',()=>{clearTimeout(resizeT);resizeT=setTimeout(()=>{rebuildDots();moveCarousel(cIdx)},200)});
+
+// ── Video ──────────────────────────────────────────────
+let vhIdx=0; const VH=4; let vhTimer=setInterval(()=>vhGo(vhIdx+1),5000);
+function vhGo(i){vhIdx=((i%VH)+VH)%VH;document.getElementById('videoInner').style.transform=`translateX(-${vhIdx*100}%)`;document.querySelectorAll('.vh-dot').forEach((d,j)=>d.classList.toggle('active',j===vhIdx));document.querySelectorAll('.video-slide video').forEach((v,j)=>j===vhIdx?v.play():v.pause())}
+function vhNext(){vhGo(vhIdx+1);clearInterval(vhTimer);vhTimer=setInterval(()=>vhGo(vhIdx+1),5000)}
+function vhPrev(){vhGo(vhIdx-1);clearInterval(vhTimer);vhTimer=setInterval(()=>vhGo(vhIdx+1),5000)}
+
+// ── Touch swipe ────────────────────────────────────────
+let txStart=0,txEl=null;
+document.addEventListener('touchstart',e=>{txStart=e.touches[0].clientX;txEl=e.target},{passive:true});
+document.addEventListener('touchend',e=>{
+  const diff=txStart-e.changedTouches[0].clientX;
+  if(Math.abs(diff)<40)return;
+  if(txEl?.closest('.video-hero')){diff>0?vhNext():vhPrev()}
+  else{diff>0?carouselNext():carouselPrev()}
+},{passive:true});
+
+// ── Group select ───────────────────────────────────────
+function selectGroup(btn){
+  document.querySelectorAll('.group-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentGroup=btn.dataset.group;
+  // reset search on tab change
+  document.getElementById('searchInput').value='';
+  searchQ=''; sortMode='default';
+  document.getElementById('searchClear').classList.remove('show');
+  document.getElementById('sortSelect').value='default';
+  setCount(null);
+  loadGroup(currentGroup);
+}
+
+// ── Load group ─────────────────────────────────────────
+async function loadGroup(gid){
+  document.getElementById('catalogContent').innerHTML=`<div class="loading-state"><div class="spinner"></div><p>Carregando itens...</p></div>`;
+  try{
+    await fetchGroupItems(gid);
+    renderFiltered();
+    renderRanking();
+    const all=Object.values(allLoaded).flat().filter(i=>i._thumb);
+    if(all.length>=3)buildCarousel(all);
+  }catch{
+    document.getElementById('catalogContent').innerHTML=`
+      <div class="error-state">
+        <p>⚠️ Não foi possível carregar os itens agora.<br>O Roblox pode estar com instabilidade.<br><br><strong>Tente recarregar a página.</strong></p>
+        <button class="retry-btn" data-gid="${gid}" onclick="loadGroup(this.dataset.gid)">🔄 Tentar novamente</button>
+      </div>`;
+  }
+}
+
+// ── LOGIN FLOW ─────────────────────────────────────────
+let robloxUser = null;
+
+async function loSearch(){
+  const inp = document.getElementById('loUsernameInput');
+  const username = inp.value.trim();
+  const errEl = document.getElementById('loErr');
+  const btn = document.getElementById('loSearchBtn');
+
+  if(!username){ showLoError('Digite seu nome de usuário.'); inp.focus(); return; }
+
+  // loading state
+  btn.classList.add('loading'); btn.disabled = true;
+  inp.classList.remove('error');
+  errEl.classList.add('hidden');
+
+  try {
+    // 1. Get user ID from username
+    const r1 = await fetch(PROXY + encodeURIComponent(
+      `https://users.roblox.com/v1/usernames/users`
+    ), {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
+    });
+    const d1 = await r1.json();
+    const user = d1.data?.[0];
+    if(!user){ showLoError('Usuário não encontrado. Verifique o nome.'); inp.classList.add('error'); return; }
+
+    const uid = user.id;
+    const uname = user.name;
+    const displayName = user.displayName || uname;
+
+    // 2. Get avatar headshot
+    const r2 = await fetch(PROXY + encodeURIComponent(
+      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${uid}&size=180x180&format=Png&isCircular=false`
+    ));
+    const d2 = await r2.json();
+    const avatarUrl = d2.data?.[0]?.imageUrl || '';
+
+    robloxUser = { uid, username: uname, displayName, avatarUrl };
+
+    // Show step 2
+    document.getElementById('loAvatarImg').src = avatarUrl;
+    document.getElementById('loProfileName').textContent = uname;
+    document.getElementById('loProfileDisplay').textContent = displayName !== uname ? `"${displayName}"` : '';
+    document.getElementById('loProfileUid').textContent = `ID: ${uid}`;
+
+    document.getElementById('loStep1').classList.add('hidden');
+    document.getElementById('loStep2').classList.remove('hidden');
+
+  } catch(e) {
+    showLoError('Erro de conexão. Tente novamente.');
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+function showLoError(msg){
+  const el = document.getElementById('loErr');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+function loBack(){
+  document.getElementById('loStep2').classList.add('hidden');
+  document.getElementById('loStep1').classList.remove('hidden');
+  document.getElementById('loUsernameInput').focus();
+  robloxUser = null;
+}
+
+function loConfirm(){
+  if(!robloxUser) return;
+
+  // Show user in nav
+  const navUser = document.getElementById('navUser');
+  document.getElementById('navUserAvatar').src = robloxUser.avatarUrl;
+  document.getElementById('navUserName').textContent = robloxUser.username;
+  navUser.style.display = 'flex';
+  navUser.onclick = () => {
+    if(confirm(`Sair da conta @${robloxUser.username}?`)) loLogout();
+  };
+
+  // Update hero greeting
+  const heroSub = document.querySelector('.hero-sub');
+  if(heroSub) heroSub.innerHTML = `Olá, <strong>${robloxUser.displayName || robloxUser.username}</strong>! 👋<br>Explore skins e outfits reais dos grupos do Roblox.`;
+
+  // Hide overlay
+  const ov = document.getElementById('loginOverlay');
+  ov.classList.add('hide');
+  setTimeout(()=>{ ov.style.display='none'; document.body.style.overflow=''; }, 500);
+}
+
+function loLogout(){
+  robloxUser = null;
+  document.getElementById('navUser').style.display = 'none';
+  const ov = document.getElementById('loginOverlay');
+  ov.style.display = 'flex';
+  ov.classList.remove('hide');
+  // reset steps
+  document.getElementById('loStep1').classList.remove('hidden');
+  document.getElementById('loStep2').classList.add('hidden');
+  document.getElementById('loUsernameInput').value = '';
+  document.getElementById('loErr').classList.add('hidden');
+  document.getElementById('loUsernameInput').classList.remove('error');
+  document.body.style.overflow = 'hidden';
+}
+
+// Block body scroll while overlay is visible
+document.body.style.overflow = 'hidden';
+// ──────────────────────────────────────────────────────
+
+// ── Init ───────────────────────────────────────────────
+async function init(){
+  for(const gid of Object.keys(GROUPS)){
+    fetchGroupIcon(gid).then(url=>{if(url){const img=document.getElementById('icon-'+gid);if(img){img.src=url;img.style.display='block'}}});
+  }
+  await loadGroup(currentGroup);
+  for(const gid of Object.keys(GROUPS)){
+    if(gid!==currentGroup)fetchGroupItems(gid).then(()=>{renderRanking();const all=Object.values(allLoaded).flat().filter(i=>i._thumb);if(all.length>=3)buildCarousel(all)}).catch(()=>{});
+  }
+}
+
+// ── Fetch group icon ─────────────────────────────────────
+async function fetchGroupIcon(gid){
+  try{
+    const res = await fetch(PROXY + encodeURIComponent(
+      `https://thumbnails.roblox.com/v1/groups/icons?groupIds=${gid}&size=150x150&format=Png`
+    ));
+    const data = await res.json();
+    return data.data?.[0]?.imageUrl || null;
+  } catch(e){ console.warn('fetchGroupIcon error', e); return null; }
+}
+
+// ── Fetch group items ───────────────────────────────────
+async function fetchGroupItems(gid){
+  if(cache[gid]) return cache[gid];
+  try{
+    const res = await fetch(PROXY + encodeURIComponent(
+      `https://catalog.roblox.com/v1/search/items?sortOrder=Asc&limit=50&creatorTargetId=${gid}&creatorType=Group`
+    ));
+    const data = await res.json();
+    const items = data.data?.map(i=>({
+      id: i.id,
+      name: i.name,
+      price: i.priceInRobux ?? null,
+      _thumb: i.thumbnail?.url ?? null
+    })) || [];
+    cache[gid] = items;
+    allLoaded[gid] = items;
+    return items;
+  } catch(e){ console.warn('fetchGroupItems error', e); return []; }
+}
+
+// ── Intersection observer ──────────────────────────────
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.trust-card,.review-card,.rank-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
+
+init();
+</script>
+</body>
+</html>
