@@ -3088,285 +3088,57 @@
   <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
     aria-label="Topo">↑</button>
 
-  <script>
-    const GROUPS = { '35278576': { name: 'Darkverse Skins', emoji: '🌑' }, '35692783': { name: 'Memeverse Skins', emoji: '😂' }, '113335355': { name: 'Animeverse Skins', emoji: '⛩️' } };
+<script>
+// ── CONFIG ─────────────────────────────────────────────
+const EDGE = "https://sqarjthwitlmfdtxmhpt.supabase.co/functions/v1/affiliate"; // substitua pela sua URL
 
-    // ── Supabase config ────────────────────────────────────
-    const EDGE = "https://sqarjthwitlmfdtxmhpt.supabase.co/functions/v1";
-    const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxYXJqdGh3aXRsbWZkdHhtaHB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODg1NDQsImV4cCI6MjA4ODA2NDU0NH0.sBh_W3V4CmQkTghIbMEIi8Or-vr2r8Q_iGbNGkQeA1E";
+const GROUPS={'35278576':{name:'Darkverse Skins',emoji:'🌑'},'35692783':{name:'Memeverse Skins',emoji:'😂'},'113335355':{name:'Animeverse Skins',emoji:'⛩️'}}; const PROXY = "https://corsproxy.io/?"; let currentGroup='35278576', cache={}, allLoaded={};
 
-    async function edgeCall(action, body = {}) {
-      const res = await fetch(`${EDGE}/affiliate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${ANON_KEY}`
-        },
-        body: JSON.stringify({ action, ...body })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.error(`edgeCall [${action}] erro ${res.status}:`, data);
-      }
-      return data;
-    }
+// Captura ref da URL
+const urlParams = new URLSearchParams(window.location.search);
+const REF = urlParams.get('ref') || null;
 
-    async function proxyFetch(url, opts = {}) {
-      const headers = { ...(opts.headers || {}), "Authorization": `Bearer ${ANON_KEY}` };
-      const res = await fetch(`${EDGE}/roblox-proxy?url=${encodeURIComponent(url)}`, { ...opts, headers });
-      if (!res.ok) throw new Error(`Proxy erro ${res.status}`);
-      return res;
-    }
-
-    const _REF = new URLSearchParams(location.search).get('ref');
-    if (_REF) {
-      sessionStorage.setItem('vx_ref', _REF);
-      edgeCall('track_click', { code: _REF }).catch(() => { });
-    }
-    const activeRef = () => sessionStorage.getItem('vx_ref');
-
-    let currentGroup = '35278576', cache = {}, allLoaded = {};
-
-    // ── Stars ──────────────────────────────────────────────
-    // ── MOD 6: SVG Stars helper ──────────────────────────
-    function svgStars(rating, size) {
-      let s = ''; const full = Math.floor(rating); const half = (rating % 1) >= .4;
-      for (let i = 0; i < 5; i++) {
-        if (i < full)
-          s += `<svg viewBox="0 0 24 24" fill="#ffcc00" width="${size}" height="${size}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-        else if (i === full && half)
-          s += `<svg viewBox="0 0 24 24" width="${size}" height="${size}"><defs><linearGradient id="hg${i}"><stop offset="50%" stop-color="#ffcc00"/><stop offset="50%" stop-color="rgba(255,204,0,.2)"/></linearGradient></defs><path fill="url(#hg${i})" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-        else
-          s += `<svg viewBox="0 0 24 24" fill="rgba(255,204,0,.2)" width="${size}" height="${size}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-      }
-      return s;
-    }
-
-    // ── MOD 10: detectar categoria pelo nome ──────────────
-    function detectCategory(name) {
-      const n = name.toLowerCase();
-      if (n.includes('pants') || n.includes('pant') || n.includes('leg') || n.includes('calça')) return 'Calça';
-      if (n.includes('shirt') || n.includes('top') || n.includes('tee') || n.includes('camisa') || n.includes('blusa')) return 'Camisa';
-      if (n.includes('dress') || n.includes('vestido') || n.includes('skirt') || n.includes('saia')) return 'Vestido';
-      if (n.includes('jacket') || n.includes('coat') || n.includes('jaqueta') || n.includes('casaco')) return 'Jaqueta';
-      if (n.includes('hat') || n.includes('cap') || n.includes('chapéu') || n.includes('boné')) return 'Chapéu';
-      if (n.includes('shoe') || n.includes('boot') || n.includes('tênis') || n.includes('sapato')) return 'Calçado';
-      if (n.includes('wing') || n.includes('asa')) return 'Acessório';
-      if (n.includes('hair') || n.includes('cabelo')) return 'Cabelo';
-      if (n.includes('mask') || n.includes('máscara') || n.includes('face')) return 'Máscara';
-      if (n.includes('cloak') || n.includes('robe') || n.includes('manto')) return 'Manto';
-      if (n.includes('outfit') || n.includes('bundle') || n.includes('set') || n.includes('conjunto')) return 'Conjunto';
-      return 'Skin';
-    }
-
-    // ── MOD 9: Frase pós-carrossel ────────────────────────
-    const PHRASES = [
-      '"Escolha não uma roupa. Escolha quem você quer ser."',
-      '"Seu avatar, sua alma. Vista o que te representa."',
-      '"Cada look conta uma história. Qual é a sua?"',
-      '"Moda no Roblox é arte. Seja a obra-prima."',
-    ];
-    let phraseIdx = 0, phraseLocked = false;
-    function showNextPhrase() {
-      if (phraseLocked) return;
-      phraseLocked = true;
-      const el = document.getElementById('carouselPhraseText');
-      el.classList.remove('visible'); el.classList.add('fade-out');
-      setTimeout(() => {
-        phraseIdx = (phraseIdx + 1) % PHRASES.length;
-        el.textContent = PHRASES[phraseIdx];
-        el.classList.remove('fade-out');
-        setTimeout(() => { el.classList.add('visible'); phraseLocked = false; }, 50);
-      }, 650);
-    }
-    // Mostrar frase inicial após carregamento
-    setTimeout(() => {
-      const el = document.getElementById('carouselPhraseText');
-      if (el) el.classList.add('visible');
-    }, 1400);
-
-    // MOD 6: stars na seção de avaliação
-    const ratingSvgEl = document.getElementById('ratingSvgStars');
-    if (ratingSvgEl) ratingSvgEl.innerHTML = svgStars(4.9, 18);
-
-    const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 100; i++) {
-      const s = document.createElement('div'); s.className = 'star';
-      const sz = Math.random() * 2 + .5;
-      s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;--d:${(Math.random() * 4 + 2).toFixed(1)}s;animation-delay:${(Math.random() * 5).toFixed(1)}s`;
-      starsEl.appendChild(s);
-    }
-
-    // MOD 12: Bolhas flutuantes
-    const bubblesEl = document.getElementById('bubbles');
-    if (bubblesEl) {
-      for (let i = 0; i < 16; i++) {
-        const b = document.createElement('div'); b.className = 'bubble';
-        const sz = Math.random() * 55 + 18;
-        b.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;--bd:${(Math.random() * 18 + 10).toFixed(1)}s;--bdel:${(Math.random() * 14).toFixed(1)}s`;
-        bubblesEl.appendChild(b);
-      }
-    }
-
-    // ── Mobile menu ────────────────────────────────────────
-    function toggleMenu() {
-      const m = document.getElementById('mobileMenu'), h = document.getElementById('hamburger');
-      const open = m.classList.toggle('open');
-      h.classList.toggle('open', open);
-      document.body.style.overflow = open ? 'hidden' : '';
-    }
-    function closeMenu() {
-      document.getElementById('mobileMenu').classList.remove('open');
-      document.getElementById('hamburger').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('click', e => {
-      const m = document.getElementById('mobileMenu'), nav = document.getElementById('mainNav');
-      if (m.classList.contains('open') && !m.contains(e.target) && !nav.contains(e.target)) closeMenu();
+// Função para enviar registro de clique
+async function registerClick(itemId) {
+  try {
+    if(!REF) return;
+    await fetch(`${EDGE}/click`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ref: REF, itemId})
     });
+  } catch(e){ console.warn('Click error', e); }
+}
 
-    // ── Nav scroll ─────────────────────────────────────────
-    const SECS = ['home', 'catalogo', 'ranking', 'seguranca', 'avaliacoes'];
-    window.addEventListener('scroll', () => {
-      document.getElementById('mainNav').classList.toggle('scrolled', scrollY > 40);
-      document.getElementById('backTop').classList.toggle('visible', scrollY > 400);
-      for (const id of [...SECS].reverse()) {
-        const el = document.getElementById(id);
-        if (el && scrollY >= el.offsetTop - 100) {
-          document.querySelectorAll('.nav-links a,.mobile-menu a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-          break;
-        }
-      }
-    }, { passive: true });
+// Função para enviar registro de conversão
+async function registerConversion(itemId) {
+  try {
+    if(!REF) return;
+    await fetch(`${EDGE}/conversion`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ref: REF, itemId})
+    });
+  } catch(e){ console.warn('Conversion error', e); }
+}
 
-    // ── Toast ──────────────────────────────────────────────
-    function showToast(msg, type = 'success') {
-      const icons = { success: '✅', info: '💫', error: '❌' };
-      document.getElementById('toastMsg').textContent = msg;
-      document.getElementById('toastIcon').textContent = icons[type] || '💫';
-      const el = document.getElementById('toast');
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3500);
-    }
-
-    // ── API ────────────────────────────────────────────────
-    async function fetchGroupIcon(gid) {
-      try { const r = await proxyFetch(`https://thumbnails.roblox.com/v1/groups/icons?groupIds=${gid}&size=150x150&format=Png`); const d = await r.json(); return d.data?.[0]?.imageUrl ?? null } catch (e) { console.warn('fetchGroupIcon error', e); return null }
-    }
-    async function fetchGroupItems(gid) {
-      if (cache[gid]) return cache[gid];
-      const r = await proxyFetch(`https://catalog.roblox.com/v1/search/items/details?Category=3&CreatorType=2&CreatorTargetId=${gid}&Limit=30&SortType=0`);
-      if (!r.ok) throw new Error('API error');
-      const d = await r.json(); const items = d.data || [];
-      if (items.length) {
-        const ids = items.map(i => i.id).join(',');
-        try {
-          const tr = await proxyFetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${ids}&size=420x420&format=Png`);
-          const td = await tr.json(); const map = {};
-          (td.data || []).forEach(t => { map[t.targetId] = t.imageUrl });
-          items.forEach(item => { item._thumb = map[item.id] ?? null });
-        } catch { }
-      }
-      cache[gid] = items; allLoaded[gid] = items; return items;
-    }
-
-    let pendingSession = null;
-
-    const reg = {};
-    function regItem(id, url, name, price) { reg[id] = { url, name, price, id }; return id; }
-
-    async function openReg(el) {
-      const e = reg[el.dataset.rid];
-      if (!e) return;
-
-      const ref = activeRef();
-
-      if (ref && robloxUser) {
-        const rawId = el.dataset.rid.replace(/^[sc]/, '');
-
-        try {
-          const res = await edgeCall('create_session', {
-            code: ref,
-            item_id: rawId,
-            item_name: e.name,
-            item_price: e.price || 0,
-          });
-
-          if (res.token) {
-            pendingSession = { token: res.token, itemName: e.name, itemUrl: e.url };
-            showPurchaseModal(e.name, e.url);
-            return;
-          } else {
-            console.warn('create_session falhou:', res.error || res);
-          }
-        } catch (err) {
-          console.warn('create_session erro:', err);
-        }
-      }
-
-      showToast(`🛒 Abrindo: ${e.name}`, 'info');
-      setTimeout(() => window.open(e.url, '_blank'), 600);
-    }
-
-    function showPurchaseModal(itemName, itemUrl) {
-      document.getElementById('pmItemName').textContent = itemName;
-      document.getElementById('purchaseModal').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      window.open(itemUrl, '_blank');
-    }
-
-    function pmGoRoblox() {
-      if (!pendingSession) return;
-      window.open(reg[Object.keys(reg).find(k => reg[k].name === pendingSession.itemName)]?.url || '#', '_blank');
-    }
-
-    async function pmConfirm() {
-      if (!pendingSession || !robloxUser) return;
-
-      const btn = document.getElementById('pmConfirmBtn');
-      btn.disabled = true;
-      btn.textContent = '⏳ Verificando...';
-
-      try {
-        const res = await edgeCall('confirm_purchase', {
-          token: pendingSession.token,
-          buyer_uid: robloxUser.uid,
-        });
-
-        if (res.ok) {
-          closePurchaseModal();
-          showToast(`🎉 Compra confirmada! Comissão registrada.`, 'success');
-        } else {
-          const msgs = {
-            token_invalido: 'Link inválido ou expirado.',
-            sessao_ja_usada: 'Esta compra já foi confirmada.',
-            sessao_expirada: 'Sessão expirada (24h). Clique novamente no link.',
-            dispositivo_diferente: 'Confirme pelo mesmo dispositivo que clicou no link.',
-            afiliado_inativo: 'Link de afiliado inativo.',
-            auto_fraude: 'Você não pode comprar pelo seu próprio link.',
-            compra_duplicada: 'Você já confirmou este item antes.',
-            limite_diario: 'Limite de confirmações diárias atingido.',
-          };
-          closePurchaseModal();
-          showToast(`⚠️ ${msgs[res.reason] || 'Não foi possível confirmar.'}`, 'error');
-        }
-      } catch {
-        closePurchaseModal();
-        showToast('Erro de conexão. Tente novamente.', 'error');
-      } finally {
-        pendingSession = null;
-      }
-    }
-
-    function pmCancel() {
-      closePurchaseModal();
-      pendingSession = null;
-    }
-
-    function closePurchaseModal() {
-      document.getElementById('purchaseModal').style.display = 'none';
-      document.body.style.overflow = '';
-    }
+// ── REGISTRY UPDATE ─────────────────────────────────────
+const reg={};
+function regItem(id,url,name){
+  reg[id]={url,name};
+  return id;
+}
+function openReg(el){
+  const e=reg[el.dataset.rid];
+  if(e){
+    showToast(`🛒 Abrindo: ${e.name}`,'info');
+    registerClick(e.url); // registra clique
+    setTimeout(()=>{
+      window.open(e.url,'_blank');
+      registerConversion(e.url); // registra conversão ao abrir
+    },600);
+  }
+}
 
     // ── SEARCH STATE ───────────────────────────────────────
     let searchQ = '', sortMode = 'default', searchDebounce = null;
@@ -3439,42 +3211,29 @@
       renderItems(filtered, currentGroup, searchQ);
     }
 
-    function renderItems(items, gid, hl = '') {
-      const cont = document.getElementById('catalogContent');
-      if (!items.length) {
-        cont.innerHTML = `<div class="error-state"><p>😔 Nenhum item encontrado.<br>Tente novamente em instantes.</p></div>`;
-        return;
-      }
-      const gname = GROUPS[gid]?.name || '';
-      cont.innerHTML = `<div class="skins-grid">${items.map((item, i) => {
-        const price = item.price != null
-          ? `<span class="price-diamonds">💎 ${item.price} R$</span>`
-          : `<span class="price-free">✓ GRÁTIS</span>`;
-        const thumb = item._thumb
-          ? `<img src="${item._thumb}" alt="" loading="lazy">`
-          : `<span class="no-img">${GROUPS[gid]?.emoji || '🎮'}</span>`;
-        const rid = regItem('s' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name, item.price);
-        const displayName = hl
-          ? item.name.replace(new RegExp(`(${hl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
-            '<span class="match-hl">$1</span>')
-          : item.name;
-
-        // MOD 10: hot badge (foguinho) se >20% do teto de vendas
-        const sales = item._sales || Math.floor(Math.random() * 600 + 50);
-        item._sales = sales;
-        const isHot = sales > 380;
-        const hotBadge = isHot ? `<div class="skin-hot-badge">🔥 Em Alta</div>` : '';
-
-        // MOD 10: categoria
-        const cat = detectCategory(item.name);
-        const catBadge = `<div class="skin-cat-badge">${cat}</div>`;
-
-        // MOD 6: estrelas SVG
-        const starRating = (Math.random() * 1.5 + 3.5).toFixed(1);
-        const cardStars = `<div class="skin-stars">${svgStars(parseFloat(starRating), 11)}<span style="font-size:9px;color:var(--muted);margin-left:2px;font-weight:700">${starRating}</span></div>`;
-
-        return `<div class="skin-card" style="animation-delay:${Math.min(i * 30, 500)}ms" data-rid="${rid}" onclick="openReg(this)">
-      <div class="skin-img-wrap">${thumb}${hotBadge}${catBadge}<div class="skin-overlay"></div></div>
+// ── Render catalog ─────────────────────────────────────
+function renderItems(items, gid, hl=''){
+  const cont=document.getElementById('catalogContent');
+  if(!items.length){
+    cont.innerHTML=`<div class="error-state"><p>😔 Nenhum item encontrado.<br>Tente novamente em instantes.</p></div>`;
+    return;
+  }
+  const gname=GROUPS[gid]?.name||'';
+  cont.innerHTML=`<div class="skins-grid">${items.map((item,i)=>{
+    const price=item.price!=null
+      ?`<span class="price-diamonds">💎 ${item.price} R$</span>`
+      :`<span class="price-free">✓ GRÁTIS</span>`;
+    const thumb=item._thumb
+      ?`<img src="${item._thumb}" alt="" loading="lazy">`
+      :`<span class="no-img">${GROUPS[gid]?.emoji||'🎮'}</span>`;
+    const rid=regItem('s'+item.id, `https://www.roblox.com/catalog/${item.id}`, item.name);
+    // highlight matched text
+    const displayName = hl
+      ? item.name.replace(new RegExp(`(${hl.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'),
+          '<span class="match-hl">$1</span>')
+      : item.name;
+    return `<div class="skin-card" style="animation-delay:${Math.min(i*30,500)}ms" data-rid="${rid}" onclick="openReg(this)">
+      <div class="skin-img-wrap">${thumb}<div class="skin-overlay"></div></div>
       <div class="skin-info">
         <div class="skin-name" title="${item.name}">${displayName}</div>
         <div class="skin-group-label">📦 ${gname}</div>
@@ -3510,15 +3269,15 @@
     let cItems = [], cIdx = 0, cTimer = null;
     const VISIBLE = () => window.innerWidth < 480 ? 1 : window.innerWidth < 780 ? 2 : 3;
 
-    function buildCarousel(items) {
-      cItems = items.filter(i => i._thumb).slice(0, 10);
-      const track = document.getElementById('carouselTrack');
-      if (!cItems.length) { track.innerHTML = ''; return }
-      track.innerHTML = cItems.map((item, i) => {
-        const mc = ['gold', 'silver', 'bronze'][i] || 'other';
-        const crid = regItem('c' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name, item.price);
-        return `<div class="carousel-card${i === 0 ? ' gold-card' : ''}" data-rid="${crid}" onclick="openReg(this)">
-      <div class="c-medal ${mc}">${i + 1}</div>
+function buildCarousel(items){
+  cItems=items.filter(i=>i._thumb).slice(0,10);
+  const track=document.getElementById('carouselTrack');
+  if(!cItems.length){track.innerHTML='';return}
+  track.innerHTML=cItems.map((item,i)=>{
+    const mc=['gold','silver','bronze'][i]||'other';
+    const crid=regItem('c'+item.id,`https://www.roblox.com/catalog/${item.id}`,item.name);
+    return `<div class="carousel-card${i===0?' gold-card':''}" data-rid="${crid}" onclick="openReg(this)">
+      <div class="c-medal ${mc}">${i+1}</div>
       <div class="c-img-box"><img src="${item._thumb}" alt="" loading="lazy"></div>
       <div class="c-name">${item.name}</div>
       <div class="c-sales">${Math.floor(Math.random() * 1200 + 300)} vendas</div>
@@ -3605,36 +3364,42 @@
 
       if (!username) { showLoError('Digite seu nome de usuário.'); inp.focus(); return; }
 
-      btn.classList.add('loading'); btn.disabled = true;
-      inp.classList.remove('error');
-      errEl.classList.add('hidden');
+  // loading state
+  btn.classList.add('loading'); btn.disabled = true;
+  inp.classList.remove('error');
+  errEl.classList.add('hidden');
 
-      try {
-        const res = await edgeCall('lookup', { username });
+  try {
+    // 1. Get user ID from username
+    const r1 = await fetch(PROXY + encodeURIComponent(
+      `https://users.roblox.com/v1/usernames/users`
+    ), {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
+    });
+    const d1 = await r1.json();
+    const user = d1.data?.[0];
+    if(!user){ showLoError('Usuário não encontrado. Verifique o nome.'); inp.classList.add('error'); return; }
 
-        if (res.error || !res.user) {
-          showLoError('Usuário não encontrado. Verifique o nome.');
-          inp.classList.add('error');
-          return;
-        }
+    const uid = user.id;
+    const uname = user.name;
+    const displayName = user.displayName || uname;
 
-        const { uid, username: uname, displayName } = res.user;
-
-        let avatarUrl = '';
-        try {
-          const r2 = await proxyFetch(
-            `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${uid}&size=180x180&format=Png&isCircular=false`
-          );
-          const d2 = await r2.json();
-          avatarUrl = d2.data?.[0]?.imageUrl || '';
-        } catch { }
+    // 2. Get avatar headshot
+    const r2 = await fetch(PROXY + encodeURIComponent(
+      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${uid}&size=180x180&format=Png&isCircular=false`
+    ));
+    const d2 = await r2.json();
+    const avatarUrl = d2.data?.[0]?.imageUrl || '';
 
         robloxUser = { uid, username: uname, displayName, avatarUrl };
 
-        document.getElementById('loAvatarImg').src = avatarUrl;
-        document.getElementById('loProfileName').textContent = uname;
-        document.getElementById('loProfileDisplay').textContent = displayName !== uname ? `"${displayName}"` : '';
-        document.getElementById('loProfileUid').textContent = `ID: ${uid}`;
+    // Show step 2
+    document.getElementById('loAvatarImg').src = avatarUrl;
+    document.getElementById('loProfileName').textContent = uname;
+    document.getElementById('loProfileDisplay').textContent = displayName !== uname ? `"${displayName}"` : '';
+    document.getElementById('loProfileUid').textContent = `ID: ${uid}`;
 
         document.getElementById('loStep1').classList.add('hidden');
         document.getElementById('loStep2').classList.remove('hidden');
@@ -3659,132 +3424,101 @@
       robloxUser = null;
     }
 
-    async function loConfirm() {
-      if (!robloxUser) return;
+function loConfirm(){
+  if(!robloxUser) return;
 
-      try {
-        await edgeCall('register', { uid: robloxUser.uid });
-      } catch { }
+  // Show user in nav
+  const navUser = document.getElementById('navUser');
+  document.getElementById('navUserAvatar').src = robloxUser.avatarUrl;
+  document.getElementById('navUserName').textContent = robloxUser.username;
+  navUser.style.display = 'flex';
+  navUser.onclick = () => {
+    if(confirm(`Sair da conta @${robloxUser.username}?`)) loLogout();
+  };
 
-      const navUser = document.getElementById('navUser');
-      document.getElementById('navUserAvatar').src = robloxUser.avatarUrl;
-      document.getElementById('navUserName').textContent = robloxUser.username;
-      navUser.style.display = 'flex';
-      navUser.onclick = () => {
-        if (confirm(`Sair da conta @${robloxUser.username}?`)) loLogout();
-      };
+  // Update hero greeting
+  const heroSub = document.querySelector('.hero-sub');
+  if(heroSub) heroSub.innerHTML = `Olá, <strong>${robloxUser.displayName || robloxUser.username}</strong>! 👋<br>Explore skins e outfits reais dos grupos do Roblox.`;
 
-      const heroSub = document.querySelector('.hero-sub');
-      if (heroSub) heroSub.innerHTML = `Olá, <strong>${robloxUser.displayName || robloxUser.username}</strong>! 👋<br>Descubra Seu Proximo Visual!`;
+  // Hide overlay
+  const ov = document.getElementById('loginOverlay');
+  ov.classList.add('hide');
+  setTimeout(()=>{ ov.style.display='none'; document.body.style.overflow=''; }, 500);
+}
 
-      const ov = document.getElementById('loginOverlay');
-      ov.classList.add('hide');
-      setTimeout(() => { ov.style.display = 'none'; document.body.style.overflow = ''; }, 500);
-    }
+function loLogout(){
+  robloxUser = null;
+  document.getElementById('navUser').style.display = 'none';
+  const ov = document.getElementById('loginOverlay');
+  ov.style.display = 'flex';
+  ov.classList.remove('hide');
+  // reset steps
+  document.getElementById('loStep1').classList.remove('hidden');
+  document.getElementById('loStep2').classList.add('hidden');
+  document.getElementById('loUsernameInput').value = '';
+  document.getElementById('loErr').classList.add('hidden');
+  document.getElementById('loUsernameInput').classList.remove('error');
+  document.body.style.overflow = 'hidden';
+}
 
-    function loLogout() {
-      robloxUser = null;
-      document.getElementById('navUser').style.display = 'none';
-      const ov = document.getElementById('loginOverlay');
-      ov.style.display = 'flex';
-      ov.classList.remove('hide');
-      document.getElementById('loStep1').classList.remove('hidden');
-      document.getElementById('loStep2').classList.add('hidden');
-      document.getElementById('loUsernameInput').value = '';
-      document.getElementById('loErr').classList.add('hidden');
-      document.getElementById('loUsernameInput').classList.remove('error');
-      document.body.style.overflow = 'hidden';
-    }
+// Block body scroll while overlay is visible
+document.body.style.overflow = 'hidden';
+// ──────────────────────────────────────────────────────
 
-    document.body.style.overflow = 'hidden';
+// ── Init ───────────────────────────────────────────────
+async function init(){
+  for(const gid of Object.keys(GROUPS)){
+    fetchGroupIcon(gid).then(url=>{if(url){const img=document.getElementById('icon-'+gid);if(img){img.src=url;img.style.display='block'}}});
+  }
+  await loadGroup(currentGroup);
+  for(const gid of Object.keys(GROUPS)){
+    if(gid!==currentGroup)fetchGroupItems(gid).then(()=>{renderRanking();const all=Object.values(allLoaded).flat().filter(i=>i._thumb);if(all.length>=3)buildCarousel(all)}).catch(()=>{});
+  }
+}
 
-    async function init() {
-      for (const gid of Object.keys(GROUPS)) {
-        fetchGroupIcon(gid).then(url => { if (url) { const img = document.getElementById('icon-' + gid); if (img) { img.src = url; img.style.display = 'block' } } });
-      }
-      await loadGroup(currentGroup);
-      for (const gid of Object.keys(GROUPS)) {
-        if (gid !== currentGroup) fetchGroupItems(gid).then(() => { renderRanking(); const all = Object.values(allLoaded).flat().filter(i => i._thumb); if (all.length >= 3) buildCarousel(all) }).catch(() => { });
-      }
-    }
+// ── Fetch group icon ─────────────────────────────────────
+async function fetchGroupIcon(gid){
+  try{
+    const res = await fetch(PROXY + encodeURIComponent(
+      `https://thumbnails.roblox.com/v1/groups/icons?groupIds=${gid}&size=150x150&format=Png`
+    ));
+    const data = await res.json();
+    return data.data?.[0]?.imageUrl || null;
+  } catch(e){ console.warn('fetchGroupIcon error', e); return null; }
+}
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)' } });
-    }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.trust-card,.review-card,.rank-card').forEach(el => {
-      el.style.opacity = '0'; el.style.transform = 'translateY(18px)';
-      el.style.transition = 'opacity .5s ease, transform .5s ease';
-      observer.observe(el);
-    });
+// ── Fetch group items ───────────────────────────────────
+async function fetchGroupItems(gid){
+  if(cache[gid]) return cache[gid];
+  try{
+    const res = await fetch(PROXY + encodeURIComponent(
+      `https://catalog.roblox.com/v1/search/items?sortOrder=Asc&limit=50&creatorTargetId=${gid}&creatorType=Group`
+    ));
+    const data = await res.json();
+    const items = data.data?.map(i=>({
+      id: i.id,
+      name: i.name,
+      price: i.priceInRobux ?? null,
+      _thumb: i.thumbnail?.url ?? null
+    })) || [];
+    cache[gid] = items;
+    allLoaded[gid] = items;
+    return items;
+  } catch(e){ console.warn('fetchGroupItems error', e); return []; }
+}
 
-    init();
-  </script>
+// ── Intersection observer ──────────────────────────────
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.trust-card,.review-card,.rank-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
 
-  <!-- ══ MODAL DE CONFIRMAÇÃO DE COMPRA ══ -->
-  <div id="purchaseModal"
-    style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(5,2,15,.92);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:var(--px)">
-    <div
-      style="position:relative;width:min(460px,100%);background:rgba(255,255,255,.03);border:1px solid rgba(124,58,237,.3);border-radius:28px;padding:clamp(28px,5vw,44px);text-align:center;animation:fadeUp .4s ease both">
-
-      <div
-        style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(168,85,247,.2));border:2px solid rgba(124,58,237,.4);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px">
-        🛒</div>
-
-      <h3 style="font-family:'Syne',sans-serif;font-size:clamp(18px,3.5vw,24px);font-weight:800;margin-bottom:10px">
-        Confirmar sua compra</h3>
-
-      <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:6px">
-        O Roblox foi aberto com o item:<br>
-        <strong style="color:var(--v3);font-size:14px" id="pmItemName"></strong>
-      </p>
-
-      <div
-        style="background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:16px;padding:18px;margin:20px 0;text-align:left">
-        <div
-          style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">
-          Como funciona</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)">
-            <span
-              style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--v),#9333ea);color:#fff;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span>
-            Complete a compra no Roblox que acabou de abrir
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)">
-            <span
-              style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--v),#9333ea);color:#fff;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span>
-            Volte aqui e clique em <strong style="color:var(--text)">"Já comprei!"</strong>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)">
-            <span
-              style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--green),#22c55e);color:#000;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</span>
-            A comissão do afiliado é registrada automaticamente
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;flex-direction:column">
-        <button id="pmConfirmBtn" onclick="pmConfirm()"
-          style="width:100%;background:linear-gradient(135deg,var(--green),#22c55e);border:none;border-radius:13px;padding:15px;color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all var(--t);box-shadow:0 8px 24px rgba(74,222,128,.3)">
-          ✅ Já comprei! Confirmar
-        </button>
-        <button onclick="pmGoRoblox()"
-          style="width:100%;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);border-radius:13px;padding:12px;color:var(--v3);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all var(--t)">
-          🔗 Reabrir no Roblox
-        </button>
-        <button onclick="pmCancel()"
-          style="width:100%;background:transparent;border:none;padding:10px;color:var(--muted2);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:12px;cursor:pointer">
-          Cancelar — não comprei
-        </button>
-      </div>
-
-      <p style="font-size:11px;color:var(--muted2);margin-top:16px;line-height:1.5">
-        🔒 Confirmação vinculada ao seu dispositivo e sessão.<br>
-        Válida por 24h a partir do clique no link.
-      </p>
-    </div>
-  </div>
-  <!-- ════════════════════════════════════════ -->
-
+init();
+</script>
 </body>
 
 </html>
