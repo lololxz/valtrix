@@ -11,32 +11,40 @@
     rel="stylesheet">
   <style>
     :root {
-      /* Paleta clara, viva e infantil */
-      --v: #ff1493;
-      --v2: #ff5cbf;
-      --v3: #ffaadd;
-      --accent: #ffe600;
-      --accent2: #00d4ff;
-      --accent3: #00ff88;
-      --gold: #ffcc00;
-      --green: #00e676;
-      --coral: #ff4f4f;
-      --purple: #bf7fff;
-      --bg: #1a0d30;
-      --bg3: #2a1550;
-      --card: rgba(255, 255, 255, 0.08);
-      --card-border: rgba(255, 20, 147, 0.35);
-      --card-hover: rgba(255, 20, 147, 0.2);
-      --text: #ffffff;
-      --muted: rgba(255, 220, 240, 0.85);
-      --muted2: rgba(255, 220, 240, 0.55);
-      --r: 16px;
-      --rl: 20px;
-      --rxl: 28px;
-      --t: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      --nav-h: 64px;
-      --px: clamp(16px, 5vw, 48px);
-      --spy: clamp(56px, 8vw, 96px);
+/* Paleta mais clara, vibrante e infantil */
+--v: #ff4db8;
+--v2: #ff85d6;
+--v3: #ffd1f0;
+
+--accent: #fff066;
+--accent2: #66e7ff;
+--accent3: #66ffb3;
+
+--gold: #ffd84d;
+--green: #5cff9d;
+--coral: #ff7a7a;
+--purple: #d6a3ff;
+
+--bg: #2b1555;
+--bg3: #3a1f70;
+
+--card: rgba(255, 255, 255, 0.18);
+--card-border: rgba(255, 77, 184, 0.35);
+--card-hover: rgba(255, 77, 184, 0.25);
+
+--text: #ffffff;
+--muted: rgba(255, 230, 245, 0.9);
+--muted2: rgba(255, 230, 245, 0.65);
+
+--r: 16px;
+--rl: 20px;
+--rxl: 28px;
+
+--t: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+--nav-h: 64px;
+--px: clamp(16px, 5vw, 48px);
+--spy: clamp(56px, 8vw, 96px);
     }
 
     *,
@@ -1445,24 +1453,24 @@
     }
 
     /* MOD 1: Buy btn "Ir para compra" com seta */
-    .buy-btn {
-      background: linear-gradient(135deg, var(--v), #d4006c);
-      border: none;
-      border-radius: 8px;
-      padding: clamp(5px, 1vw, 6px) clamp(8px, 1.5vw, 12px);
-      color: #fff;
-      font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800;
-      font-size: clamp(9px, 1.4vw, 11px);
-      cursor: pointer;
-      transition: all var(--t);
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      position: relative;
-      overflow: hidden;
-    }
+.buy-btn {
+  background: linear-gradient(135deg, var(--v), #d4006c);
+  border: none;
+  border-radius: 8px;
+  padding: clamp(7px, 1.2vw, 8px) clamp(10px, 1.8vw, 14px);
+  color: #fff;
+  font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(10px, 1.6vw, 12px);
+  cursor: pointer;
+  transition: all var(--t);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
 
     .buy-btn .btn-label {
       transition: transform .2s ease
@@ -3821,7 +3829,7 @@ async function confirmPurchase(buyerUID) {
       renderItems(items, searchQ);
     }
 
-    // ── Render catalog ─────────────────────────────────────
+        // ── Render catalog ─────────────────────────────────────
     function renderItems(allItems, hl = '') {
       const cont = document.getElementById('catalogContent');
       const pagEl = document.getElementById('catalogPagination');
@@ -3839,10 +3847,10 @@ async function confirmPurchase(buyerUID) {
       cont.innerHTML = `<div class="skins-grid">${pageItems.map((item, i) => {
         const gid = item._gid || currentGroup;
         const price = item.price != null
-          ? `<span class="price-diamonds">💎 ${item.price} R$</span>`
+          ? `<span class="price-diamonds"><img width="20" height="20" src="https://img.icons8.com/color/48/robux--v1.png" alt="robux--v1"/>${item.price}</span>`
           : `<span class="price-free">✓ GRÁTIS</span>`;
         const thumb = item._thumb
-          ? `<img src="${item._thumb}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\"no-img\\">${GROUPS[gid]?.emoji || '🎮'}</span>'">`
+          ? `<img src="${item._thumb}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\"no-img\\"></span>`
           : `<span class="no-img">${GROUPS[gid]?.emoji || '🎮'}</span>`;
         const rid = regItem('s' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name);
         const safeHl = hl ? hl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
@@ -3944,22 +3952,44 @@ async function confirmPurchase(buyerUID) {
       }).join('');
       rebuildDots(); moveCarousel(0); startCAuto();
     }
-    function rebuildDots() {
-      const pages = Math.max(1, cItems.length - VISIBLE() + 1);
-      document.getElementById('carouselDots').innerHTML =
-        Array.from({ length: pages }, (_, i) => `<div class="c-dot${i === 0 ? ' active' : ''}" onclick="moveCarousel(${i})"></div>`).join('');
-    }
-    function moveCarousel(idx) {
-      const track = document.getElementById('carouselTrack');
-      const card = track.querySelector('.carousel-card');
-      if (!card) return;
-      const gap = parseInt(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
-      const cw = card.getBoundingClientRect().width + gap;
-      const max = Math.max(0, cItems.length - VISIBLE());
-      cIdx = Math.max(0, Math.min(idx, max));
-      track.style.transform = `translateX(-${cIdx * cw}px)`;
-      document.querySelectorAll('.c-dot').forEach((d, i) => d.classList.toggle('active', i === cIdx));
-    }
+function rebuildDots() {
+  const pages = Math.max(1, cItems.length - VISIBLE() + 1);
+  const dots = Math.min(4, pages);
+
+  document.getElementById('carouselDots').innerHTML =
+    Array.from({ length: dots }, (_, i) => {
+      const idx = Math.floor((pages - 1) * (i / (dots - 1 || 1)));
+      return `<div class="c-dot${i === 0 ? ' active' : ''}" onclick="moveCarousel(${idx})"></div>`;
+    }).join('');
+}
+function moveCarousel(idx) {
+  const track = document.getElementById('carouselTrack');
+  const wrapper = track.parentElement; // container visível
+  const card = track.querySelector('.carousel-card');
+  if (!card) return;
+
+  const gap = parseInt(getComputedStyle(track).gap || 16);
+  const cw = card.getBoundingClientRect().width + gap;
+
+  const trackWidth = track.scrollWidth;
+  const wrapperWidth = wrapper.clientWidth;
+
+  const maxTranslate = trackWidth - wrapperWidth;
+
+  cIdx = Math.max(0, idx);
+
+  let translate = cIdx * cw;
+
+  if (translate > maxTranslate) {
+    translate = maxTranslate;
+    cIdx = Math.floor(maxTranslate / cw);
+  }
+
+  track.style.transform = `translateX(-${translate}px)`;
+
+  document.querySelectorAll('.c-dot')
+    .forEach((d, i) => d.classList.toggle('active', i === cIdx));
+}
     // Phrase rotation
     const phrases = [
       '"Escolha não uma roupa. Escolha quem você quer ser."',
