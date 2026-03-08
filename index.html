@@ -11,40 +11,40 @@
     rel="stylesheet">
   <style>
     :root {
-/* Paleta mais clara, vibrante e infantil */
---v: #ff4db8;
---v2: #ff85d6;
---v3: #ffd1f0;
+      /* Paleta mais clara, vibrante e infantil */
+      --v: #ff4db8;
+      --v2: #ff85d6;
+      --v3: #ffd1f0;
 
---accent: #fff066;
---accent2: #66e7ff;
---accent3: #66ffb3;
+      --accent: #fff066;
+      --accent2: #66e7ff;
+      --accent3: #66ffb3;
 
---gold: #ffd84d;
---green: #5cff9d;
---coral: #ff7a7a;
---purple: #d6a3ff;
+      --gold: #ffd84d;
+      --green: #5cff9d;
+      --coral: #ff7a7a;
+      --purple: #d6a3ff;
 
---bg: #2b1555;
---bg3: #3a1f70;
+      --bg: #2b1555;
+      --bg3: #3a1f70;
 
---card: rgba(255, 255, 255, 0.18);
---card-border: rgba(255, 77, 184, 0.35);
---card-hover: rgba(255, 77, 184, 0.25);
+      --card: rgba(255, 255, 255, 0.18);
+      --card-border: rgba(255, 77, 184, 0.35);
+      --card-hover: rgba(255, 77, 184, 0.25);
 
---text: #ffffff;
---muted: rgba(255, 230, 245, 0.9);
---muted2: rgba(255, 230, 245, 0.65);
+      --text: #ffffff;
+      --muted: rgba(255, 230, 245, 0.9);
+      --muted2: rgba(255, 230, 245, 0.65);
 
---r: 16px;
---rl: 20px;
---rxl: 28px;
+      --r: 16px;
+      --rl: 20px;
+      --rxl: 28px;
 
---t: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --t: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
---nav-h: 64px;
---px: clamp(16px, 5vw, 48px);
---spy: clamp(56px, 8vw, 96px);
+      --nav-h: 64px;
+      --px: clamp(16px, 5vw, 48px);
+      --spy: clamp(56px, 8vw, 96px);
     }
 
     *,
@@ -1453,24 +1453,24 @@
     }
 
     /* MOD 1: Buy btn "Ir para compra" com seta */
-.buy-btn {
-  background: linear-gradient(135deg, var(--v), #d4006c);
-  border: none;
-  border-radius: 8px;
-  padding: clamp(7px, 1.2vw, 8px) clamp(10px, 1.8vw, 14px);
-  color: #fff;
-  font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  font-size: clamp(10px, 1.6vw, 12px);
-  cursor: pointer;
-  transition: all var(--t);
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  position: relative;
-  overflow: hidden;
-}
+    .buy-btn {
+      background: linear-gradient(135deg, var(--v), #d4006c);
+      border: none;
+      border-radius: 8px;
+      padding: clamp(7px, 1.2vw, 8px) clamp(10px, 1.8vw, 14px);
+      color: #fff;
+      font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(10px, 1.6vw, 12px);
+      cursor: pointer;
+      transition: all var(--t);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
 
     .buy-btn .btn-label {
       transition: transform .2s ease
@@ -1617,7 +1617,7 @@
       position: absolute;
       top: -13px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, 0);
       width: 28px;
       height: 28px;
       border-radius: 50%;
@@ -1627,26 +1627,34 @@
       font-family: 'Syne', sans-serif;
       font-size: 12px;
       font-weight: 800;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .5)
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .5);
     }
 
     .c-medal.gold {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      height: 40px;
+      width: 40px;
       color: #000
     }
 
     .c-medal.silver {
       background: linear-gradient(135deg, #d1d5db, #9ca3af);
+      height: 40px;
+      width: 40px;
       color: #000
     }
 
     .c-medal.bronze {
       background: linear-gradient(135deg, #cd7f32, #92400e);
+      height: 40px;
+      width: 40px;
       color: #fff
     }
 
     .c-medal.other {
       background: rgba(124, 58, 237, .3);
+      height: 40px;
+      width: 40px;
       color: var(--v3)
     }
 
@@ -1799,16 +1807,22 @@
 
     .rank-num.gold-m {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      height: 40px;
+      width: 40px;
       color: #000
     }
 
     .rank-num.silver-m {
       background: linear-gradient(135deg, #d1d5db, #9ca3af);
+      height: 40px;
+      width: 40px;
       color: #000
     }
 
     .rank-num.bronze-m {
       background: linear-gradient(135deg, #cd7f32, #92400e);
+      height: 40px;
+      width: 40px;
       color: #fff
     }
 
@@ -3139,6 +3153,330 @@
         padding: 0 7px
       }
     }
+
+    /* ── BACKGROUND EFFECTS ──────────────────────────────── */
+    /* Grid pontilhado animado */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(circle, rgba(255, 77, 184, .18) 1px, transparent 1px),
+        radial-gradient(circle, rgba(102, 231, 255, .10) 1px, transparent 1px);
+      background-size: 44px 44px, 88px 88px;
+      background-position: 0 0, 22px 22px;
+      animation: gridDrift 20s linear infinite;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    }
+
+    @keyframes gridDrift {
+      0% {
+        background-position: 0 0, 22px 22px;
+      }
+
+      100% {
+        background-position: 44px 44px, 66px 66px;
+      }
+    }
+
+    /* Aurora central */
+    .bg-aurora {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .aurora-band {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: auroraPulse var(--dur, 12s) ease-in-out infinite alternate;
+      opacity: 0;
+      animation-fill-mode: both;
+    }
+
+    .aurora-band:nth-child(1) {
+      width: 70vw;
+      height: 40vw;
+      background: radial-gradient(ellipse, rgba(255, 77, 184, .13) 0%, transparent 70%);
+      top: 5%;
+      left: 15%;
+      --dur: 11s;
+      animation-delay: 0s;
+    }
+
+    .aurora-band:nth-child(2) {
+      width: 60vw;
+      height: 35vw;
+      background: radial-gradient(ellipse, rgba(102, 231, 255, .10) 0%, transparent 70%);
+      top: 30%;
+      right: 0%;
+      --dur: 15s;
+      animation-delay: -5s;
+    }
+
+    .aurora-band:nth-child(3) {
+      width: 55vw;
+      height: 30vw;
+      background: radial-gradient(ellipse, rgba(214, 163, 255, .09) 0%, transparent 70%);
+      bottom: 0%;
+      left: 10%;
+      --dur: 13s;
+      animation-delay: -2.5s;
+    }
+
+    @keyframes auroraPulse {
+      0% {
+        opacity: 0;
+        transform: translate(0px, 0px) scale(1);
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      60% {
+        opacity: .7;
+      }
+
+      100% {
+        opacity: .9;
+        transform: translate(30px, 20px) scale(1.08);
+      }
+    }
+
+    /* Partículas flutuantes */
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-particle {
+      position: absolute;
+      border-radius: 50%;
+      animation:
+        particleFloat var(--pd, 8s) ease-in-out infinite alternate,
+        particleFade var(--pd, 8s) ease-in-out infinite alternate;
+    }
+
+    @keyframes particleFloat {
+      from {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      to {
+        transform: translate(var(--dx, 20px), var(--dy, -30px)) rotate(180deg);
+      }
+    }
+
+    @keyframes particleFade {
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      30%,
+      70% {
+        opacity: var(--po, .6);
+      }
+    }
+
+    /* ══ CURSOR NEON ══════════════════════════════════════════ */
+    @media (pointer: fine) {
+      * {
+        cursor: none !important;
+      }
+    }
+
+    #cursorDot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: var(--v);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: width .15s, height .15s, background .2s, opacity .2s;
+      box-shadow: 0 0 12px var(--v), 0 0 24px rgba(255, 77, 184, .5);
+      mix-blend-mode: screen;
+    }
+
+    #cursorRing {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid rgba(255, 77, 184, .55);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: width .35s ease, height .35s ease, border-color .3s, opacity .3s, transform .1s linear;
+      backdrop-filter: none;
+    }
+
+    #cursorDot.hovered {
+      width: 12px;
+      height: 12px;
+      background: var(--accent2);
+      box-shadow: 0 0 18px var(--accent2), 0 0 36px rgba(102, 231, 255, .6);
+    }
+
+    #cursorRing.hovered {
+      width: 52px;
+      height: 52px;
+      border-color: rgba(102, 231, 255, .45);
+    }
+
+    /* ══ CARD SHINE / GLARE ═══════════════════════════════════ */
+    .skin-card,
+    .rank-card,
+    .trust-card,
+    .review-card,
+    .carousel-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skin-card::after,
+    .rank-card::after,
+    .trust-card::after,
+    .carousel-card::after {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -75%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(105deg,
+          transparent 20%,
+          rgba(255, 255, 255, .07) 50%,
+          transparent 80%);
+      transform: skewX(-15deg);
+      transition: left .6s ease, opacity .4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .skin-card:hover::after,
+    .rank-card:hover::after,
+    .trust-card:hover::after,
+    .carousel-card:hover::after {
+      left: 130%;
+      opacity: 1;
+    }
+
+    /* ══ SKIP RIPPLE ═══════════════════════════════════════════ */
+    .btn-primary,
+    .nav-cta,
+    .mobile-cta {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .28);
+      transform: scale(0);
+      animation: rippleAnim .55s linear;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* ══ SCROLL REVEAL ═════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s cubic-bezier(.4, 0, .2, 1), transform .65s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ══ STAT COUNTER GLOW ═════════════════════════════════════ */
+    .stat-num[data-count] {
+      transition: color .3s;
+    }
+
+    .stat-num.counting {
+      color: var(--v2);
+      text-shadow: 0 0 18px rgba(255, 133, 214, .6);
+    }
+
+    /* ══ ENHANCED SKIN CARD HOVER ══════════════════════════════ */
+    .skin-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(255, 77, 184, .22), 0 0 0 1px rgba(255, 77, 184, .3);
+    }
+
+    /* ══ TITLE GRADIENT SHIMMER ════════════════════════════════ */
+    .h1-grad {
+      background-size: 200% auto;
+      animation: shimmerGrad 3.5s linear infinite;
+    }
+
+    @keyframes shimmerGrad {
+      0% {
+        background-position: 0% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
+    }
+
+    /* ══ FLOATING BADGE ════════════════════════════════════════ */
+    .hero-eyebrow {
+      animation: fadeUp .8s ease both, floatBadge 3s ease-in-out 1s infinite alternate;
+    }
+
+    @keyframes floatBadge {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-5px);
+      }
+    }
+
+    /* ══ SKIN CARD BADGE PULSE ═════════════════════════════════ */
+    .pill-hot {
+      animation: hotPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes hotPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 77, 184, .4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 5px rgba(255, 77, 184, 0);
+      }
+    }
   </style>
 </head>
 
@@ -3152,6 +3490,15 @@
   <div class="stars" id="stars"></div>
   <!-- MOD 12: Bolhas flutuantes -->
   <div class="bubbles" id="bubbles"></div>
+
+  <!-- ══ BACKGROUND EFFECTS ══ -->
+  <div class="bg-grid"></div>
+  <div class="bg-aurora">
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+  </div>
+  <div class="bg-particles" id="bgParticles"></div>
 
   <!-- ══ LOGIN OVERLAY ══ -->
   <div id="loginOverlay">
@@ -3623,18 +3970,18 @@
 
 
     // ── REGISTRY UPDATE ─────────────────────────────────────
-function regItem(id, url, name) {
+    function regItem(id, url, name) {
 
-  const realId = id.replace(/[a-z]/g,"");
+      const realId = id.replace(/[a-z]/g, "");
 
-  reg[id] = { 
-    id: realId,
-    url,
-    name
-  };
+      reg[id] = {
+        id: realId,
+        url,
+        name
+      };
 
-  return id;
-}
+      return id;
+    }
     async function openReg(el) {
 
       const e = reg[el.dataset.rid];
@@ -3711,45 +4058,45 @@ function regItem(id, url, name) {
 
     }
 
-async function confirmPurchase(buyerUID) {
+    async function confirmPurchase(buyerUID) {
 
-  const token = localStorage.getItem("purchase_session");
+      const token = localStorage.getItem("purchase_session");
 
-  if (!token) {
-    console.log("Sem sessão de compra");
-    return;
-  }
+      if (!token) {
+        console.log("Sem sessão de compra");
+        return;
+      }
 
-  try {
+      try {
 
-    const res = await fetch(EDGE, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxYXJqdGh3aXRsbWZkdHhtaHB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODg1NDQsImV4cCI6MjA4ODA2NDU0NH0.sBh_W3V4CmQkTghIbMEIi8Or-vr2r8Q_iGbNGkQeA1E",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxYXJqdGh3aXRsbWZkdHhtaHB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODg1NDQsImV4cCI6MjA4ODA2NDU0NH0.sBh_W3V4CmQkTghIbMEIi8Or-vr2r8Q_iGbNGkQeA1E"
-      },
-      body: JSON.stringify({
-        action: "confirm_purchase",
-        token: token,
-        buyer_uid: buyerUID
-      })
-    });
+        const res = await fetch(EDGE, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxYXJqdGh3aXRsbWZkdHhtaHB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODg1NDQsImV4cCI6MjA4ODA2NDU0NH0.sBh_W3V4CmQkTghIbMEIi8Or-vr2r8Q_iGbNGkQeA1E",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxYXJqdGh3aXRsbWZkdHhtaHB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODg1NDQsImV4cCI6MjA4ODA2NDU0NH0.sBh_W3V4CmQkTghIbMEIi8Or-vr2r8Q_iGbNGkQeA1E"
+          },
+          body: JSON.stringify({
+            action: "confirm_purchase",
+            token: token,
+            buyer_uid: buyerUID
+          })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    console.log("Resposta confirm_purchase:", data);
+        console.log("Resposta confirm_purchase:", data);
 
-    if (data.ok) {
-      console.log("✅ Comissão registrada");
-      localStorage.removeItem("purchase_session");
+        if (data.ok) {
+          console.log("✅ Comissão registrada");
+          localStorage.removeItem("purchase_session");
+        }
+
+      } catch (err) {
+        console.error("Erro confirm_purchase:", err);
+      }
+
     }
-
-  } catch (err) {
-    console.error("Erro confirm_purchase:", err);
-  }
-
-}
     // ── SEARCH STATE ───────────────────────────────────────
     let searchQ = '', sortMode = 'default', searchDebounce = null;
 
@@ -3829,7 +4176,7 @@ async function confirmPurchase(buyerUID) {
       renderItems(items, searchQ);
     }
 
-        // ── Render catalog ─────────────────────────────────────
+    // ── Render catalog ─────────────────────────────────────
     function renderItems(allItems, hl = '') {
       const cont = document.getElementById('catalogContent');
       const pagEl = document.getElementById('catalogPagination');
@@ -3952,44 +4299,44 @@ async function confirmPurchase(buyerUID) {
       }).join('');
       rebuildDots(); moveCarousel(0); startCAuto();
     }
-function rebuildDots() {
-  const pages = Math.max(1, cItems.length - VISIBLE() + 1);
-  const dots = Math.min(4, pages);
+    function rebuildDots() {
+      const pages = Math.max(1, cItems.length - VISIBLE() + 1);
+      const dots = Math.min(4, pages);
 
-  document.getElementById('carouselDots').innerHTML =
-    Array.from({ length: dots }, (_, i) => {
-      const idx = Math.floor((pages - 1) * (i / (dots - 1 || 1)));
-      return `<div class="c-dot${i === 0 ? ' active' : ''}" onclick="moveCarousel(${idx})"></div>`;
-    }).join('');
-}
-function moveCarousel(idx) {
-  const track = document.getElementById('carouselTrack');
-  const wrapper = track.parentElement; // container visível
-  const card = track.querySelector('.carousel-card');
-  if (!card) return;
+      document.getElementById('carouselDots').innerHTML =
+        Array.from({ length: dots }, (_, i) => {
+          const idx = Math.floor((pages - 1) * (i / (dots - 1 || 1)));
+          return `<div class="c-dot${i === 0 ? ' active' : ''}" onclick="moveCarousel(${idx})"></div>`;
+        }).join('');
+    }
+    function moveCarousel(idx) {
+      const track = document.getElementById('carouselTrack');
+      const wrapper = track.parentElement; // container visível
+      const card = track.querySelector('.carousel-card');
+      if (!card) return;
 
-  const gap = parseInt(getComputedStyle(track).gap || 16);
-  const cw = card.getBoundingClientRect().width + gap;
+      const gap = parseInt(getComputedStyle(track).gap || 16);
+      const cw = card.getBoundingClientRect().width + gap;
 
-  const trackWidth = track.scrollWidth;
-  const wrapperWidth = wrapper.clientWidth;
+      const trackWidth = track.scrollWidth;
+      const wrapperWidth = wrapper.clientWidth;
 
-  const maxTranslate = trackWidth - wrapperWidth;
+      const maxTranslate = trackWidth - wrapperWidth;
 
-  cIdx = Math.max(0, idx);
+      cIdx = Math.max(0, idx);
 
-  let translate = cIdx * cw;
+      let translate = cIdx * cw;
 
-  if (translate > maxTranslate) {
-    translate = maxTranslate;
-    cIdx = Math.floor(maxTranslate / cw);
-  }
+      if (translate > maxTranslate) {
+        translate = maxTranslate;
+        cIdx = Math.floor(maxTranslate / cw);
+      }
 
-  track.style.transform = `translateX(-${translate}px)`;
+      track.style.transform = `translateX(-${translate}px)`;
 
-  document.querySelectorAll('.c-dot')
-    .forEach((d, i) => d.classList.toggle('active', i === cIdx));
-}
+      document.querySelectorAll('.c-dot')
+        .forEach((d, i) => d.classList.toggle('active', i === cIdx));
+    }
     // Phrase rotation
     const phrases = [
       '"Escolha não uma roupa. Escolha quem você quer ser."',
@@ -4177,9 +4524,9 @@ function moveCarousel(idx) {
       const token = localStorage.getItem("purchase_session");
 
 
-if (token) {
-  confirmPurchase(robloxUser.uid);
-}
+      if (token) {
+        confirmPurchase(robloxUser.uid);
+      }
 
       // Update hero greeting
       const heroSub = document.querySelector('.hero-sub');
@@ -4309,6 +4656,161 @@ if (token) {
     });
 
     init();
+
+    // ── BG PARTICLES ────────────────────────────────────────
+    (function spawnBgParticles() {
+      const container = document.getElementById('bgParticles');
+      if (!container) return;
+      const colors = [
+        'rgba(255,77,184,VAR)',   // rosa
+        'rgba(102,231,255,VAR)',  // ciano
+        'rgba(214,163,255,VAR)',  // lilás
+        'rgba(255,240,102,VAR)',  // amarelo
+        'rgba(102,255,179,VAR)',  // verde
+      ];
+      const count = 28;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'bg-particle';
+        const size = Math.random() * 5 + 2;        // 2–7 px
+        const x = Math.random() * 100;          // %
+        const y = Math.random() * 100;           // %
+        const dur = (Math.random() * 10 + 6).toFixed(1); // 6–16 s
+        const delay = (Math.random() * -14).toFixed(1);
+        const dx = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
+        const dy = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
+        const op = (Math.random() * 0.4 + 0.2).toFixed(2);
+        const color = colors[i % colors.length].replace('VAR', op);
+        const glow = colors[i % colors.length].replace('VAR', (op * 0.5).toFixed(2));
+        el.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${x}%; top:${y}%;
+          background:${color};
+          box-shadow:0 0 ${size * 3}px ${glow};
+          --pd:${dur}s; --dx:${dx}; --dy:${dy}; --po:${op};
+          animation-delay:${delay}s;
+        `;
+        container.appendChild(el);
+      }
+    })();
+
+    // ══ CUSTOM NEON CURSOR ═══════════════════════════════════
+    (function initCursor() {
+      if (window.matchMedia('(pointer: coarse)').matches) return; // skip touch
+
+      const dot = document.createElement('div'); dot.id = 'cursorDot';
+      const ring = document.createElement('div'); ring.id = 'cursorRing';
+      document.body.append(dot, ring);
+
+      let mx = -100, my = -100, rx = -100, ry = -100;
+      let rafId;
+
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+      });
+
+      // Smooth ring lag
+      function animateRing() {
+        rx += (mx - rx) * 0.13;
+        ry += (my - ry) * 0.13;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        rafId = requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      // Hover state
+      const hoverTargets = 'a,button,[role="button"],.skin-card,.carousel-card,.rank-card,.group-tab';
+      document.addEventListener('mouseover', e => {
+        if (e.target.closest(hoverTargets)) {
+          dot.classList.add('hovered');
+          ring.classList.add('hovered');
+        }
+      });
+      document.addEventListener('mouseout', e => {
+        if (e.target.closest(hoverTargets)) {
+          dot.classList.remove('hovered');
+          ring.classList.remove('hovered');
+        }
+      });
+
+      document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+      document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+    })();
+
+    // ══ RIPPLE EFFECT ════════════════════════════════════════
+    (function initRipple() {
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('.btn-primary,.nav-cta,.mobile-cta');
+        if (!btn) return;
+        const r = document.createElement('span');
+        r.className = 'ripple-effect';
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`;
+        btn.appendChild(r);
+        r.addEventListener('animationend', () => r.remove());
+      });
+    })();
+
+    // ══ SCROLL REVEAL ════════════════════════════════════════
+    (function initScrollReveal() {
+      const targets = '.section-header,.hero-stats,.trust-card,.review-card,.rank-card,.skin-card';
+      const revealObs = new IntersectionObserver(entries => {
+        entries.forEach((e, i) => {
+          if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('in-view'), i * 60);
+            revealObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.07, rootMargin: '0px 0px -20px 0px' });
+
+      document.querySelectorAll(targets).forEach(el => {
+        el.classList.add('reveal');
+        revealObs.observe(el);
+      });
+    })();
+
+    // ══ ANIMATED STAT COUNTERS ═══════════════════════════════
+    (function initStatCounters() {
+      const statNums = document.querySelectorAll('.stat-num');
+      const counterObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const rawText = el.textContent.trim();
+          const match = rawText.match(/([\d,.]+)/);
+          if (!match) return;
+          const suffix = el.querySelector('span')?.textContent || '';
+          const rawNum = parseFloat(match[1].replace(/[,.]/g, ''));
+          const hasDot = match[1].includes('.');
+          const isK = rawText.includes('k') || rawText.includes('K');
+          const target = isK ? rawNum : rawNum;
+          let start = 0;
+          const dur = 1400;
+          const startTime = performance.now();
+          el.classList.add('counting');
+          function tick(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / dur, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            const cur = Math.round(target * ease);
+            const display = isK
+              ? (cur >= 1000 ? (cur / 1000).toFixed(1) + 'k' : cur)
+              : (hasDot ? (cur / 10).toFixed(1) : cur);
+            el.childNodes[0].textContent = display;
+            if (progress < 1) requestAnimationFrame(tick);
+            else el.classList.remove('counting');
+          }
+          requestAnimationFrame(tick);
+          counterObs.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+
+      statNums.forEach(el => counterObs.observe(el));
+    })();
   </script>
 </body>
 
