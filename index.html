@@ -47,6 +47,125 @@
       --spy: clamp(56px, 8vw, 96px);
     }
 
+    /* ══ DEV CARDS ════════════════════════════════════════════ */
+    .dev-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .dev-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--rxl);
+      padding: 32px 24px;
+      text-align: center;
+      transition: all var(--t);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dev-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 77, 184, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .dev-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--v2);
+      background: var(--card-hover);
+      box-shadow: 0 20px 40px rgba(5, 2, 15, 0.4);
+    }
+
+    .dev-card.founder {
+      border-color: var(--gold);
+      box-shadow: 0 0 25px rgba(255, 216, 77, 0.15);
+    }
+
+    .dev-card.founder::after {
+      content: 'FOUNDER';
+      position: absolute;
+      top: 15px;
+      right: -30px;
+      background: var(--gold);
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 40px;
+      transform: rotate(45deg);
+      box-shadow: 0 2px 10px rgba(255, 216, 77, 0.4);
+    }
+
+    .dev-avatar-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--v), var(--accent2));
+    }
+
+    .dev-card.founder .dev-avatar-wrap {
+      background: linear-gradient(135deg, var(--gold), #ff8c00);
+    }
+
+    .dev-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 3px solid #05020f;
+      display: block;
+      object-fit: cover;
+    }
+
+    .dev-info h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .dev-role {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--v2);
+    }
+
+    .dev-card.founder .dev-role {
+      color: var(--gold);
+    }
+
+    .dev-btn {
+      margin-top: 8px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all var(--t);
+    }
+
+    .dev-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
     *,
     *::before,
     *::after {
@@ -56,16 +175,21 @@
     }
 
     html {
-      scroll-behavior: smooth
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      width: 100%;
+      height: 100%;
     }
 
     body {
-      font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
+      background: #05020f;
       color: var(--text);
-      overflow-x: hidden;
+      font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
-      -webkit-font-smoothing: antialiased
+      overflow-x: hidden;
+      width: 100%;
+      margin: 0;
+      position: relative;
     }
 
     body::before {
@@ -78,81 +202,132 @@
       opacity: .55
     }
 
-    /* MESH */
-    .mesh {
+    /* ── GALAXY CANVAS ─ FIXED BEHIND EVERYTHING ── */
+    #galaxyCanvas {
       position: fixed;
       inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      /* Fica no fundão base */
       pointer-events: none;
-      z-index: 0;
-      overflow: hidden
+      opacity: 0;
+      /* Começa invisível, ativado no login */
+      transition: opacity 2s ease-in-out;
     }
 
-    .mesh-orb {
+    /* ── MESH IMAGE BEHIND CANVAS ── */
+    .bg-mesh-image {
+      position: fixed;
+      inset: 0;
+      z-index: -4;
+      /* Atrás do canvas */
+      pointer-events: none;
+      background-image: url('assets/image/bg-mesh.jpg');
+      /* CRIE ESTA IMAGEM NO SEU PROJETO */
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      /* Sutil */
+      mix-blend-mode: screen;
+    }
+
+    .galaxy-active #galaxyCanvas {
+      opacity: 1;
+      /* Revela o canvas quando entra */
+    }
+
+    /* ── FLOATING NEBULA ORBS (OPCIONAL, extra glow) ── */
+    .galaxy-orbs {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .galaxy-active .galaxy-orbs {
+      opacity: 1;
+    }
+
+    .g-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(100px);
-      animation: orbF 14s ease-in-out infinite alternate
+      filter: blur(120px);
+      mix-blend-mode: screen;
+      animation: gOrbFloat 20s ease-in-out infinite alternate;
     }
 
-    .mesh-orb:nth-child(1) {
+    .g-orb:nth-child(1) {
       width: min(700px, 90vw);
       height: min(700px, 90vw);
-      background: radial-gradient(circle, rgba(124, 58, 237, .16), transparent 70%);
-      top: -20%;
-      left: -15%
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.15), transparent 60%);
+      top: -10%;
+      left: -10%;
     }
 
-    .mesh-orb:nth-child(2) {
+    .g-orb:nth-child(2) {
       width: min(500px, 70vw);
       height: min(500px, 70vw);
-      background: radial-gradient(circle, rgba(168, 85, 247, .12), transparent 70%);
-      bottom: -15%;
-      right: -10%;
-      animation-delay: -7s
+      background: radial-gradient(circle, rgba(255, 77, 184, 0.1), transparent 60%);
+      bottom: -10%;
+      right: -5%;
+      animation-delay: -5s;
     }
 
-    .mesh-orb:nth-child(3) {
-      width: min(350px, 50vw);
-      height: min(350px, 50vw);
-      background: radial-gradient(circle, rgba(240, 171, 252, .09), transparent 70%);
-      top: 45%;
-      left: 55%;
-      animation-delay: -3.5s
+    .g-orb:nth-child(3) {
+      width: min(400px, 60vw);
+      height: min(400px, 60vw);
+      background: radial-gradient(circle, rgba(102, 231, 255, 0.08), transparent 60%);
+      top: 40%;
+      left: 60%;
+      animation-delay: -10s;
     }
 
-    @keyframes orbF {
-      from {
-        transform: translate(0, 0) scale(1)
+    @keyframes gOrbFloat {
+      0% {
+        transform: translate(0, 0) scale(1);
       }
 
-      to {
-        transform: translate(30px, 50px) scale(1.06)
+      100% {
+        transform: translate(40px, 60px) scale(1.1);
       }
     }
 
-    .stars {
+    /* ── TWINKLING STARS CSS (OVERLAY) ── */
+    #galaxyStars {
       position: fixed;
       inset: 0;
+      z-index: -1;
       pointer-events: none;
-      z-index: 0
+      opacity: 0;
+      transition: opacity 2s ease;
     }
 
-    .star {
+    .galaxy-active #galaxyStars {
+      opacity: 1;
+    }
+
+    .css-star {
       position: absolute;
       border-radius: 50%;
-      background: white;
-      animation: twink var(--d) ease-in-out infinite alternate
+      background: #fff;
+      animation: starTwinkleCSS var(--dur) ease-in-out infinite alternate;
+      animation-delay: var(--del);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px var(--color);
     }
 
-    @keyframes twink {
-      from {
-        opacity: .05;
-        transform: scale(.7)
+    @keyframes starTwinkleCSS {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
       }
 
-      to {
-        opacity: .7;
-        transform: scale(1.3)
+      100% {
+        opacity: var(--max), 1;
+        transform: scale(1.2);
       }
     }
 
@@ -504,10 +679,18 @@
     }
 
     .h1-grad {
-      background: linear-gradient(135deg, var(--v2) 0%, var(--accent) 40%, var(--gold) 100%);
+      background: linear-gradient(to right,
+          #bb3ed8,
+          /* lilas */
+          #fff066,
+          /* amarelo */
+          #bb3ed8
+          /* lilas - para loop perfeito */
+        );
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text
+      background-clip: text;
     }
 
     .hero-sub {
@@ -849,7 +1032,7 @@
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: var(--v3);
-      margin-bottom: 12px
+      margin-bottom: 25px;
     }
 
     .section-header h2 {
@@ -857,21 +1040,33 @@
       font-size: clamp(24px, 5vw, 52px);
       font-weight: 800;
       letter-spacing: clamp(-.5px, -.03em, -1.5px);
-      line-height: 1.05;
-      color: var(--text)
+      line-height: 1.0;
+      color: var(--text);
+      margin-top: -16px;
     }
 
     .section-header h2 .hl {
-      background: linear-gradient(135deg, var(--v2), var(--accent));
+
+      background: linear-gradient(to right,
+          #bb3ed8,
+          #fff066,
+          #bb3ed8);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text
+      background-clip: text;
+      animation: GradientSweep 10s linear infinite;
+      padding-bottom: 0.3em;
+      margin-bottom: -0.3em;
+      display: inline-block;
+      vertical-align: baseline;
+      position: relative;
     }
 
     .section-header p {
       color: var(--muted);
       font-size: clamp(12px, 1.8vw, 14px);
-      margin-top: 8px;
+      margin-top: 4px;
       font-weight: 500;
       line-height: 1.6
     }
@@ -1293,7 +1488,8 @@
       filter: drop-shadow(0 0 4px rgba(251, 191, 36, .4));
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
+      margin-right: -2px;
     }
 
     .price-free {
@@ -1479,24 +1675,30 @@
     }
 
     .buy-btn .btn-label {
+      padding-left: 10px;
+      padding-right: 10px;
       transition: transform .2s ease
     }
 
     .buy-btn .btn-arrow {
+      top: 50%;
+      transform: translateY(-50%);
+      margin-top: -1px;
       opacity: 0;
       position: absolute;
-      right: -14px;
-      transition: right .2s ease, opacity .2s ease;
+      padding-left: 7px;
+      left: -19px;
+      transition: left .2s ease, opacity .2s ease;
       display: flex;
       align-items: center
     }
 
     .buy-btn:hover .btn-label {
-      transform: translateX(-5px)
+      transform: translateX(14px)
     }
 
     .buy-btn:hover .btn-arrow {
-      right: 6px;
+      left: 8px;
       opacity: 1
     }
 
@@ -1601,22 +1803,71 @@
       border-radius: var(--rxl);
       padding: clamp(18px, 3vw, 28px) clamp(12px, 2.5vw, 20px) clamp(14px, 2.5vw, 22px);
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
       position: relative;
-      cursor: pointer;
       transition: all var(--t);
-      user-select: none
     }
 
-    .carousel-card:hover {
-      transform: translateY(-7px);
-      box-shadow: 0 20px 44px rgba(124, 58, 237, .3);
-      border-color: rgba(168, 85, 247, .4);
-      background: rgba(124, 58, 237, .08)
+    /* Final Phrase Card */
+    .carousel-final-card {
+      background: linear-gradient(165deg, rgba(124, 58, 237, 0.15), rgba(5, 2, 15, 0.4)), var(--card);
+      border: 1.5px dashed rgba(168, 85, 247, 0.4);
+      justify-content: center !important;
+      padding: 32px 24px;
+    }
+
+    .carousel-final-card .c-final-icon {
+      font-size: 42px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.5));
+    }
+
+    .carousel-final-card .c-final-text {
+      font-family: 'Fredoka One', 'Syne', sans-serif;
+      font-size: clamp(16px, 2.5vw, 20px);
+      line-height: 1.4;
+      background: linear-gradient(135deg, #fff 30%, var(--v3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+    }
+
+    .carousel-final-card:hover {
+      border-style: solid;
+      border-color: var(--v3);
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.2);
     }
 
     .carousel-card.gold-card {
-      border-color: rgba(251, 191, 36, .4);
-      box-shadow: 0 0 36px rgba(251, 191, 36, .1)
+      border: 2px solid rgba(251, 191, 36, .5) !important;
+      box-shadow: 0 0 40px rgba(251, 191, 36, .15);
+      background: linear-gradient(165deg, rgba(251, 191, 36, 0.05), transparent);
+    }
+
+    .carousel-card.silver-card {
+      border: 2px solid rgba(209, 213, 219, .4) !important;
+      box-shadow: 0 0 30px rgba(209, 213, 219, .1);
+    }
+
+    .carousel-card.bronze-card {
+      border: 2px solid rgba(205, 127, 50, .4) !important;
+      box-shadow: 0 0 30px rgba(205, 127, 50, .1);
+    }
+
+    .carousel-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(124, 58, 237, .4);
+      border-color: var(--v3);
+      z-index: 10;
+    }
+
+    .carousel-card.gold-card:hover {
+      box-shadow: 0 25px 50px rgba(251, 191, 36, .35);
+      border-color: #fbbf24;
     }
 
     .c-medal {
@@ -1630,8 +1881,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
+      font-family: sans-serif;
+      font-size: 15px;
       font-weight: 800;
       box-shadow: 0 4px 14px rgba(0, 0, 0, .5);
     }
@@ -1785,7 +2036,7 @@
       justify-content: center;
       flex-wrap: wrap;
       max-width: 860px;
-      margin: 0 auto
+      margin: 35px auto 0
     }
 
     .rank-card {
@@ -1802,22 +2053,39 @@
     }
 
     .rank-card:hover {
-      transform: translateY(-5px)
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 50px rgba(124, 58, 237, .3);
+      border-color: var(--v3);
+      z-index: 10;
     }
 
     .rank-card.first {
-      border-color: rgba(251, 191, 36, .4);
-      box-shadow: 0 0 36px rgba(251, 191, 36, .1);
-      transform: scale(1.04)
+      border: 2.5px solid rgba(251, 191, 36, .6) !important;
+      box-shadow: 0 0 45px rgba(251, 191, 36, .2);
+      transform: scale(1.06);
+      background: linear-gradient(165deg, rgba(251, 191, 36, 0.08), transparent);
     }
 
     .rank-card.first:hover {
-      transform: scale(1.04) translateY(-5px)
+      transform: scale(1.08) translateY(-15px);
+      box-shadow: 0 30px 60px rgba(251, 191, 36, .4);
+      border-color: #fbbf24 !important;
+    }
+
+    .rank-card.second {
+      border: 2px solid rgba(209, 213, 219, .5) !important;
+      box-shadow: 0 0 35px rgba(209, 213, 219, .15);
+    }
+
+    .rank-card.third {
+      border: 2px solid rgba(205, 127, 50, .5) !important;
+      box-shadow: 0 0 35px rgba(205, 127, 50, .15);
     }
 
     .rank-num {
       position: absolute;
-      top: -16px;
+      top: -20px;
+      /* Bem pertinho acima do card */
       left: 50%;
       transform: translateX(-50%);
       width: 32px;
@@ -1826,9 +2094,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 800
+      font-family: sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      z-index: 5;
     }
 
     .rank-num.gold-m {
@@ -1918,8 +2187,7 @@
     }
 
     .trust-card:hover {
-      background: var(--card-hover);
-      border-color: rgba(124, 58, 237, .35);
+
       transform: translateY(-3px)
     }
 
@@ -3333,12 +3601,15 @@
 
     /* ══ CARD SHINE / GLARE ═══════════════════════════════════ */
     .skin-card,
-    .rank-card,
-    .trust-card,
-    .review-card,
-    .carousel-card {
+    .review-card {
       position: relative;
       overflow: hidden;
+    }
+
+    .rank-card,
+    .trust-card,
+    .carousel-card {
+      position: relative;
     }
 
     .skin-card::after,
@@ -3424,16 +3695,16 @@
     /* ══ TITLE GRADIENT SHIMMER ════════════════════════════════ */
     .h1-grad {
       background-size: 200% auto;
-      animation: Brishimmergrad 3.5s linear infinite;
+      animation: GradientSweep 10s linear infinite;
     }
 
-    @keyframes Brishimmergrad {
+    @keyframes GradientSweep {
       0% {
         background-position: 200% center;
       }
 
       100% {
-        background-position: 0% center;
+        background-position: -200% center;
       }
     }
 
@@ -3468,28 +3739,74 @@
         box-shadow: 0 0 0 5px rgba(255, 77, 184, 0);
       }
     }
+
+    /* ══ NAV USER PROFILE ══════════════════════════════════════ */
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 77, 184, 0.3);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all var(--t);
+      margin-left: 10px;
+    }
+
+    .nav-user:hover {
+      background: rgba(255, 77, 184, 0.15);
+      border-color: var(--v2);
+      transform: translateY(-1px);
+    }
+
+    .nav-user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--v2);
+      object-fit: cover;
+    }
+
+    .nav-user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 90px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .nav-user {
+        padding: 4px 8px;
+        gap: 6px;
+      }
+
+      .nav-user-name {
+        display: none;
+        /* Hide name on mobile to save space */
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- ── GALAXY CANVAS ─ FIXED BEHIND EVERYTHING ── -->
+  <div class="bg-mesh-image"></div>
+  <canvas id="galaxyCanvas"></canvas>
 
-  <div class="mesh">
-    <div class="mesh-orb"></div>
-    <div class="mesh-orb"></div>
-    <div class="mesh-orb"></div>
+  <!-- ── GALAXY NEBULA ORBS ── -->
+  <div class="galaxy-orbs">
+    <div class="g-orb"></div>
+    <div class="g-orb"></div>
+    <div class="g-orb"></div>
   </div>
-  <div class="stars" id="stars"></div>
-  <!-- MOD 12: Bolhas flutuantes -->
-  <div class="bubbles" id="bubbles"></div>
 
-  <!-- ══ BACKGROUND EFFECTS ══ -->
-  <div class="bg-grid"></div>
-  <div class="bg-aurora">
-    <div class="aurora-band"></div>
-    <div class="aurora-band"></div>
-    <div class="aurora-band"></div>
-  </div>
-  <div class="bg-particles" id="bgParticles"></div>
+  <!-- ── TWINKLING CSS STARS OVERLAY ── -->
+  <div id="galaxyStars"></div>
 
   <!-- ══ LOGIN OVERLAY ══ -->
   <div id="loginOverlay">
@@ -3549,6 +3866,7 @@
     <ul class="nav-links">
       <li><a href="#catalogo">Catálogo</a></li>
       <li><a href="#ranking">Ranking</a></li>
+      <li><a href="#devs">Conheça os Devs</a></li>
       <li><a href="#seguranca">Segurança</a></li>
     </ul>
     <div class="nav-right">
@@ -3569,7 +3887,7 @@
           Roblox
         </a>
       </div>
-      <div class="nav-user" id="navUser" style="display:none" title="Sair">
+      <div class="nav-user" id="navUser" style="display:none" title="Clique para Sair" onclick="loLogout()">
         <img class="nav-user-avatar" id="navUserAvatar" src="" alt="">
         <span class="nav-user-name" id="navUserName"></span>
       </div>
@@ -3585,7 +3903,7 @@
       <li><a href="#catalogo" onclick="closeMenu()">✨ Catálogo</a></li>
       <li><a href="#ranking" onclick="closeMenu()">🏆 Ranking</a></li>
       <li><a href="#seguranca" onclick="closeMenu()">🔒 Segurança</a></li>
-      <li><a href="#avaliacoes" onclick="closeMenu()">⭐ Avaliações</a></li>
+      <li><a href="#devs" onclick="closeMenu()">👨‍💻Conheça os Devs</a></li>
     </ul>
     <!-- MOD 7: Social buttons mobile -->
     <div class="mobile-social-btns">
@@ -3697,12 +4015,6 @@
     <div class="carousel-wrapper">
 
       <div class="carousel-track" id="carouselTrack">
-        <div class="carousel-phrase" id="carouselPhrase">
-          <span class="carousel-phrase-inner" id="carouselPhraseText">"Escolha não uma roupa. Escolha quem você quer
-            ser."</span>
-        </div>
-
-        <div class="divider"></div>
         <div class="loading-state" style="width:100%;padding:48px">
           <div class="spinner"></div>
           <p>Carregando itens...</p>
@@ -3746,11 +4058,13 @@
       <div class="search-sort" id="searchSort">
         <span>Ordenar:</span>
         <select id="sortSelect" onchange="applySort()">
-          <option value="default">Padrão</option>
-          <option value="az">A → Z</option>
-          <option value="za">Z → A</option>
-          <option value="price-asc">Menor preço</option>
-          <option value="price-desc">Maior preço</option>
+          <option value="default">Relevância (Padrão)</option>
+          <option value="id-desc">Novidades</option>
+          <option value="sales-desc">Mais Vendidos</option>
+          <option value="az">Nome: A → Z</option>
+          <option value="za">Nome: Z → A</option>
+          <option value="price-asc">Preço: Menor ao Maior</option>
+          <option value="price-desc">Preço: Maior ao Maior</option>
         </select>
       </div>
     </div>
@@ -3783,121 +4097,21 @@
     </div>
   </section>
 
-  <!-- REVIEWS -->
-  <section class="reviews-section" id="avaliacoes">
+
+
+  <!-- DEVS -->
+  <section class="section" id="devs">
     <div class="section-header">
-      <div class="pill">⭐ Avaliações verificadas</div>
-      <h2>O que dizem nossos <span class="hl">clientes</span></h2>
+      <span class="pill">Equipe Técnica</span>
+      <h2>Conheça os <span class="hl">Desenvolvedores</span></h2>
+      <p>A equipe por trás da maior loja de skins e outfits do Roblox.</p>
     </div>
-    <div class="rating-summary">
-      <div class="rating-big">
-        <div class="rating-num">4.9</div>
-        <div id="ratingSvgStars" class="rating-stars-svg"
-          style="display:flex;gap:3px;justify-content:center;margin:5px 0;filter:drop-shadow(0 0 5px rgba(255,204,0,.4))">
-        </div>
-        <div class="rating-count">748 avaliações</div>
-      </div>
-      <div class="rating-bars">
-        <div class="rb"><span>5★</span>
-          <div class="rb-track">
-            <div class="rb-fill" style="width:83%"></div>
-          </div><span>620</span>
-        </div>
-        <div class="rb"><span>4★</span>
-          <div class="rb-track">
-            <div class="rb-fill" style="width:13%;background:rgba(251,191,36,.5)"></div>
-          </div><span>98</span>
-        </div>
-        <div class="rb"><span>3★</span>
-          <div class="rb-track">
-            <div class="rb-fill" style="width:3%;background:rgba(251,191,36,.3)"></div>
-          </div><span>22</span>
-        </div>
-        <div class="rb"><span>2★</span>
-          <div class="rb-track">
-            <div class="rb-fill" style="width:1%;background:rgba(251,191,36,.2)"></div>
-          </div><span>5</span>
-        </div>
-        <div class="rb"><span>1★</span>
-          <div class="rb-track">
-            <div class="rb-fill" style="width:.5%;background:rgba(251,191,36,.15)"></div>
-          </div><span>3</span>
-        </div>
-      </div>
-    </div>
-    <div class="reviews-grid">
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar" style="background:linear-gradient(135deg,#4a4a8a,#2a2a5a)">S</div>
-          <div>
-            <div class="review-user">@ShadowPlayer_BR</div>
-            <div class="review-time">há 2 dias</div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-        </div>
-        <p class="review-text">Comprei e caiu na hora, muito seguro. Melhor marketplace de skins do Brasil!</p>
-        <div class="review-product">💬 Comprou: Void Shadow Cloak</div>
-      </div>
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar" style="background:linear-gradient(135deg,#1a6a4a,#0a3a2a)">N</div>
-          <div>
-            <div class="review-user">@NeonKing_RBX</div>
-            <div class="review-time">há 5 dias</div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-        </div>
-        <p class="review-text">Nunca pensei que seria tão fácil e seguro. Já é minha 3ª compra aqui!</p>
-        <div class="review-product">💬 Comprou: Neon Phantom Blade</div>
-      </div>
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar" style="background:linear-gradient(135deg,#8a2a6a,#5a0a4a)">C</div>
-          <div>
-            <div class="review-user">@CrystalGirl_Gaming</div>
-            <div class="review-time">há 1 semana</div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-        </div>
-        <p class="review-text">As skins são lindas e chegam instantaneamente. Recomendo demais!</p>
-        <div class="review-product">💬 Comprou: Crystal Aura Wings</div>
-      </div>
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar" style="background:linear-gradient(135deg,#6a2a2a,#3a0a0a)">D</div>
-          <div>
-            <div class="review-user">@DarkLord_Apex</div>
-            <div class="review-time">há 1 semana</div>
-          </div>
-          <div class="review-stars">★★★★<span style="color:rgba(245,240,255,.2)">★</span></div>
-        </div>
-        <p class="review-text">Plataforma confiável. Processo simples e sem dor de cabeça. Voltarei a comprar.</p>
-        <div class="review-product">💬 Comprou: Void Shadow Cloak</div>
-      </div>
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar" style="background:linear-gradient(135deg,#2a4a8a,#0a1a5a)">P</div>
-          <div>
-            <div class="review-user">@PixelHunter99</div>
-            <div class="review-time">há 2 semanas</div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-        </div>
-        <p class="review-text">Serviço rápido e transparente. A skin ficou perfeita no meu avatar!</p>
-        <div class="review-product">💬 Comprou: Neon Phantom Blade</div>
-      </div>
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar" style="background:linear-gradient(135deg,#3a2a8a,#1a0a6a)">L</div>
-          <div>
-            <div class="review-user">@LunaGamer_BR</div>
-            <div class="review-time">há 3 semanas</div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-        </div>
-        <p class="review-text">Incrível! Login oficial, suporte rápido e skin top. Nota 10 com certeza!</p>
-        <div class="review-product">💬 Comprou: Crystal Aura Wings</div>
-      </div>
+    <div class="dev-grid" id="devGrid">
+      <!-- Devs injected via JS -->
+      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
+      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
+      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
+      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
     </div>
   </section>
 
@@ -3905,7 +4119,7 @@
   <section class="section" id="seguranca" style="background:linear-gradient(180deg,rgba(124,58,237,.04),transparent)">
     <div class="section-header">
       <div class="pill"> Segurança</div>
-      <h2>Você está <span class="hl">segura aqui</span></h2>
+      <h2>Aqui você está <span class="hl">em boas mãos</span></h2>
       <p>Total transparência para você e seus responsáveis</p>
     </div>
     <div class="trust-grid">
@@ -3944,10 +4158,145 @@
     aria-label="Topo">↑</button>
 
   <script>
+
+    // ── GALAXY BACKGROUND ENGINE ──────────────────────────────────
+    function initGalaxy() {
+      const canvas = document.getElementById('galaxyCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawGalaxy();
+      }
+
+      function drawGalaxy() {
+        const W = canvas.width, H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        // Base deep space background with mixed hues
+        const bg = ctx.createLinearGradient(0, 0, W, H);
+        bg.addColorStop(0, '#0d021a'); // Dark violet
+        bg.addColorStop(0.3, '#080c24'); // Deep navy blue
+        bg.addColorStop(0.6, '#180a2b'); // Rich plum
+        bg.addColorStop(1, '#05020f'); // Almost black
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, W, H);
+
+        // Nebula 1: Magenta / Pink (Right side)
+        const nb1 = ctx.createRadialGradient(W * 0.92, H * 0.65, 0, W * 0.92, H * 0.65, W * 0.5);
+        nb1.addColorStop(0, 'rgba(200, 30, 150, 0.25)'); // Bright magenta
+        nb1.addColorStop(0.3, 'rgba(140, 20, 100, 0.15)'); // Dark pink
+        nb1.addColorStop(1, 'transparent');
+        ctx.fillStyle = nb1;
+        ctx.fillRect(0, 0, W, H);
+
+        // Nebula 2: Bright Cyan / Teal (Top left)
+        const nb2 = ctx.createRadialGradient(W * 0.15, H * 0.15, 0, W * 0.15, H * 0.15, W * 0.45);
+        nb2.addColorStop(0, 'rgba(0, 200, 255, 0.22)'); // Electric cyan
+        nb2.addColorStop(0.4, 'rgba(10, 100, 140, 0.12)'); // Ocean teal
+        nb2.addColorStop(1, 'transparent');
+        ctx.fillStyle = nb2;
+        ctx.fillRect(0, 0, W, H);
+
+        // Nebula 3: Deep Violet / Purple (Bottom left)
+        const nb3 = ctx.createRadialGradient(W * 0.25, H * 0.9, 0, W * 0.25, H * 0.9, W * 0.4);
+        nb3.addColorStop(0, 'rgba(130, 40, 200, 0.22)'); // Royal purple
+        nb3.addColorStop(0.5, 'rgba(80, 20, 120, 0.1)'); // Dark amethyst
+        nb3.addColorStop(1, 'transparent');
+        ctx.fillStyle = nb3;
+        ctx.fillRect(0, 0, W, H);
+
+        // Nebula 4: Gold / Amber glow (Center right)
+        const nb4 = ctx.createRadialGradient(W * 0.65, H * 0.35, 0, W * 0.65, H * 0.35, W * 0.35);
+        nb4.addColorStop(0, 'rgba(255, 180, 50, 0.12)'); // Soft gold
+        nb4.addColorStop(0.6, 'rgba(200, 80, 20, 0.05)'); // Deep orange/rust
+        nb4.addColorStop(1, 'transparent');
+        ctx.fillStyle = nb4;
+        ctx.fillRect(0, 0, W, H);
+
+        // Nebula 5: Emerald Green / Mint (Top center)
+        const nb5 = ctx.createRadialGradient(W * 0.5, H * 0.05, 0, W * 0.5, H * 0.05, W * 0.3);
+        nb5.addColorStop(0, 'rgba(50, 255, 150, 0.1)');  // Mint green
+        nb5.addColorStop(0.5, 'rgba(20, 120, 80, 0.04)'); // Dark emerald
+        nb5.addColorStop(1, 'transparent');
+        ctx.fillStyle = nb5;
+        ctx.fillRect(0, 0, W, H);
+
+        // Star dust (static small dots drawn purely on canvas)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        for (let i = 0; i < 400; i++) {
+          const x = Math.random() * W;
+          const y = Math.random() * H;
+          // Varying star sizes and slight color tints
+          const sz = Math.random() * 1.5;
+          ctx.beginPath();
+          ctx.arc(x, y, sz, 0, Math.PI * 2);
+
+          // Occasional tinted star dust
+          if (i % 5 === 0) ctx.fillStyle = 'rgba(200, 220, 255, 0.6)'; // Blueish
+          else if (i % 7 === 0) ctx.fillStyle = 'rgba(255, 210, 200, 0.6)'; // Pinkish
+          else ctx.fillStyle = 'rgba(255, 255, 255, 0.45)'; // White
+
+          ctx.fill();
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        // throttle resize
+        clearTimeout(window._gxResize);
+        window._gxResize = setTimeout(resize, 200);
+      });
+
+      resize();
+    }
+
+    function spawnTwinkleStars() {
+      const container = document.getElementById('galaxyStars');
+      if (!container) return;
+      container.innerHTML = '';
+      const colors = ['#ffffff', '#ffebf0', '#e0f7ff', '#f0e6ff'];
+      const count = 75; // Aumentei um pouco a densidade
+
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'css-star';
+        const isSuper = (i % 10 === 0);
+        const size = isSuper ? (Math.random() * 1.5 + 2.5).toFixed(1) : (Math.random() * 1 + 0.8).toFixed(1);
+        const x = (Math.random() * 100).toFixed(1);
+        const y = (Math.random() * 100).toFixed(1);
+        const dur = (isSuper ? Math.random() * 3 + 4 : Math.random() * 5 + 3).toFixed(1);
+        const del = (Math.random() * -10).toFixed(1);
+        const maxOp = isSuper ? (Math.random() * 0.2 + 0.8).toFixed(2) : (Math.random() * 0.4 + 0.4).toFixed(2);
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        el.style.cssText = `
+          width: ${size}px; height: ${size}px;
+          left: ${x}vw; top: ${y}vh;
+          --color: ${color}${isSuper ? 'bb' : '66'};
+          --dur: ${dur}s;
+          --del: ${del}s;
+          --max: ${maxOp};
+          ${isSuper ? `box-shadow: 0 0 10px #fff, 0 0 20px ${color};` : ''}
+        `;
+        container.appendChild(el);
+      }
+    }
+
+    function activateGalaxy() {
+      document.body.classList.add('galaxy-active');
+    }
+
+    // Inicializa a engine assim que possível (só aparecerá ao ganhar a classe 'galaxy-active')
+    initGalaxy();
+    spawnTwinkleStars();
+
+
     // ── CONFIG ─────────────────────────────────────────────
     const EDGE = "https://sqarjthwitlmfdtxmhpt.supabase.co/functions/v1/affiliate"; // substitua pela sua URL
 
-    const GROUPS = { '35278576': { name: 'Darkverse', emoji: '🌑' }, '35692783': { name: 'Memeverse', emoji: '😂' }, '113335355': { name: 'Animeverse', emoji: '⛩️' } }; const PROXY = 'https://sqarjthwitlmfdtxmhpt.supabase.co/functions/v1/roblox-proxy?url='; let currentGroup = 'all', cache = {}, allLoaded = {}, currentPage = 1; const PAGE_SIZE = 20;
+    const GROUPS = { '35278576': { name: 'Darkverse', emoji: '🌑' }, '35692783': { name: 'Memeverse', emoji: '😂' }, '113335355': { name: 'Animeverse', emoji: '⛩️' } }; const PROXY = 'https://sqarjthwitlmfdtxmhpt.supabase.co/functions/v1/roblox-proxy?url='; let currentGroup = 'all', cache = {}, allLoaded = {}, mergedAllCache = [], currentPage = 1; const PAGE_SIZE = 20;
 
     const urlParams = new URLSearchParams(window.location.search);
     let REF = urlParams.get("ref");
@@ -3959,6 +4308,86 @@
     REF = localStorage.getItem("affiliate_code");
     const reg = {};
 
+    function cleanName(str) {
+      if (!str) return "";
+      // Regex mais robusto para remover emojis, símbolos e caracteres especiais variados
+      return str
+        .replace(/[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+
+    // ── DEVS LOGIC ──────────────────────────────────────────
+    async function initDevs() {
+      const devs = [
+        { user: 'Neguin_carecabrancaa', role: 'Founder' },
+        { user: 'ponthinho0', role: 'Co-Founder' },
+        { user: 'Alfandego22', role: 'Co-Founder' },
+        { user: 'Calvaodecria1113', role: 'Co-Founder' }
+      ];
+
+      const grid = document.getElementById('devGrid');
+      if (!grid) return;
+
+      try {
+        const usersData = [];
+        for (const d of devs) {
+          // Tentativa 1: Search API
+          let uid, uname, displayName;
+          const r = await fetch(PROXY + encodeURIComponent(`https://users.roblox.com/v1/users/search?keyword=${d.user}&limit=10`));
+          if (r.ok) {
+            const json = await r.json();
+            const match = json.data?.find(u => u.name.toLowerCase() === d.user.toLowerCase());
+            if (match) { uid = match.id; uname = match.name; displayName = match.displayName; }
+          }
+          // Fallback
+          if (!uid) {
+            const r2 = await fetch(PROXY + encodeURIComponent(`https://api.roblox.com/users/get-by-username?username=${d.user}`));
+            if (r2.ok) {
+              const d2 = await r2.json();
+              if (d2.Id && !d2.errorMessage) { uid = d2.Id; uname = d2.Username; displayName = d2.Username; }
+            }
+          }
+          if (uid) usersData.push({ ...d, id: uid, realName: displayName || uname || d.user });
+        }
+
+        if (usersData.length === 0) {
+          grid.innerHTML = '<p style="color:var(--muted2);grid-column:1/-1">Equipe em manutenção.</p>';
+          return;
+        }
+
+        const ids = usersData.map(u => u.id).join(',');
+        const rt = await fetch(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=true`));
+        const dt = await rt.json();
+        const thumbs = dt.data || [];
+
+        grid.innerHTML = '';
+        usersData.forEach(ud => {
+          const thumbObj = thumbs.find(x => x.targetId === ud.id);
+          const t = thumbObj?.imageUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${ud.id}&width=150&height=150&format=png`;
+          const card = document.createElement('div');
+          card.className = `dev-card ${ud.role.toLowerCase() === 'founder' ? 'founder' : ''} reveal`;
+          card.innerHTML = `
+            <div class="dev-avatar-wrap">
+              <img src="${t}" alt="${ud.user}" class="dev-avatar" loading="lazy">
+            </div>
+            <div class="dev-info">
+              <div class="dev-role">${ud.role}</div>
+              <h3>${ud.realName}</h3>
+            </div>
+            <a href="https://www.roblox.com/users/${ud.id}/profile" target="_blank" class="dev-btn">Ver Perfil</a>
+          `;
+          grid.appendChild(card);
+        });
+
+        if (revealObs) {
+          grid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+        }
+      } catch (e) {
+        console.error('[initDevs]', e);
+      }
+    }
 
     // ── REGISTRY UPDATE ─────────────────────────────────────
     function regItem(id, url, name) {
@@ -4117,16 +4546,23 @@
     function sortItems(items) {
       const arr = [...items];
       switch (sortMode) {
-        case 'az': return arr.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base' }));
-        case 'za': return arr.sort((a, b) => (b.name || '').localeCompare(a.name || '', 'pt-BR', { sensitivity: 'base' }));
-        case 'price-asc': return arr.sort((a, b) => {
-          const pa = a.price ?? Infinity, pb = b.price ?? Infinity;
-          return pa - pb;
-        });
-        case 'price-desc': return arr.sort((a, b) => {
-          const pa = a.price ?? -1, pb = b.price ?? -1;
-          return pb - pa;
-        });
+        case 'az':
+          return arr.sort((a, b) => {
+            const na = (a.name || "").trim().toLowerCase();
+            const nb = (b.name || "").trim().toLowerCase();
+            return na.localeCompare(nb, 'pt-BR');
+          });
+        case 'za':
+          return arr.sort((a, b) => {
+            const na = (a.name || "").trim().toLowerCase();
+            const nb = (b.name || "").trim().toLowerCase();
+            return nb.localeCompare(na, 'pt-BR');
+          });
+        case 'price-asc': return arr.sort((a, b) => (a.price ?? 999999) - (b.price ?? 999999));
+        case 'price-desc': return arr.sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
+        case 'id-desc': return arr.sort((a, b) => b.id - a.id);
+        case 'id-asc': return arr.sort((a, b) => a.id - b.id);
+        case 'sales-desc': return arr.sort((a, b) => (b.sales || 0) - (a.sales || 0));
         default: return arr;
       }
     }
@@ -4140,15 +4576,18 @@
 
     function getActiveItems() {
       if (currentGroup === 'all') {
-        const all = Object.entries(allLoaded).flatMap(([gid, items]) =>
-          items.map(i => ({ ...i, _gid: gid }))
-        );
-        // Shuffle the array of all items randomly
-        for (let i = all.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [all[i], all[j]] = [all[j], all[i]];
+        if (!mergedAllCache.length) {
+          const all = Object.entries(allLoaded).flatMap(([gid, items]) =>
+            items.map(i => ({ ...i, _gid: gid }))
+          );
+          // Shuffle only once
+          for (let i = all.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [all[i], all[j]] = [all[j], all[i]];
+          }
+          mergedAllCache = all;
         }
-        return all;
+        return mergedAllCache;
       }
       return (allLoaded[currentGroup] || []).map(i => ({ ...i, _gid: currentGroup }));
     }
@@ -4212,8 +4651,8 @@
         <div class="skin-footer">
           <div class="skin-price">${price}</div>
           <button class="buy-btn" data-rid="${rid}" onclick="event.stopPropagation();openReg(this)">
+            <span class="btn-arrow"><img width="15" height="13" src="https://img.icons8.com/ios-filled/50/FFFFFF/down-right.png" alt="down-right"/></span>
             <span class="btn-label">Ir para compra</span>
-            <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></span>
           </button>
         </div>
       </div>
@@ -4285,19 +4724,26 @@
       if (!cItems.length) { track.innerHTML = ''; return }
       track.innerHTML = cItems.map((item, i) => {
         const mc = ['gold', 'silver', 'bronze'][i] || 'other';
+        const rankClass = i === 0 ? 'gold-card' : i === 1 ? 'silver-card' : i === 2 ? 'bronze-card' : '';
         const crid = regItem('c' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name);
-        return `<div class="carousel-card${i === 0 ? ' gold-card' : ''}" data-rid="${crid}" onclick="openReg(this)">
+        return `<div class="carousel-card ${rankClass}" data-rid="${crid}" onclick="openReg(this)">
       <div class="c-medal ${mc}">${i + 1}</div>
       <div class="c-img-box"><img src="${item._thumb}" alt="" loading="lazy"></div>
       <div class="c-name">${item.name}</div>
       <div class="c-sales">${Math.floor(Math.random() * 1200 + 300)} vendas</div>
       <div class="c-price">${item.price != null ? `<img width="16" height="16" src="https://img.icons8.com/color/48/robux--v1.png" alt="R$"/> ${item.price}` : 'GRÁTIS'}</div>
     </div>`;
-      }).join('');
+      }).join('') + `
+      <div class="carousel-card carousel-final-card">
+        <div class="c-final-icon">✦</div>
+        <div class="c-final-text">"Escolha não uma roupa. Escolha quem você quer ser."</div>
+      </div>
+      `;
       rebuildDots(); moveCarousel(0); startCAuto();
     }
     function rebuildDots() {
-      const pages = Math.max(1, cItems.length - VISIBLE() + 1);
+      const totalSlides = cItems.length + 1; // +1 pela frase final
+      const pages = Math.max(1, totalSlides - VISIBLE() + 1);
       const dots = Math.min(4, pages);
 
       document.getElementById('carouselDots').innerHTML =
@@ -4359,8 +4805,18 @@
       if (el) el.classList.add('visible');
     }, 500);
 
-    function carouselNext() { moveCarousel(cIdx >= Math.max(0, cItems.length - VISIBLE()) ? 0 : cIdx + 1); resetCAuto(); showNextPhrase(); }
-    function carouselPrev() { moveCarousel(cIdx <= 0 ? Math.max(0, cItems.length - VISIBLE()) : cIdx - 1); resetCAuto(); showNextPhrase(); }
+    function carouselNext() {
+      const totalSlides = cItems.length + 1;
+      moveCarousel(cIdx >= Math.max(0, totalSlides - VISIBLE()) ? 0 : cIdx + 1);
+      resetCAuto();
+      showNextPhrase();
+    }
+    function carouselPrev() {
+      const totalSlides = cItems.length + 1;
+      moveCarousel(cIdx <= 0 ? Math.max(0, totalSlides - VISIBLE()) : cIdx - 1);
+      resetCAuto();
+      showNextPhrase();
+    }
     function startCAuto() { clearInterval(cTimer); cTimer = setInterval(carouselNext, 4000) }
     function resetCAuto() { clearInterval(cTimer); startCAuto() }
 
@@ -4391,6 +4847,7 @@
       document.getElementById('searchClear').classList.remove('show');
       document.getElementById('sortSelect').value = 'default';
       setCount(null);
+      mergedAllCache = [];
       loadGroup(currentGroup);
     }
 
@@ -4513,15 +4970,28 @@
       robloxUser = null;
     }
 
-    function loConfirm() {
+    function loConfirm(isAuto = false) {
       if (!robloxUser) return;
 
+      // Persistência
+      localStorage.setItem('roblox_user', JSON.stringify(robloxUser));
+
       // Show user in nav
+      const navUser = document.getElementById('navUser');
+      if (navUser) {
+        document.getElementById('navUserName').textContent = robloxUser.displayName || robloxUser.username;
+        document.getElementById('navUserAvatar').src = robloxUser.avatarUrl || '';
+        navUser.style.display = 'flex';
+      }
+      // Hide login buttons if any
+      const navSocial = document.querySelector('.nav-social-btns');
+      if (navSocial) navSocial.style.display = 'none';
+      const mobSocial = document.querySelector('.mobile-social-btns');
+      if (mobSocial) mobSocial.style.display = 'none';
 
       const token = localStorage.getItem("purchase_session");
 
-
-      if (token) {
+      if (token && !isAuto) {
         confirmPurchase(robloxUser.uid);
       }
 
@@ -4529,21 +4999,40 @@
       const heroSub = document.querySelector('.hero-sub');
       if (heroSub) heroSub.innerHTML = `Olá, <strong>${robloxUser.displayName || robloxUser.username}</strong>! 👋`;
 
+      // Ativa o galaxy background (fade in)
+      if (typeof activateGalaxy === 'function') activateGalaxy();
+
       // Hide overlay
       const ov = document.getElementById('loginOverlay');
-      ov.classList.add('hide');
-      setTimeout(() => {
+      if (isAuto) {
         ov.style.display = 'none';
         document.body.style.overflow = '';
-      }, 500);
+      } else {
+        ov.classList.add('hide');
+        setTimeout(() => {
+          ov.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 500);
+      }
     }
 
     function loLogout() {
       robloxUser = null;
+      localStorage.removeItem('roblox_user');
       document.getElementById('navUser').style.display = 'none';
+      const navSocial = document.querySelector('.nav-social-btns');
+      if (navSocial) navSocial.style.display = 'flex';
+      const mobSocial = document.querySelector('.mobile-social-btns');
+      if (mobSocial) mobSocial.style.display = 'flex';
+
+      // Reset galaxy
+      document.body.classList.remove('galaxy-active');
+
+      // Show overlay again
       const ov = document.getElementById('loginOverlay');
       ov.style.display = 'flex';
       ov.classList.remove('hide');
+
       // reset steps
       document.getElementById('loStep1').classList.remove('hidden');
       document.getElementById('loStep2').classList.add('hidden');
@@ -4553,8 +5042,27 @@
       document.body.style.overflow = 'hidden';
     }
 
-    // Block body scroll while overlay is visible
-    document.body.style.overflow = 'hidden';
+    function checkPersistence() {
+      const saved = localStorage.getItem('roblox_user');
+      if (saved) {
+        try {
+          robloxUser = JSON.parse(saved);
+          loConfirm(true);
+        } catch (e) {
+          localStorage.removeItem('roblox_user');
+        }
+      }
+    }
+
+    // Inicialização
+    checkPersistence();
+
+    // Block body scroll while overlay is visible (if not logged in)
+    if (!localStorage.getItem('roblox_user')) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.getElementById('loginOverlay').style.display = 'none';
+    }
     // ──────────────────────────────────────────────────────
 
     // ── Menu Toggles ───────────────────────────────────────
@@ -4577,6 +5085,7 @@
       for (const gid of Object.keys(GROUPS)) {
         fetchGroupIcon(gid).then(url => { if (url) { const img = document.getElementById('icon-' + gid); if (img) { img.src = url; img.style.display = 'block' } } });
       }
+      initDevs();
       await loadGroup('all');
       for (const gid of Object.keys(GROUPS)) {
         if (gid !== currentGroup) fetchGroupItems(gid).then(() => { renderRanking(); const all = Object.values(allLoaded).flat().filter(i => i._thumb); if (all.length >= 3) buildCarousel(all) }).catch(() => { });
@@ -4611,9 +5120,10 @@
           if (!data.data?.length) break;
 
           data.data.forEach(d => {
+            const rawName = d.name || 'Item #' + d.id;
             allItems.push({
               id: d.id,
-              name: d.name || 'Item #' + d.id,
+              name: cleanName(rawName),
               price: d.price ?? d.lowestPrice ?? d.priceInRobux ?? null,
               sales: d.sales ?? d.unitsAvailableForConsumption ?? 0,
               _thumb: d.thumbnail || d.thumbnailImage?.final || d.imageUrl || null,
@@ -4667,41 +5177,83 @@
       observer.observe(el);
     });
 
-    init();
 
-    // ── BG PARTICLES ────────────────────────────────────────
-    (function spawnBgParticles() {
+
+    // ── STARRY BACKGROUND & SECTION GRADIENTS ──────────────────────
+    (function spawnStarryBg() {
       const container = document.getElementById('bgParticles');
       if (!container) return;
-      const colors = [
-        'rgba(255,77,184,VAR)',   // rosa
-        'rgba(102,231,255,VAR)',  // ciano
-        'rgba(214,163,255,VAR)',  // lilás
-        'rgba(255,240,102,VAR)',  // amarelo
-        'rgba(102,255,179,VAR)',  // verde
-      ];
-      const count = 28;
+      container.innerHTML = '';
+
+      if (!document.getElementById('starStyle')) {
+        const style = document.createElement('style');
+        style.id = 'starStyle';
+        style.textContent = `
+          .bg-star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: starTwinkle var(--dur) ease-in-out infinite;
+            animation-delay: var(--del);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px var(--color);
+          }
+          @keyframes starTwinkle {
+            0% { opacity: 0; transform: scale(0.3); }
+            30% { opacity: var(--max-op); transform: scale(1.1); }
+            70% { opacity: var(--max-op); transform: scale(0.9); }
+            100% { opacity: 0; transform: scale(0.3); }
+          }
+          
+          /* Degrades suaves nas seções */
+          .section {
+            position: relative;
+            z-index: 1;
+          }
+          .section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.55;
+            transition: opacity 0.5s ease;
+          }
+          .section:nth-of-type(1)::before { background: linear-gradient(180deg, rgba(255, 77, 184, 0.0), rgba(255, 77, 184, 0.08)); }
+          .section:nth-of-type(2)::before { background: linear-gradient(180deg, rgba(255, 77, 184, 0.08), rgba(102, 231, 255, 0.08)); }
+          .section:nth-of-type(3)::before { background: linear-gradient(180deg, rgba(102, 231, 255, 0.08), rgba(214, 163, 255, 0.08)); }
+          .section:nth-of-type(4)::before { background: linear-gradient(180deg, rgba(214, 163, 255, 0.08), rgba(255, 240, 102, 0.08)); }
+          .section:nth-of-type(5)::before { background: linear-gradient(180deg, rgba(255, 240, 102, 0.08), rgba(92, 255, 157, 0.08)); }
+          .section:nth-of-type(n+6)::before { background: linear-gradient(180deg, rgba(92, 255, 157, 0.08), rgba(255, 77, 184, 0.05)); }
+        `;
+        document.head.appendChild(style);
+      }
+
+      const colors = ['#ff4db8', '#66e7ff', '#d6a3ff', '#fff066', '#5cff9d'];
+      const count = 75; // Numero de estrelas
+
       for (let i = 0; i < count; i++) {
         const el = document.createElement('div');
-        el.className = 'bg-particle';
-        const size = Math.random() * 5 + 2;        // 2–7 px
-        const x = Math.random() * 100;          // %
-        const y = Math.random() * 100;           // %
-        const dur = (Math.random() * 10 + 6).toFixed(1); // 6–16 s
-        const delay = (Math.random() * -14).toFixed(1);
-        const dx = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
-        const dy = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
-        const op = (Math.random() * 0.4 + 0.2).toFixed(2);
-        const color = colors[i % colors.length].replace('VAR', op);
-        const glow = colors[i % colors.length].replace('VAR', (op * 0.5).toFixed(2));
+        el.className = 'bg-star';
+
+        const size = (Math.random() * 2.5 + 1).toFixed(1); // 1-3.5px
+        const x = (Math.random() * 100).toFixed(1);
+        const y = (Math.random() * 100).toFixed(1);
+        const dur = (Math.random() * 6 + 4).toFixed(1); // 4-10s
+        const del = (Math.random() * -10).toFixed(1); // random start
+        const maxOp = (Math.random() * 0.6 + 0.4).toFixed(2); // 0.4 - 1
+        const color = colors[i % colors.length]; // Glow sutil
+
         el.style.cssText = `
-          width:${size}px; height:${size}px;
-          left:${x}%; top:${y}%;
-          background:${color};
-          box-shadow:0 0 ${size * 3}px ${glow};
-          --pd:${dur}s; --dx:${dx}; --dy:${dy}; --po:${op};
-          animation-delay:${delay}s;
+          width: ${size}px; height: ${size}px;
+          left: ${x}%; top: ${y}%;
+          --color: ${color}40;
+          --dur: ${dur}s; 
+          --del: ${del}s;
+          --max-op: ${maxOp};
         `;
+
         container.appendChild(el);
       }
     })();
@@ -4768,9 +5320,10 @@
     })();
 
     // ══ SCROLL REVEAL ════════════════════════════════════════
+    let revealObs;
     (function initScrollReveal() {
       const targets = '.section-header,.hero-stats,.trust-card,.review-card,.rank-card,.skin-card';
-      const revealObs = new IntersectionObserver(entries => {
+      revealObs = new IntersectionObserver(entries => {
         entries.forEach((e, i) => {
           if (e.isIntersecting) {
             setTimeout(() => e.target.classList.add('in-view'), i * 60);
@@ -4823,6 +5376,9 @@
 
       statNums.forEach(el => counterObs.observe(el));
     })();
+
+    // ── FINAL INIT ───────────────────────────────────────────
+    init();
   </script>
 </body>
 
