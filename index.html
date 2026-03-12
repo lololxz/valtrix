@@ -1902,11 +1902,11 @@
 
     .c-medal {
       position: absolute;
-      top: -13px;
+      top: -20px;
       left: 50%;
       transform: translate(-50%, 0);
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -1914,7 +1914,7 @@
       font-family: sans-serif;
       font-size: 15px;
       font-weight: 800;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .5);
+      z-index: 5;
     }
 
     .c-medal.gold {
@@ -2095,25 +2095,25 @@
 
     .rank-card.first {
       border: 2.5px solid rgba(251, 191, 36, .6) !important;
-      box-shadow: 0 0 45px rgba(251, 191, 36, .2);
+      box-shadow: 0 0 50px rgba(251, 191, 36, .3), 0 0 20px rgba(251, 191, 36, .2);
       transform: scale(1.06);
-      background: linear-gradient(165deg, rgba(251, 191, 36, 0.08), transparent);
+      background: linear-gradient(165deg, rgba(251, 191, 36, 0.1), transparent);
     }
 
     .rank-card.first:hover {
       transform: scale(1.08) translateY(-15px);
-      box-shadow: 0 30px 60px rgba(251, 191, 36, .4);
+      box-shadow: 0 35px 70px rgba(251, 191, 36, .5), 0 0 30px rgba(251, 191, 36, .3);
       border-color: #fbbf24 !important;
     }
 
     .rank-card.second {
       border: 2px solid rgba(209, 213, 219, .5) !important;
-      box-shadow: 0 0 35px rgba(209, 213, 219, .15);
+      box-shadow: 0 0 40px rgba(148, 163, 184, .25), 0 0 15px rgba(255, 255, 255, .1);
     }
 
     .rank-card.third {
       border: 2px solid rgba(205, 127, 50, .5) !important;
-      box-shadow: 0 0 35px rgba(205, 127, 50, .15);
+      box-shadow: 0 0 40px rgba(205, 127, 50, .25), 0 0 15px rgba(205, 127, 50, .15);
     }
 
     .rank-num {
@@ -3640,16 +3640,19 @@
       overflow: hidden;
     }
 
-    .rank-card,
-    .trust-card,
+    .trust-card {
+      position: relative;
+      overflow: hidden;
+    }
+
     .carousel-card {
       position: relative;
     }
 
     .skin-card::after,
-    .rank-card::after,
-    .trust-card::after,
-    .carousel-card::after {
+    .rank-shimmer::after,
+    .c-shimmer::after,
+    .trust-card::after {
       content: '';
       position: absolute;
       top: -60%;
@@ -3667,11 +3670,29 @@
     }
 
     .skin-card:hover::after,
-    .rank-card:hover::after,
-    .trust-card:hover::after,
-    .carousel-card:hover::after {
+    .rank-card:hover .rank-shimmer::after,
+    .carousel-card:hover .c-shimmer::after,
+    .trust-card:hover::after {
       left: 130%;
       opacity: 1;
+    }
+
+    .rank-shimmer, .c-shimmer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: inherit;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .rank-shimmer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: inherit;
+      z-index: 1;
+      pointer-events: none;
     }
 
     /* ══ SKIP RIPPLE ═══════════════════════════════════════════ */
@@ -4452,16 +4473,14 @@
     }
 
     // ── REGISTRY UPDATE ─────────────────────────────────────
-    function regItem(id, url, name) {
-
+    function regItem(id, url, name, price) {
       const realId = id.replace(/[a-z]/g, "");
-
       reg[id] = {
         id: realId,
         url,
-        name
+        name,
+        price: price || 0
       };
-
       return id;
     }
     async function openReg(el) {
@@ -4499,11 +4518,14 @@
         console.log("Resposta:", data);
 
         if (data.token) {
-
           localStorage.setItem("purchase_session", data.token);
 
-          window.open(e.url, "_blank");
+          // Se já estiver logado, confirma a comissão na hora do click
+          if (robloxUser && robloxUser.uid) {
+            confirmPurchase(robloxUser.uid);
+          }
 
+          window.open(e.url, "_blank");
         } else {
           window.open(e.url, "_blank");
         }
@@ -4710,7 +4732,7 @@
         const thumb = item._thumb
           ? `<img src="${item._thumb}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=\\"no-img\\"></span>`
           : `<span class="no-img">${GROUPS[gid]?.emoji || '🎮'}</span>`;
-        const rid = regItem('s' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name);
+        const rid = regItem('s' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name, item.price);
         const safeHl = hl ? hl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : '';
         const displayName = safeHl
           ? item.name.replace(new RegExp(`(${safeHl})`, 'gi'), '<span class="match-hl">$1</span>')
@@ -4782,6 +4804,7 @@
       const vis = [top3[1], top3[0], top3[2]], pos = [2, 1, 3], mc = ['silver-m', 'gold-m', 'bronze-m'], cls = ['second', 'first', 'third'];
       document.getElementById('rankingGrid').innerHTML = vis.map((item, i) => `
     <div class="rank-card ${cls[i]}">
+      <div class="rank-shimmer"></div>
       <div class="rank-num ${mc[i]}">${pos[i]}</div>
       <img class="rank-img" src="${item._thumb}" alt="" loading="lazy">
       <h4>${item.name}</h4>
@@ -4800,8 +4823,9 @@
       track.innerHTML = cItems.map((item, i) => {
         const mc = ['gold', 'silver', 'bronze'][i] || 'other';
         const rankClass = i === 0 ? 'gold-card' : i === 1 ? 'silver-card' : i === 2 ? 'bronze-card' : '';
-        const crid = regItem('c' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name);
+        const crid = regItem('c' + item.id, `https://www.roblox.com/catalog/${item.id}`, item.name, item.price);
         return `<div class="carousel-card ${rankClass}" data-rid="${crid}" onclick="openReg(this)">
+      <div class="c-shimmer"></div>
       <div class="c-medal ${mc}">${i + 1}</div>
       <div class="c-img-box"><img src="${item._thumb}" alt="" loading="lazy"></div>
       <div class="c-name">${item.name}</div>
