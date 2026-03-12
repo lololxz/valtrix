@@ -4020,24 +4020,6 @@
         <a href="#catalogo" class="btn-primary">✨ Ver Catálogo</a>
         <a href="#seguranca" class="btn-secondary">🔒 Como funciona?</a>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="stat-num">4.2<span>k+</span></div>
-          <div class="stat-label">Itens</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-num">18<span>k</span></div>
-          <div class="stat-label">Clientes</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-num">4.9<span>★</span></div>
-          <div class="stat-label">Avaliação</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-num">100<span>%</span></div>
-          <div class="stat-label">Seguro</div>
-        </div>
-      </div>
       <div class="scroll-hint">
         <div class="s-arrow">
           <div class="s-dot"></div>
@@ -4616,7 +4598,7 @@
 
         if (data.ok) {
           console.log("✅ [SISTEMA-AFF] Comissão registrada!");
-          showToast("💸 Comissão Confirmada! +R$ " + data.commission, "success");
+          // showToast("💸 Comissão Confirmada! +R$ " + data.commission, "success");
           localStorage.removeItem("purchase_session");
           localStorage.removeItem("purchase_item_id");
         } else {
@@ -5513,24 +5495,6 @@
       });
     })();
 
-    // ══ SCROLL REVEAL ════════════════════════════════════════
-    let revealObs;
-    (function initScrollReveal() {
-      const targets = '.section-header,.hero-stats,.trust-card,.review-card,.rank-card,.skin-card';
-      revealObs = new IntersectionObserver(entries => {
-        entries.forEach((e, i) => {
-          if (e.isIntersecting) {
-            setTimeout(() => e.target.classList.add('in-view'), i * 60);
-            revealObs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.07, rootMargin: '0px 0px -20px 0px' });
-
-      document.querySelectorAll(targets).forEach(el => {
-        el.classList.add('reveal');
-        revealObs.observe(el);
-      });
-    })();
 
     // ══ ANIMATED STAT COUNTERS ═══════════════════════════════
     (function initStatCounters() {
