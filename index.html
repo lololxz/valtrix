@@ -4515,14 +4515,18 @@
 
         const data = await res.json();
 
-        console.log("Resposta:", data);
+        console.log("[SISTEMA-AFF] Resposta da API:", data);
 
         if (data.token) {
           localStorage.setItem("purchase_session", data.token);
 
-          // Se já estiver logado, confirma a comissão na hora do click
+          console.log("[SISTEMA-AFF] Sessão criada. Token:", data.token);
+
           if (robloxUser && robloxUser.uid) {
+            console.log("[SISTEMA-AFF] 🚀 Usuário logado: " + robloxUser.username + ". Confirmando comissão...");
             confirmPurchase(robloxUser.uid);
+          } else {
+            console.log("[SISTEMA-AFF] ⏳ Usuário não logado. A comissão aguarda o login.");
           }
 
           window.open(e.url, "_blank");
@@ -4592,8 +4596,10 @@
         console.log("Resposta confirm_purchase:", data);
 
         if (data.ok) {
-          console.log("✅ Comissão registrada");
+          console.log("✅ Comissão registrada com sucesso!");
           localStorage.removeItem("purchase_session");
+        } else {
+          console.log("❌ Falha na comissão:", data.reason);
         }
 
       } catch (err) {
@@ -5113,7 +5119,7 @@
 
       const token = localStorage.getItem("purchase_session");
 
-      if (token && !isAuto) {
+      if (token) {
         confirmPurchase(robloxUser.uid);
       }
 
