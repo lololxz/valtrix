@@ -1497,35 +1497,35 @@
     }
 
     /* MOD 9: Frase pós-carrossel */
-    .carousel-phrase {
-      position: relative;
-      z-index: 1;
+    .carousel-phrase-box {
       text-align: center;
-      padding: clamp(10px, 2vw, 20px) var(--px);
-      overflow: hidden;
+      padding: 30px var(--px) 10px;
+      opacity: 1; /* Default for desktop */
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: relative;
+      z-index: 2;
     }
 
-    .carousel-phrase-inner {
-      display: inline-block;
+    .carousel-phrase {
       font-family: 'Fredoka One', 'Syne', cursive;
-      font-size: clamp(15px, 2.5vw, 24px);
-      background: linear-gradient(135deg, var(--v2), var(--accent), var(--accent2, #7ee8fa));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity .65s cubic-bezier(.4, 0, .2, 1), transform .65s cubic-bezier(.4, 0, .2, 1);
+      font-size: clamp(16px, 3.2vw, 24px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+      display: inline-block;
     }
 
-    .carousel-phrase-inner.visible {
-      opacity: 1;
-      transform: translateY(0)
-    }
-
-    .carousel-phrase-inner.fade-out {
+    .carousel-phrase span {
+      display: inline-block;
+      white-space: pre;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #fff;
+      -webkit-text-fill-color: initial;
+      background: none;
       opacity: 0;
-      transform: translateY(-18px)
+      transform: translateY(5px);
+      filter: blur(2px) drop-shadow(0 2px 10px rgba(124, 58, 237, 0.5));
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     }
 
     /* MOD 10: Hot badge + categoria */
@@ -3861,301 +3861,307 @@
   </div>
   <!-- ═════════════════════ -->
 
-  <nav id="mainNav">
-    <a class="logo" href="#"><span>Valtrix</span><span class="logo-spark">✦</span></a>
-    <ul class="nav-links">
-      <li><a href="#catalogo">Catálogo</a></li>
-      <li><a href="#ranking">Ranking</a></li>
-      <li><a href="#devs">Conheça os Devs</a></li>
-      <li><a href="#seguranca">Segurança</a></li>
-    </ul>
-    <div class="nav-right">
-      <!-- MOD 7: Botões Discord e Roblox -->
-      <div class="nav-social-btns">
-        <a class="nav-social-btn nav-discord" href="https://discord.gg/bGfNGZGHjF" target="_blank" rel="noopener">
+  <!-- ══ APP CONTENT (Hidden until login) ══ -->
+  <div id="appContent" style="display: none;">
+
+    <nav id="mainNav">
+      <a class="logo" href="#"><span>Valtrix</span><span class="logo-spark">✦</span></a>
+      <ul class="nav-links">
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#ranking">Ranking</a></li>
+        <li><a href="#devs">Conheça os Devs</a></li>
+        <li><a href="#seguranca">Segurança</a></li>
+      </ul>
+      <div class="nav-right">
+        <!-- MOD 7: Botões Discord e Roblox -->
+        <div class="nav-social-btns">
+          <a class="nav-social-btn nav-discord" href="https://discord.gg/bGfNGZGHjF" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
+            </svg>
+            Suporte
+          </a>
+          <a class="nav-social-btn nav-roblox-btn" href="https://www.roblox.com/pt/users/4359357717/profile"
+            target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4.062 4L2 20l17.938 4L22 8 4.062 4zM15.1 15.1l-6.2-1.5 1.5-6.2 6.2 1.5-1.5 6.2z" />
+            </svg>
+            Roblox
+          </a>
+        </div>
+        <div class="nav-user" id="navUser" style="display:none" title="Clique para Sair" onclick="loLogout()">
+          <img class="nav-user-avatar" id="navUserAvatar" src="" alt="">
+          <span class="nav-user-name" id="navUserName"></span>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- MOBILE DRAWER -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="#catalogo" onclick="closeMenu()">✨ Catálogo</a></li>
+        <li><a href="#ranking" onclick="closeMenu()">🏆 Ranking</a></li>
+        <li><a href="#seguranca" onclick="closeMenu()">🔒 Segurança</a></li>
+        <li><a href="#devs" onclick="closeMenu()">👨‍💻Conheça os Devs</a></li>
+      </ul>
+      <!-- MOD 7: Social buttons mobile -->
+      <div class="mobile-social-btns">
+        <a class="nav-social-btn nav-discord" href="https://discord.gg/bGfNGZGHjF" target="_blank" rel="noopener"
+          style="flex:1;justify-content:center">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
           </svg>
-          Suporte
+          Discord Suporte
         </a>
         <a class="nav-social-btn nav-roblox-btn" href="https://www.roblox.com/pt/users/4359357717/profile"
-          target="_blank" rel="noopener">
+          target="_blank" rel="noopener" style="flex:1;justify-content:center">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path d="M4.062 4L2 20l17.938 4L22 8 4.062 4zM15.1 15.1l-6.2-1.5 1.5-6.2 6.2 1.5-1.5 6.2z" />
           </svg>
-          Roblox
+          Perfil Roblox
         </a>
       </div>
-      <div class="nav-user" id="navUser" style="display:none" title="Clique para Sair" onclick="loLogout()">
-        <img class="nav-user-avatar" id="navUserAvatar" src="" alt="">
-        <span class="nav-user-name" id="navUserName"></span>
-      </div>
-      <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-      </button>
     </div>
-  </nav>
 
-  <!-- MOBILE DRAWER -->
-  <div class="mobile-menu" id="mobileMenu">
-    <ul>
-      <li><a href="#catalogo" onclick="closeMenu()">✨ Catálogo</a></li>
-      <li><a href="#ranking" onclick="closeMenu()">🏆 Ranking</a></li>
-      <li><a href="#seguranca" onclick="closeMenu()">🔒 Segurança</a></li>
-      <li><a href="#devs" onclick="closeMenu()">👨‍💻Conheça os Devs</a></li>
-    </ul>
-    <!-- MOD 7: Social buttons mobile -->
-    <div class="mobile-social-btns">
-      <a class="nav-social-btn nav-discord" href="https://discord.gg/bGfNGZGHjF" target="_blank" rel="noopener"
-        style="flex:1;justify-content:center">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
-        </svg>
-        Discord Suporte
-      </a>
-      <a class="nav-social-btn nav-roblox-btn" href="https://www.roblox.com/pt/users/4359357717/profile" target="_blank"
-        rel="noopener" style="flex:1;justify-content:center">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M4.062 4L2 20l17.938 4L22 8 4.062 4zM15.1 15.1l-6.2-1.5 1.5-6.2 6.2 1.5-1.5 6.2z" />
-        </svg>
-        Perfil Roblox
-      </a>
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <h1><em class="h1-white">Seu avatar,</em><em class="h1-grad">sua identidade.</em></h1>
-    <p class="hero-sub">Skins e outfits reais dos <strong>grupos do Roblox</strong>.<br>Compra segura, entrega
-      instantânea, 100% oficial.</p>
-    <div class="hero-ctas">
-      <a href="#catalogo" class="btn-primary">✨ Ver Catálogo</a>
-      <a href="#seguranca" class="btn-secondary">🔒 Como funciona?</a>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="stat-num">4.2<span>k+</span></div>
-        <div class="stat-label">Itens</div>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <h1><em class="h1-white">Seu avatar,</em><em class="h1-grad">sua identidade.</em></h1>
+      <p class="hero-sub">Skins e outfits reais dos <strong>grupos do Roblox</strong>.<br>Compra segura, entrega
+        instantânea, 100% oficial.</p>
+      <div class="hero-ctas">
+        <a href="#catalogo" class="btn-primary">✨ Ver Catálogo</a>
+        <a href="#seguranca" class="btn-secondary">🔒 Como funciona?</a>
       </div>
-      <div class="hero-stat">
-        <div class="stat-num">18<span>k</span></div>
-        <div class="stat-label">Clientes</div>
-      </div>
-      <div class="hero-stat">
-        <div class="stat-num">4.9<span>★</span></div>
-        <div class="stat-label">Avaliação</div>
-      </div>
-      <div class="hero-stat">
-        <div class="stat-num">100<span>%</span></div>
-        <div class="stat-label">Seguro</div>
-      </div>
-    </div>
-    <div class="scroll-hint">
-      <div class="s-arrow">
-        <div class="s-dot"></div>
-      </div><span>Explorar</span>
-    </div>
-  </section>
-
-  <!-- VIDEO HERO -->
-  <section class="video-hero" id="videoHero">
-    <div class="video-hero-outer">
-      <div style="position:relative;overflow:hidden;border-radius:inherit">
-        <div class="video-inner" id="videoInner">
-          <div class="video-slide">
-            <div class="video-placeholder"><span class="ph-emoji">🧚‍♀️</span><span class="ph-label">Fairy
-                Collection</span><span class="ph-sub">📁 assets/video/0119.mp4</span></div><video autoplay muted loop
-              playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-              <source src="assets/video/0119.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-slide">
-            <div class="video-placeholder"><span class="ph-emoji">🧜‍♀️</span><span class="ph-label">Ocean
-                Series</span><span class="ph-sub">📁 assets/video/0119(1).mp4</span></div><video autoplay muted loop
-              playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-              <source src="assets/video/0119(1).mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-slide">
-            <div class="video-placeholder"><span class="ph-emoji">🌙</span><span class="ph-label">Night
-                Edition</span><span class="ph-sub">📁 assets/video/0119(2).mp4</span></div><video autoplay muted loop
-              playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-              <source src="assets/video/0119(2).mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-slide">
-            <div class="video-placeholder"><span class="ph-emoji">🦄</span><span class="ph-label">Fantasy
-                Bundle</span><span class="ph-sub">📁 assets/video/0119(3).mp4</span></div><video autoplay muted loop
-              playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-              <source src="assets/video/0119(3).mp4" type="video/mp4">
-            </video>
-          </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="stat-num">4.2<span>k+</span></div>
+          <div class="stat-label">Itens</div>
         </div>
-        <button class="vh-arrow left" onclick="vhPrev()" aria-label="Anterior">&#8592;</button>
-        <button class="vh-arrow right" onclick="vhNext()" aria-label="Próximo">&#8594;</button>
-        <div class="vh-dots" id="vhDots">
-          <div class="vh-dot active" onclick="vhGo(0)"></div>
-          <div class="vh-dot" onclick="vhGo(1)"></div>
-          <div class="vh-dot" onclick="vhGo(2)"></div>
-          <div class="vh-dot" onclick="vhGo(3)"></div>
+        <div class="hero-stat">
+          <div class="stat-num">18<span>k</span></div>
+          <div class="stat-label">Clientes</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-num">4.9<span>★</span></div>
+          <div class="stat-label">Avaliação</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-num">100<span>%</span></div>
+          <div class="stat-label">Seguro</div>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="scroll-hint">
+        <div class="s-arrow">
+          <div class="s-dot"></div>
+        </div><span>Explorar</span>
+      </div>
+    </section>
 
-  <!-- TOP SEMANAL -->
-  <section class="carousel-section" id="topSemanal">
-    <div class="section-header" style="padding:0 var(--px)">
-      <div class="pill">🏆 Top Semanal</div>
-      <h2>As <span class="hl">mais amadas</span> da semana</h2>
-      <p>Ranking atualizado toda segunda-feira</p>
-    </div>
-    <div class="carousel-wrapper">
+    <!-- VIDEO HERO -->
+    <section class="video-hero" id="videoHero">
+      <div class="video-hero-outer">
+        <div style="position:relative;overflow:hidden;border-radius:inherit">
+          <div class="video-inner" id="videoInner">
+            <div class="video-slide">
+              <div class="video-placeholder"><span class="ph-emoji">🧚‍♀️</span><span class="ph-label">Fairy
+                  Collection</span><span class="ph-sub">📁 assets/video/0119.mp4</span></div><video autoplay muted loop
+                playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                <source src="assets/video/0119.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-slide">
+              <div class="video-placeholder"><span class="ph-emoji">🧜‍♀️</span><span class="ph-label">Ocean
+                  Series</span><span class="ph-sub">📁 assets/video/0119(1).mp4</span></div><video autoplay muted loop
+                playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                <source src="assets/video/0119(1).mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-slide">
+              <div class="video-placeholder"><span class="ph-emoji">🌙</span><span class="ph-label">Night
+                  Edition</span><span class="ph-sub">📁 assets/video/0119(2).mp4</span></div><video autoplay muted loop
+                playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                <source src="assets/video/0119(2).mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-slide">
+              <div class="video-placeholder"><span class="ph-emoji">🦄</span><span class="ph-label">Fantasy
+                  Bundle</span><span class="ph-sub">📁 assets/video/0119(3).mp4</span></div><video autoplay muted loop
+                playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                <source src="assets/video/0119(3).mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <button class="vh-arrow left" onclick="vhPrev()" aria-label="Anterior">&#8592;</button>
+          <button class="vh-arrow right" onclick="vhNext()" aria-label="Próximo">&#8594;</button>
+          <div class="vh-dots" id="vhDots">
+            <div class="vh-dot active" onclick="vhGo(0)"></div>
+            <div class="vh-dot" onclick="vhGo(1)"></div>
+            <div class="vh-dot" onclick="vhGo(2)"></div>
+            <div class="vh-dot" onclick="vhGo(3)"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <div class="carousel-track" id="carouselTrack">
-        <div class="loading-state" style="width:100%;padding:48px">
+    <!-- TOP SEMANAL -->
+    <section class="carousel-section" id="topSemanal">
+      <div class="section-header" style="padding:0 var(--px)">
+        <div class="pill">🏆 Top Semanal</div>
+        <h2>As <span class="hl">mais amadas</span> da semana</h2>
+        <p>Ranking atualizado toda segunda-feira</p>
+      </div>
+      <div class="carousel-wrapper">
+
+        <div class="carousel-track" id="carouselTrack">
+          <div class="loading-state" style="width:100%;padding:48px">
+            <div class="spinner"></div>
+            <p>Carregando itens...</p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="c-btn" onclick="carouselPrev()" aria-label="Anterior">&#8592;</button>
+        <div class="c-dots" id="carouselDots"></div>
+        <button class="c-btn" onclick="carouselNext()" aria-label="Próximo">&#8594;</button>
+      </div>
+    </section>
+    
+    <!-- MOD 9: Frase animada pós-carrossel -->
+    <div class="carousel-phrase-box" id="carouselPhraseBox">
+      <p class="carousel-phrase" id="carouselPhraseText"></p>
+    </div>
+
+    <!-- CATALOG -->
+    <section class="section" id="catalogo">
+      <div class="section-header">
+        <div class="pill">✨ Catálogo Oficial</div>
+        <h2>Escolha o seu <span class="hl">look perfeito</span></h2>
+      </div>
+
+      <!-- GROUP TABS -->
+      <div class="group-tabs" id="groupTabs">
+        <button class="group-tab active" data-group="all" onclick="selectGroup(this)">🌐 Todos</button>
+        <button class="group-tab" data-group="35278576" onclick="selectGroup(this)">🌑 Darkverse</button>
+        <button class="group-tab" data-group="35692783" onclick="selectGroup(this)">😂 Memeverse</button>
+        <button class="group-tab" data-group="113335355" onclick="selectGroup(this)">⛩️ Animeverse</button>
+      </div>
+
+      <!-- ══ SEARCH BAR ══ -->
+      <div class="search-wrap">
+        <span class="search-icon-left">🔍</span>
+        <input id="searchInput" class="search-input" type="search" placeholder="Buscar skin ou outfit..."
+          autocomplete="off" oninput="onSearch(this.value)" onkeydown="if(event.key==='Escape')clearSearch()">
+        <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Limpar">✕</button>
+      </div>
+      <div class="search-meta">
+        <span class="search-count" id="searchCount"></span>
+        <div class="search-sort" id="searchSort">
+          <span>Ordenar:</span>
+          <select id="sortSelect" onchange="applySort()">
+            <option value="default">Relevância (Padrão)</option>
+            <option value="id-desc">Novidades</option>
+            <option value="sales-desc">Mais Vendidos</option>
+            <option value="az">Nome: A → Z</option>
+            <option value="za">Nome: Z → A</option>
+            <option value="price-asc">Preço: Menor ao Maior</option>
+            <option value="price-desc">Preço: Maior ao Maior</option>
+          </select>
+        </div>
+      </div>
+      <!-- ════════════════ -->
+
+      <div id="catalogContent">
+        <div class="loading-state">
           <div class="spinner"></div>
           <p>Carregando itens...</p>
         </div>
       </div>
-    </div>
-    <div class="carousel-controls">
-      <button class="c-btn" onclick="carouselPrev()" aria-label="Anterior">&#8592;</button>
-      <div class="c-dots" id="carouselDots"></div>
-      <button class="c-btn" onclick="carouselNext()" aria-label="Próximo">&#8594;</button>
-    </div>
-  </section>
+      <!-- Paginação -->
+      <div id="catalogPagination"
+        style="display:none;justify-content:center;align-items:center;gap:8px;margin-top:24px;flex-wrap:wrap"></div>
+    </section>
 
-  <!-- MOD 9: Frase animada pós-carrossel -->
+    <div class="divider"></div>
 
-
-  <!-- CATALOG -->
-  <section class="section" id="catalogo">
-    <div class="section-header">
-      <div class="pill">✨ Catálogo Oficial</div>
-      <h2>Escolha o seu <span class="hl">look perfeito</span></h2>
-    </div>
-
-    <!-- GROUP TABS -->
-    <div class="group-tabs" id="groupTabs">
-      <button class="group-tab active" data-group="all" onclick="selectGroup(this)">🌐 Todos</button>
-      <button class="group-tab" data-group="35278576" onclick="selectGroup(this)">🌑 Darkverse</button>
-      <button class="group-tab" data-group="35692783" onclick="selectGroup(this)">😂 Memeverse</button>
-      <button class="group-tab" data-group="113335355" onclick="selectGroup(this)">⛩️ Animeverse</button>
-    </div>
-
-    <!-- ══ SEARCH BAR ══ -->
-    <div class="search-wrap">
-      <span class="search-icon-left">🔍</span>
-      <input id="searchInput" class="search-input" type="search" placeholder="Buscar skin ou outfit..."
-        autocomplete="off" oninput="onSearch(this.value)" onkeydown="if(event.key==='Escape')clearSearch()">
-      <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Limpar">✕</button>
-    </div>
-    <div class="search-meta">
-      <span class="search-count" id="searchCount"></span>
-      <div class="search-sort" id="searchSort">
-        <span>Ordenar:</span>
-        <select id="sortSelect" onchange="applySort()">
-          <option value="default">Relevância (Padrão)</option>
-          <option value="id-desc">Novidades</option>
-          <option value="sales-desc">Mais Vendidos</option>
-          <option value="az">Nome: A → Z</option>
-          <option value="za">Nome: Z → A</option>
-          <option value="price-asc">Preço: Menor ao Maior</option>
-          <option value="price-desc">Preço: Maior ao Maior</option>
-        </select>
+    <!-- RANKING -->
+    <section class="section" id="ranking">
+      <div class="section-header">
+        <div class="pill">🏆 Top 3</div>
+        <h2>As <span class="hl">campeãs</span> da semana</h2>
+        <p>Baseado em vendas e favoritos</p>
       </div>
-    </div>
-    <!-- ════════════════ -->
-
-    <div id="catalogContent">
-      <div class="loading-state">
-        <div class="spinner"></div>
-        <p>Carregando itens...</p>
+      <div class="ranking-grid" id="rankingGrid">
+        <div class="loading-state">
+          <div class="spinner"></div>
+        </div>
       </div>
-    </div>
-    <!-- Paginação -->
-    <div id="catalogPagination"
-      style="display:none;justify-content:center;align-items:center;gap:8px;margin-top:24px;flex-wrap:wrap"></div>
-  </section>
+    </section>
 
-  <div class="divider"></div>
 
-  <!-- RANKING -->
-  <section class="section" id="ranking">
-    <div class="section-header">
-      <div class="pill">🏆 Top 3</div>
-      <h2>As <span class="hl">campeãs</span> da semana</h2>
-      <p>Baseado em vendas e favoritos</p>
-    </div>
-    <div class="ranking-grid" id="rankingGrid">
-      <div class="loading-state">
-        <div class="spinner"></div>
+
+    <!-- DEVS -->
+    <section class="section" id="devs">
+      <div class="section-header">
+        <span class="pill">Equipe Técnica</span>
+        <h2>Conheça os <span class="hl">Desenvolvedores</span></h2>
+        <p>A equipe por trás da maior loja de skins e outfits do Roblox.</p>
       </div>
-    </div>
-  </section>
-
-
-
-  <!-- DEVS -->
-  <section class="section" id="devs">
-    <div class="section-header">
-      <span class="pill">Equipe Técnica</span>
-      <h2>Conheça os <span class="hl">Desenvolvedores</span></h2>
-      <p>A equipe por trás da maior loja de skins e outfits do Roblox.</p>
-    </div>
-    <div class="dev-grid" id="devGrid">
-      <!-- Devs injected via JS -->
-      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
-      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
-      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
-      <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
-    </div>
-  </section>
-
-  <!-- SECURITY -->
-  <section class="section" id="seguranca" style="background:linear-gradient(180deg,rgba(124,58,237,.04),transparent)">
-    <div class="section-header">
-      <div class="pill"> Segurança</div>
-      <h2>Aqui você está <span class="hl">em boas mãos</span></h2>
-      <p>Total transparência para você e seus responsáveis</p>
-    </div>
-    <div class="trust-grid">
-      <div class="trust-card"><span class="trust-icon"><img width="50" height="50"
-            src="https://img.icons8.com/ios/50/FFFFFF/warning-shield.png" alt="warning-shield" /></span>
-        <h4>Login OAuth2 Oficial</h4>
-        <p>OAuth2 oficial do Roblox. Sua senha nunca é digitada em nosso site.</p>
+      <div class="dev-grid" id="devGrid">
+        <!-- Devs injected via JS -->
+        <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
+        <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
+        <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
+        <div class="skeleton-card" style="height:300px;background:rgba(255,255,255,0.05);border-radius:28px"></div>
       </div>
-      <div class="trust-card"><span class="trust-icon"><img width="50" height="50"
-            src="https://img.icons8.com/ios/50/FFFFFF/shield.png" alt="shield" /></span>
-        <h4>Zero Armazenamento</h4>
-        <p>Não guardamos senhas. Autenticação 100% nos servidores do Roblox.</p>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="section" id="seguranca" style="background:linear-gradient(180deg,rgba(124,58,237,.04),transparent)">
+      <div class="section-header">
+        <div class="pill"> Segurança</div>
+        <h2>Aqui você está <span class="hl">em boas mãos</span></h2>
+        <p>Total transparência para você e seus responsáveis</p>
       </div>
-      <div class="trust-card"><span class="trust-icon"><img width="50" height="50"
-            src="https://img.icons8.com/ios/50/FFFFFF/roblox.png" alt="roblox" /></span>
-        <h4>Compra no Roblox</h4>
-        <p>Ao comprar, você vai direto para a página oficial do item no Roblox.</p>
+      <div class="trust-grid">
+        <div class="trust-card"><span class="trust-icon"><img width="50" height="50"
+              src="https://img.icons8.com/ios/50/FFFFFF/warning-shield.png" alt="warning-shield" /></span>
+          <h4>Login OAuth2 Oficial</h4>
+          <p>OAuth2 oficial do Roblox. Sua senha nunca é digitada em nosso site.</p>
+        </div>
+        <div class="trust-card"><span class="trust-icon"><img width="50" height="50"
+              src="https://img.icons8.com/ios/50/FFFFFF/shield.png" alt="shield" /></span>
+          <h4>Zero Armazenamento</h4>
+          <p>Não guardamos senhas. Autenticação 100% nos servidores do Roblox.</p>
+        </div>
+        <div class="trust-card"><span class="trust-icon"><img width="50" height="50"
+              src="https://img.icons8.com/ios/50/FFFFFF/roblox.png" alt="roblox" /></span>
+          <h4>Compra no Roblox</h4>
+          <p>Ao comprar, você vai direto para a página oficial do item no Roblox.</p>
+        </div>
+        <div class="trust-card"><span class="trust-icon"><img width="48" height="48"
+              src="https://img.icons8.com/liquid-glass/48/lightning-bolt.png" alt="lightning-bolt" /></span>
+          <h4>Dados em Tempo Real</h4>
+          <p>Imagens, nomes e preços puxados da API oficial do Roblox.</p>
+        </div>
       </div>
-      <div class="trust-card"><span class="trust-icon"><img width="48" height="48"
-            src="https://img.icons8.com/liquid-glass/48/lightning-bolt.png" alt="lightning-bolt" /></span>
-        <h4>Dados em Tempo Real</h4>
-        <p>Imagens, nomes e preços puxados da API oficial do Roblox.</p>
-      </div>
+    </section>
+
+    <footer>
+      <div class="footer-logo">Valtrix ✦</div>
+      <div class="footer-links"><a href="#">Privacidade</a><a href="#">Termos</a><a href="#">Suporte</a></div>
+      <p>© 2025 Valtrix · Não afiliado ao Roblox Corporation</p>
+    </footer>
+
+    <div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Mensagem</span>
     </div>
-  </section>
-
-  <footer>
-    <div class="footer-logo">Valtrix ✦</div>
-    <div class="footer-links"><a href="#">Privacidade</a><a href="#">Termos</a><a href="#">Suporte</a></div>
-    <p>© 2025 Valtrix · Não afiliado ao Roblox Corporation</p>
-  </footer>
-
-  <div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Mensagem</span>
-  </div>
-  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
-    aria-label="Topo">↑</button>
+    <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+      aria-label="Topo">↑</button>
+  </div> <!-- Fim de #appContent -->
 
   <script>
 
@@ -4545,17 +4551,29 @@
 
     function sortItems(items) {
       const arr = [...items];
+
+      const getCat = (s) => {
+        const c = (s || "").trim().charAt(0).toLowerCase();
+        if (c >= 'a' && c <= 'z') return 1;
+        if (c >= '0' && c <= '9') return 2;
+        return 3;
+      };
+
       switch (sortMode) {
         case 'az':
           return arr.sort((a, b) => {
             const na = (a.name || "").trim().toLowerCase();
             const nb = (b.name || "").trim().toLowerCase();
+            const ca = getCat(na), cb = getCat(nb);
+            if (ca !== cb) return ca - cb;
             return na.localeCompare(nb, 'pt-BR');
           });
         case 'za':
           return arr.sort((a, b) => {
             const na = (a.name || "").trim().toLowerCase();
             const nb = (b.name || "").trim().toLowerCase();
+            const ca = getCat(na), cb = getCat(nb);
+            if (ca !== cb) return ca - cb;
             return nb.localeCompare(na, 'pt-BR');
           });
         case 'price-asc': return arr.sort((a, b) => (a.price ?? 999999) - (b.price ?? 999999));
@@ -4576,11 +4594,12 @@
 
     function getActiveItems() {
       if (currentGroup === 'all') {
-        if (!mergedAllCache.length) {
+        const totalInAll = Object.values(allLoaded).flat().length;
+        if (!mergedAllCache.length || mergedAllCache.length !== totalInAll) {
           const all = Object.entries(allLoaded).flatMap(([gid, items]) =>
             items.map(i => ({ ...i, _gid: gid }))
           );
-          // Shuffle only once
+          // Force shuffle
           for (let i = all.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [all[i], all[j]] = [all[j], all[i]];
@@ -4733,23 +4752,26 @@
       <div class="c-sales">${Math.floor(Math.random() * 1200 + 300)} vendas</div>
       <div class="c-price">${item.price != null ? `<img width="16" height="16" src="https://img.icons8.com/color/48/robux--v1.png" alt="R$"/> ${item.price}` : 'GRÁTIS'}</div>
     </div>`;
-      }).join('') + `
-      <div class="carousel-card carousel-final-card">
-        <div class="c-final-icon">✦</div>
-        <div class="c-final-text">"Escolha não uma roupa. Escolha quem você quer ser."</div>
-      </div>
-      `;
+      }).join('');
       rebuildDots(); moveCarousel(0); startCAuto();
     }
     function rebuildDots() {
-      const totalSlides = cItems.length + 1; // +1 pela frase final
-      const pages = Math.max(1, totalSlides - VISIBLE() + 1);
-      const dots = Math.min(4, pages);
+      const track = document.getElementById('carouselTrack');
+      const wrapper = track.parentElement;
+      const card = track.querySelector('.carousel-card');
+      if (!card) return;
+
+      const gap = parseInt(getComputedStyle(track).gap || 16);
+      const cw = card.getBoundingClientRect().width + gap;
+      const maxTranslate = track.scrollWidth - wrapper.clientWidth;
+      const maxIdx = Math.max(0, Math.floor(maxTranslate / cw));
+      
+      // Add one extra "virtual" dot for final phrase completion
+      const dots = maxIdx + 2;
 
       document.getElementById('carouselDots').innerHTML =
         Array.from({ length: dots }, (_, i) => {
-          const idx = Math.floor((pages - 1) * (i / (dots - 1 || 1)));
-          return `<div class="c-dot${i === 0 ? ' active' : ''}" onclick="moveCarousel(${idx})"></div>`;
+          return `<div class="c-dot${i === cIdx ? ' active' : ''}" onclick="moveCarousel(${i})"></div>`;
         }).join('');
     }
     function moveCarousel(idx) {
@@ -4766,56 +4788,76 @@
 
       const maxTranslate = trackWidth - wrapperWidth;
 
+      const dotsContainer = document.getElementById('carouselDots');
+      const dotsCount = dotsContainer ? dotsContainer.querySelectorAll('.c-dot').length : 0;
+
       cIdx = Math.max(0, idx);
+      if (dotsCount > 0 && cIdx >= dotsCount) cIdx = dotsCount - 1;
 
       let translate = cIdx * cw;
-
-      if (translate > maxTranslate) {
-        translate = maxTranslate;
-        cIdx = Math.floor(maxTranslate / cw);
-      }
+      if (translate > maxTranslate) translate = maxTranslate;
 
       track.style.transform = `translateX(-${translate}px)`;
 
       document.querySelectorAll('.c-dot')
         .forEach((d, i) => d.classList.toggle('active', i === cIdx));
+        
+      updatePhraseEffect();
     }
-    // Phrase rotation
-    const phrases = [
-      '"Escolha não uma roupa. Escolha quem você quer ser."',
-      '"Seu avatar, sua arte."',
-      '"Vista o que você imagina."',
-      '"Estilo é personalidade com pixels."',
-      '"Seja lendária. Vista Valtrix."'
-    ];
-    let phraseIdx = 0;
-    function showNextPhrase() {
-      const el = document.getElementById('carouselPhraseText');
-      if (!el) return;
-      el.classList.add('fade-out');
-      setTimeout(() => {
-        phraseIdx = (phraseIdx + 1) % phrases.length;
-        el.textContent = phrases[phraseIdx];
-        el.classList.remove('fade-out');
-        el.classList.add('visible');
-      }, 400);
+    function updatePhraseEffect() {
+      const box = document.getElementById('carouselPhraseBox');
+      const textEl = document.getElementById('carouselPhraseText');
+      if (!box || !textEl) return;
+      
+      const fullPhrase = "Escolha não uma roupa. Escolha quem você quer ser.";
+      if (!textEl.innerHTML) {
+        textEl.innerHTML = fullPhrase.split(' ').map(word => `<span>${word} </span>`).join('');
+      }
+
+      const spans = textEl.querySelectorAll('span');
+      
+      const dotsContainer = document.getElementById('carouselDots');
+      const dotsCount = dotsContainer ? dotsContainer.querySelectorAll('.c-dot').length : 0;
+      
+      // Calculate progress based on the actual dots available
+      const progress = dotsCount > 1 ? cIdx / (dotsCount - 1) : 1;
+      
+      if (window.innerWidth < 480) {
+        // Word reveal on mobile
+        // Use a slightly more aggressive threshold to ensure completion
+        const revealThreshold = Math.ceil(progress * spans.length);
+        spans.forEach((span, i) => {
+          if (i < revealThreshold) {
+            span.style.opacity = '1';
+            span.style.filter = 'blur(0)';
+            span.style.transform = 'translateY(0)';
+          } else {
+            span.style.opacity = '0';
+            span.style.filter = 'blur(2px)';
+            span.style.transform = 'translateY(5px)';
+          }
+        });
+        box.style.opacity = '1';
+      } else {
+        // Desktop: show all
+        spans.forEach(span => {
+          span.style.opacity = '1';
+          span.style.filter = 'none';
+          span.style.transform = 'none';
+        });
+        box.style.opacity = '1';
+      }
     }
-    setTimeout(() => {
-      const el = document.getElementById('carouselPhraseText');
-      if (el) el.classList.add('visible');
-    }, 500);
 
     function carouselNext() {
-      const totalSlides = cItems.length + 1;
+      const totalSlides = cItems.length;
       moveCarousel(cIdx >= Math.max(0, totalSlides - VISIBLE()) ? 0 : cIdx + 1);
       resetCAuto();
-      showNextPhrase();
     }
     function carouselPrev() {
-      const totalSlides = cItems.length + 1;
+      const totalSlides = cItems.length;
       moveCarousel(cIdx <= 0 ? Math.max(0, totalSlides - VISIBLE()) : cIdx - 1);
       resetCAuto();
-      showNextPhrase();
     }
     function startCAuto() { clearInterval(cTimer); cTimer = setInterval(carouselNext, 4000) }
     function resetCAuto() { clearInterval(cTimer); startCAuto() }
@@ -5004,14 +5046,19 @@
 
       // Hide overlay
       const ov = document.getElementById('loginOverlay');
+      const app = document.getElementById('appContent');
       if (isAuto) {
         ov.style.display = 'none';
+        if (app) app.style.display = 'block';
         document.body.style.overflow = '';
       } else {
         ov.classList.add('hide');
         setTimeout(() => {
           ov.style.display = 'none';
+          if (app) app.style.display = 'block';
           document.body.style.overflow = '';
+          // Defer system init to when it's revealed
+          init();
         }, 500);
       }
     }
@@ -5030,8 +5077,10 @@
 
       // Show overlay again
       const ov = document.getElementById('loginOverlay');
+      const app = document.getElementById('appContent');
       ov.style.display = 'flex';
       ov.classList.remove('hide');
+      if (app) app.style.display = 'none';
 
       // reset steps
       document.getElementById('loStep1').classList.remove('hidden');
@@ -5062,6 +5111,8 @@
       document.body.style.overflow = 'hidden';
     } else {
       document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('appContent').style.display = 'block';
+      // System init already handled by init() call at the bottom if logged in
     }
     // ──────────────────────────────────────────────────────
 
@@ -5378,7 +5429,10 @@
     })();
 
     // ── FINAL INIT ───────────────────────────────────────────
-    init();
+    // Only init if logged in
+    if (localStorage.getItem('roblox_user')) {
+      init();
+    }
   </script>
 </body>
 
