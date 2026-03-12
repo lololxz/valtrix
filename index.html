@@ -1004,11 +1004,11 @@
     }
 
     .vh-arrow.left {
-      left: clamp(4px, 1.5vw, 12px);
+      left: 0;
     }
 
     .vh-arrow.right {
-      right: clamp(4px, 1.5vw, 12px);
+      right: 0;
     }
 
     .vh-dots {
@@ -2013,7 +2013,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: clamp(20px, 10vw, 60px);
+      gap: clamp(40px, 15vw, 120px);
       margin-top: 24px;
       padding: 0 var(--px)
     }
@@ -2111,9 +2111,21 @@
       box-shadow: 0 0 40px rgba(148, 163, 184, .25), 0 0 15px rgba(255, 255, 255, .1);
     }
 
+    .rank-card.second:hover {
+      transform: scale(1.08) translateY(-15px);
+      box-shadow: 0 35px 70px rgba(148, 163, 184, .4), 0 0 30px rgba(148, 163, 184, .2);
+      border-color: #94a3b8 !important;
+    }
+
     .rank-card.third {
       border: 2px solid rgba(205, 127, 50, .5) !important;
       box-shadow: 0 0 40px rgba(205, 127, 50, .25), 0 0 15px rgba(205, 127, 50, .15);
+    }
+
+    .rank-card.third:hover {
+      transform: scale(1.08) translateY(-15px);
+      box-shadow: 0 35px 70px rgba(205, 127, 50, .4), 0 0 30px rgba(205, 127, 50, .2);
+      border-color: #cd7f32 !important;
     }
 
     .rank-num {
@@ -3677,7 +3689,8 @@
       opacity: 1;
     }
 
-    .rank-shimmer, .c-shimmer {
+    .rank-shimmer,
+    .c-shimmer {
       position: absolute;
       inset: 0;
       overflow: hidden;
@@ -3693,6 +3706,19 @@
       border-radius: inherit;
       z-index: 1;
       pointer-events: none;
+    }
+
+    /* Brilho Colorido para o Top 3 */
+    .rank-card.first .rank-shimmer::after {
+      background: linear-gradient(105deg, transparent 20%, rgba(251, 191, 36, 0.25) 50%, transparent 80%);
+    }
+
+    .rank-card.second .rank-shimmer::after {
+      background: linear-gradient(105deg, transparent 20%, rgba(148, 163, 184, 0.25) 50%, transparent 80%);
+    }
+
+    .rank-card.third .rank-shimmer::after {
+      background: linear-gradient(105deg, transparent 20%, rgba(205, 127, 50, 0.3) 50%, transparent 80%);
     }
 
     /* ══ SKIP RIPPLE ═══════════════════════════════════════════ */
@@ -4484,9 +4510,20 @@
       return id;
     }
     async function openReg(el) {
-
       const e = reg[el.dataset.rid];
       if (!e) return;
+
+      const currentId = e.id || el.dataset.rid;
+      const savedToken = localStorage.getItem("purchase_session");
+      const savedId = localStorage.getItem("purchase_item_id");
+
+      // 🔄 Clique Duplo: Se já tem sessão deste item, tenta confirmar.
+      if (savedToken && String(savedId) === String(currentId) && robloxUser) {
+        console.log("[SISTEMA-AFF] Sessão ativa detectada. Verificando...");
+        showToast("🕵️‍♂️ Verificando compra no Roblox...", "info");
+        confirmPurchase(robloxUser.uid);
+        return;
+      }
 
       console.log("Abrindo:", e.name);
 
@@ -4496,7 +4533,6 @@
       }
 
       try {
-
         const res = await fetch(EDGE, {
           method: "POST",
           headers: {
@@ -4507,38 +4543,26 @@
           body: JSON.stringify({
             action: "create_session",
             code: REF,
-            item_id: e.id || el.dataset.rid,
+            item_id: currentId,
             item_name: e.name,
             item_price: e.price || 0
           })
         });
 
         const data = await res.json();
-
-        console.log("[SISTEMA-AFF] Resposta da API:", data);
-
         if (data.token) {
           localStorage.setItem("purchase_session", data.token);
-
+          localStorage.setItem("purchase_item_id", currentId);
           console.log("[SISTEMA-AFF] Sessão criada. Token:", data.token);
-
-          if (robloxUser && robloxUser.uid) {
-            console.log("[SISTEMA-AFF] 🚀 Usuário logado: " + robloxUser.username + ". Confirmando comissão...");
-            confirmPurchase(robloxUser.uid);
-          } else {
-            console.log("[SISTEMA-AFF] ⏳ Usuário não logado. A comissão aguarda o login.");
-          }
-
+          showToast("🛒 Link aberto! Clique novamente após comprar para confirmar.", "info");
           window.open(e.url, "_blank");
         } else {
           window.open(e.url, "_blank");
         }
-
       } catch (err) {
         console.error("Erro:", err);
         window.open(e.url, "_blank");
       }
-
     }
 
     function showToast(msg, type = "info") {
@@ -4566,17 +4590,14 @@
 
     }
 
-    async function confirmPurchase(buyerUID) {
-
+    let isVerifying = false;
+    async function confirmPurchase(buyerUID, isQuiet = false) {
+      if (isVerifying) return;
       const token = localStorage.getItem("purchase_session");
-
-      if (!token) {
-        console.log("Sem sessão de compra");
-        return;
-      }
+      if (!token) return;
 
       try {
-
+        isVerifying = true;
         const res = await fetch(EDGE, {
           method: "POST",
           headers: {
@@ -4593,19 +4614,29 @@
 
         const data = await res.json();
 
-        console.log("Resposta confirm_purchase:", data);
-
         if (data.ok) {
-          console.log("✅ Comissão registrada com sucesso!");
+          console.log("✅ [SISTEMA-AFF] Comissão registrada!");
+          showToast("💸 Comissão Confirmada! +R$ " + data.commission, "success");
           localStorage.removeItem("purchase_session");
+          localStorage.removeItem("purchase_item_id");
         } else {
+          // Sempre loga no console para debug
+          console.log("Resposta confirm_purchase:", data);
           console.log("❌ Falha na comissão:", data.reason);
+
+          if (!isQuiet) {
+            if (data.reason === "inventario_privado") {
+              showToast("🔒 Abra seu inventário no Roblox para confirmar!", "warning");
+            } else {
+              showToast("❌ Compra não detectada ainda...", "error");
+            }
+          }
         }
-
       } catch (err) {
-        console.error("Erro confirm_purchase:", err);
+        if (!isQuiet) console.error("Erro confirm_purchase:", err);
+      } finally {
+        isVerifying = false;
       }
-
     }
     // ── SEARCH STATE ───────────────────────────────────────
     let searchQ = '', sortMode = 'default', searchDebounce = null;
@@ -4635,6 +4666,9 @@
 
     function sortItems(items) {
       const arr = [...items];
+      const emojiRegex = /\p{Extended_Pictographic}/u;
+      const hasEmoji = (s) => emojiRegex.test(s) ? 1 : 0;
+      const emojiCompare = (a, b) => hasEmoji(a.name) - hasEmoji(b.name);
 
       const getCat = (s) => {
         const c = (s || "").trim().charAt(0).toLowerCase();
@@ -4646,6 +4680,8 @@
       switch (sortMode) {
         case 'az':
           return arr.sort((a, b) => {
+            const e = emojiCompare(a, b);
+            if (e !== 0) return e;
             const na = (a.name || "").trim().toLowerCase();
             const nb = (b.name || "").trim().toLowerCase();
             const ca = getCat(na), cb = getCat(nb);
@@ -4654,18 +4690,20 @@
           });
         case 'za':
           return arr.sort((a, b) => {
+            const e = emojiCompare(a, b);
+            if (e !== 0) return e;
             const na = (a.name || "").trim().toLowerCase();
             const nb = (b.name || "").trim().toLowerCase();
             const ca = getCat(na), cb = getCat(nb);
             if (ca !== cb) return ca - cb;
             return nb.localeCompare(na, 'pt-BR');
           });
-        case 'price-asc': return arr.sort((a, b) => (a.price ?? 999999) - (b.price ?? 999999));
-        case 'price-desc': return arr.sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
-        case 'id-desc': return arr.sort((a, b) => b.id - a.id);
-        case 'id-asc': return arr.sort((a, b) => a.id - b.id);
-        case 'sales-desc': return arr.sort((a, b) => (b.sales || 0) - (a.sales || 0));
-        default: return arr;
+        case 'price-asc': return arr.sort((a, b) => emojiCompare(a, b) || (a.price ?? 999999) - (b.price ?? 999999));
+        case 'price-desc': return arr.sort((a, b) => emojiCompare(a, b) || (b.price ?? -1) - (a.price ?? -1));
+        case 'id-desc': return arr.sort((a, b) => emojiCompare(a, b) || b.id - a.id);
+        case 'id-asc': return arr.sort((a, b) => emojiCompare(a, b) || a.id - b.id);
+        case 'sales-desc': return arr.sort((a, b) => emojiCompare(a, b) || (b.sales || 0) - (a.sales || 0));
+        default: return arr.sort((a, b) => emojiCompare(a, b));
       }
     }
 
@@ -5117,11 +5155,7 @@
       const mobSocial = document.querySelector('.mobile-social-btns');
       if (mobSocial) mobSocial.style.display = 'none';
 
-      const token = localStorage.getItem("purchase_session");
-
-      if (token) {
-        confirmPurchase(robloxUser.uid);
-      }
+      // Verificação automática removida para evitar erros na tela inicial.
 
       // Update hero greeting
       const heroSub = document.querySelector('.hero-sub');
@@ -5188,6 +5222,29 @@
         }
       }
     }
+
+    // Verificação automática (Throttled/Intervalada)
+    let lastAutoCheck = 0;
+
+    // Polling Periódico: Verifica a cada 15 segundos se houver sessão pendente
+    setInterval(() => {
+      const token = localStorage.getItem("purchase_session");
+      if (token && robloxUser && !isVerifying) {
+        console.log("[SISTEMA-AFF] Polling: Verificando compra pendente...");
+        confirmPurchase(robloxUser.uid, true);
+      }
+    }, 15000);
+
+    window.addEventListener('focus', () => {
+      const now = Date.now();
+      if (now - lastAutoCheck < 10000) return;
+      lastAutoCheck = now;
+
+      const token = localStorage.getItem("purchase_session");
+      if (token && robloxUser) {
+        confirmPurchase(robloxUser.uid, true);
+      }
+    });
 
     // Inicialização
     checkPersistence();
