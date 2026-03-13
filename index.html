@@ -4412,41 +4412,17 @@
     // ── DEVS LOGIC ──────────────────────────────────────────
     async function initDevs() {
       const devs = [
-        { user: 'Neguin_carecabrancaa', role: 'Founder' },
-        { user: 'ponthinho0', role: 'Co-Founder' },
-        { user: 'Alfandego22', role: 'Co-Founder' },
-        { user: 'Calvaodecria1113', role: 'Co-Founder' }
+        { user: 'Neguin_carecabrancaa', id: 4359357717, role: 'Founder' },
+        { user: 'ponthinho0', id: 8844843523, role: 'Co-Founder' },
+        { user: 'Alfandego22', id: 9016942978, role: 'Co-Founder' },
+        { user: 'Calvaodecria1113', id: 4374850285, role: 'Co-Founder' }
       ];
 
       const grid = document.getElementById('devGrid');
       if (!grid) return;
 
       try {
-        const usersData = [];
-        for (const d of devs) {
-          // Tentativa 1: Search API
-          let uid, uname, displayName;
-          const r = await fetch(PROXY + encodeURIComponent(`https://users.roblox.com/v1/users/search?keyword=${d.user}&limit=10`));
-          if (r.ok) {
-            const json = await r.json();
-            const match = json.data?.find(u => u.name.toLowerCase() === d.user.toLowerCase());
-            if (match) { uid = match.id; uname = match.name; displayName = match.displayName; }
-          }
-          // Fallback
-          if (!uid) {
-            const r2 = await fetch(PROXY + encodeURIComponent(`https://api.roblox.com/users/get-by-username?username=${d.user}`));
-            if (r2.ok) {
-              const d2 = await r2.json();
-              if (d2.Id && !d2.errorMessage) { uid = d2.Id; uname = d2.Username; displayName = d2.Username; }
-            }
-          }
-          if (uid) usersData.push({ ...d, id: uid, realName: displayName || uname || d.user });
-        }
-
-        if (usersData.length === 0) {
-          grid.innerHTML = '<p style="color:var(--muted2);grid-column:1/-1">Equipe em manutenção.</p>';
-          return;
-        }
+        const usersData = devs.map(d => ({ ...d, realName: d.user }));
 
         const ids = usersData.map(u => u.id).join(',');
         const rt = await fetch(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=true`));
@@ -4459,6 +4435,12 @@
           const t = thumbObj?.imageUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${ud.id}&width=150&height=150&format=png`;
           const card = document.createElement('div');
           card.className = `dev-card ${ud.role.toLowerCase() === 'founder' ? 'founder' : ''} reveal`;
+          
+          // Estilos iniciais para animação de revelação
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(18px)';
+          card.style.transition = 'opacity .5s ease, transform .5s ease';
+
           card.innerHTML = `
             <div class="dev-avatar-wrap">
               <img src="${t}" alt="${ud.user}" class="dev-avatar" loading="lazy">
@@ -4472,11 +4454,14 @@
           grid.appendChild(card);
         });
 
-        if (revealObs) {
-          grid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+        if (window.observer) {
+          grid.querySelectorAll('.reveal').forEach(el => window.observer.observe(el));
+        } else if (typeof observer !== 'undefined') {
+          grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
       } catch (e) {
         console.error('[initDevs]', e);
+        grid.innerHTML = '<p style="color:var(--muted2);grid-column:1/-1">Equipe em manutenção.</p>';
       }
     }
 
@@ -4627,6 +4612,7 @@
       clearTimeout(searchDebounce);
       searchDebounce = setTimeout(() => {
         searchQ = val.trim().toLowerCase();
+        currentPage = 1; // Reset to first page
         document.getElementById('searchClear').classList.toggle('show', searchQ.length > 0);
         renderFiltered();
       }, 180);
@@ -4635,6 +4621,7 @@
     function clearSearch() {
       const inp = document.getElementById('searchInput');
       inp.value = ''; searchQ = '';
+      currentPage = 1; // Reset to first page
       document.getElementById('searchClear').classList.remove('show');
       setCount(null);
       renderFiltered();
@@ -4643,6 +4630,7 @@
 
     function applySort() {
       sortMode = document.getElementById('sortSelect').value;
+      currentPage = 1; // Reset to first page
       renderFiltered();
     }
 
@@ -4990,11 +4978,13 @@
       btn.classList.add('active');
       currentGroup = btn.dataset.group;
       currentPage = 1;
-      document.getElementById('searchInput').value = '';
-      searchQ = ''; sortMode = 'default';
-      document.getElementById('searchClear').classList.remove('show');
+
+      // Removed clearing search on group change for better UX
+      // document.getElementById('searchInput').value = '';
+      // searchQ = ''; 
+
+      sortMode = 'default';
       document.getElementById('sortSelect').value = 'default';
-      setCount(null);
       mergedAllCache = [];
       loadGroup(currentGroup);
     }
