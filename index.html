@@ -5156,6 +5156,8 @@
     }
 
     function loLogout() {
+      if (!confirm("Certeza que quer sair?")) return;
+      
       robloxUser = null;
       localStorage.removeItem('roblox_user');
       document.getElementById('navUser').style.display = 'none';
