@@ -127,6 +127,13 @@
       object-fit: cover;
     }
 
+    .dev-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
     .dev-info h3 {
       font-family: 'Syne', sans-serif;
       font-size: 20px;
@@ -164,6 +171,16 @@
       background: rgba(255, 255, 255, 0.15);
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .dev-description {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted2);
+      margin: 8px 0;
+      max-width: 280px;
+      font-weight: 500;
+      text-align: center;
     }
 
     *,
@@ -4412,10 +4429,30 @@
     // ── DEVS LOGIC ──────────────────────────────────────────
     async function initDevs() {
       const devs = [
-        { user: 'Neguin_carecabrancaa', id: 4359357717, role: 'Founder' },
-        { user: 'ponthinho0', id: 8844843523, role: 'Co-Founder' },
-        { user: 'Alfandego22', id: 9016942978, role: 'Co-Founder' },
-        { user: 'Calvaodecria1113', id: 4374850285, role: 'Co-Founder' }
+        {
+          user: 'Neguin_carecabrancaa',
+          id: 4359357717,
+          role: 'Founder',
+          description: 'Fundador do Valtrix — responsável por transformar ideias em algo real. Faço de tudo um pouco pra manter o projeto evoluindo… e às vezes quebrando também 😎.'
+        },
+        {
+          user: 'ponthinho0',
+          id: 8844843523,
+          role: 'Co-Founder',
+          description: 'Co-fundador e principal apoiador do Valtrix, responsável por impulsionar o crescimento do projeto e tornar as ideias possíveis.'
+        },
+        {
+          user: 'Alfandego22',
+          id: 9016942978,
+          role: 'Co-Founder',
+          description: 'Responsável pela criação das skins do Valtrix, sempre buscando trazer outfits únicos e diferenciados pra comunidade.'
+        },
+        {
+          user: 'Calvaodecria1113',
+          id: 4374850285,
+          role: 'Co-Founder',
+          description: 'Parte essencial do Valtrix, contribuindo com ideias, organização e mantendo a comunidade sempre ativa.'
+        }
       ];
 
       const grid = document.getElementById('devGrid');
@@ -4435,7 +4472,7 @@
           const t = thumbObj?.imageUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${ud.id}&width=150&height=150&format=png`;
           const card = document.createElement('div');
           card.className = `dev-card ${ud.role.toLowerCase() === 'founder' ? 'founder' : ''} reveal`;
-          
+
           // Estilos iniciais para animação de revelação
           card.style.opacity = '0';
           card.style.transform = 'translateY(18px)';
@@ -4448,6 +4485,7 @@
             <div class="dev-info">
               <div class="dev-role">${ud.role}</div>
               <h3>${ud.realName}</h3>
+              <p class="dev-description">${ud.description}</p>
             </div>
             <a href="https://www.roblox.com/users/${ud.id}/profile" target="_blank" class="dev-btn">Ver Perfil</a>
           `;
@@ -5157,7 +5195,7 @@
 
     function loLogout() {
       if (!confirm("Certeza que quer sair?")) return;
-      
+
       robloxUser = null;
       localStorage.removeItem('roblox_user');
       document.getElementById('navUser').style.display = 'none';
