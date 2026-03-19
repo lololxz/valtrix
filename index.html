@@ -176,7 +176,7 @@
     .dev-description {
       font-size: 13px;
       line-height: 1.6;
-      color: var(--muted2);
+      color: #fff;
       margin: 8px 0;
       max-width: 280px;
       font-weight: 500;
@@ -1906,15 +1906,28 @@
     }
 
     .carousel-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 25px 50px rgba(124, 58, 237, .4);
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 50px rgba(124, 58, 237, .35);
       border-color: var(--v3);
       z-index: 10;
     }
 
     .carousel-card.gold-card:hover {
-      box-shadow: 0 25px 50px rgba(251, 191, 36, .35);
-      border-color: #fbbf24;
+      transform: scale(1.08) translateY(-15px);
+      box-shadow: 0 35px 70px rgba(251, 191, 36, .5), 0 0 30px rgba(251, 191, 36, .3);
+      border-color: #fbbf24 !important;
+    }
+
+    .carousel-card.silver-card:hover {
+      transform: scale(1.08) translateY(-15px);
+      box-shadow: 0 35px 70px rgba(148, 163, 184, .4), 0 0 30px rgba(148, 163, 184, .2);
+      border-color: #94a3b8 !important;
+    }
+
+    .carousel-card.bronze-card:hover {
+      transform: scale(1.08) translateY(-15px);
+      box-shadow: 0 35px 70px rgba(205, 127, 50, .4), 0 0 30px rgba(205, 127, 50, .2);
+      border-color: #cd7f32 !important;
     }
 
     .c-medal {
@@ -4039,7 +4052,7 @@
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="stat-num">20<span>K+</span></div>
+          <div class="stat-num">20.000<span>+</span></div>
           <div class="stat-label">Skins vendidas</div>
         </div>
         <div class="hero-stat">
@@ -4122,7 +4135,7 @@
     <section class="carousel-section" id="topSemanal">
       <div class="section-header" style="padding:0 var(--px)">
         <div class="pill">🏆 Top Semanal</div>
-        <h2>As <span class="hl">mais amadas</span> da semana</h2>
+        <h2>As <span class="hl">mais amadas</span> do mês</h2>
         <p>Ranking atualizado toda segunda-feira</p>
       </div>
       <div class="carousel-wrapper">
@@ -4972,31 +4985,19 @@
       // Calculate progress based on the actual dots available
       const progress = dotsCount > 1 ? cIdx / (dotsCount - 1) : 1;
 
-      if (window.innerWidth < 480) {
-        // Word reveal on mobile
-        // Use a slightly more aggressive threshold to ensure completion
-        const revealThreshold = Math.ceil(progress * spans.length);
-        spans.forEach((span, i) => {
-          if (i < revealThreshold) {
-            span.style.opacity = '1';
-            span.style.filter = 'blur(0)';
-            span.style.transform = 'translateY(0)';
-          } else {
-            span.style.opacity = '0';
-            span.style.filter = 'blur(2px)';
-            span.style.transform = 'translateY(5px)';
-          }
-        });
-        box.style.opacity = '1';
-      } else {
-        // Desktop: show all
-        spans.forEach(span => {
+      const revealThreshold = Math.ceil(progress * spans.length);
+      spans.forEach((span, i) => {
+        if (i < revealThreshold) {
           span.style.opacity = '1';
-          span.style.filter = 'none';
-          span.style.transform = 'none';
-        });
-        box.style.opacity = '1';
-      }
+          span.style.filter = 'blur(0)';
+          span.style.transform = 'translateY(0)';
+        } else {
+          span.style.opacity = '0';
+          span.style.filter = 'blur(2px)';
+          span.style.transform = 'translateY(5px)';
+        }
+      });
+      box.style.opacity = '1';
     }
 
     function carouselNext() {
@@ -5556,10 +5557,9 @@
           if (!match) return;
           const suffix = el.querySelector('span')?.textContent || '';
           const rawNum = parseFloat(match[1].replace(/[,.]/g, ''));
-          const hasDot = match[1].includes('.');
           const isK = rawText.includes('k') || rawText.includes('K');
-          const target = isK ? rawNum : rawNum;
-          let start = 0;
+          const isDecimal = match[1].includes('.') && match[1].split('.')[1].length === 1;
+          const target = rawNum;
           const dur = 1400;
           const startTime = performance.now();
           el.classList.add('counting');
@@ -5568,9 +5568,15 @@
             const progress = Math.min(elapsed / dur, 1);
             const ease = 1 - Math.pow(1 - progress, 3);
             const cur = Math.round(target * ease);
-            const display = isK
-              ? (cur >= 1000 ? (cur / 1000).toFixed(1) + 'k' : cur)
-              : (hasDot ? (cur / 10).toFixed(1) : cur);
+
+            let display;
+            if (isK) {
+              display = cur >= 1000 ? (cur / 1000).toFixed(1) + 'k' : cur;
+            } else if (isDecimal) {
+              display = (cur / 10).toFixed(1);
+            } else {
+              display = cur.toLocaleString('pt-BR');
+            }
             el.childNodes[0].textContent = display;
             if (progress < 1) requestAnimationFrame(tick);
             else el.classList.remove('counting');
